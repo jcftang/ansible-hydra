@@ -55,10 +55,6 @@
       template: src=../files/insecure_config_proxy dest=${home_directory}/.ssh/config mode=0600
       sudo: False
 
-    ## setup some users
-    - include: ../tasks/users-admin.yml
-    - include: ../tasks/users-dri.yml
-
     ## install rvm and basic ruby install
     - include: ../tasks/rvm-setup-sl.yml
     - include: ../tasks/rvm-setup-common.yml

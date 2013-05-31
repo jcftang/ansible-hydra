@@ -39,10 +39,6 @@
     - redis
 
   tasks:
-    ## setup some users
-    - include: ../tasks/users-admin.yml
-    - include: ../tasks/users-dri.yml
-
     ## install rvm and basic ruby install
     - include: ../tasks/rvm-setup-sl.yml
     - include: ../tasks/rvm-setup-common.yml

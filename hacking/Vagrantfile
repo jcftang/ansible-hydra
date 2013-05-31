@@ -28,7 +28,11 @@ Vagrant::Config.run do |global_config|
       "modifyvm", :id,
       "--name", "hydra VM",
       "--memory", "1024",
+      "--natdnsproxy1", "off",
+      "--natdnshostresolver1", "off"
     ]
+    config.vm.customize ["setextradata", :id,
+      "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   end
 
 end
