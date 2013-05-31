@@ -21,7 +21,10 @@
     #action: command cp /tmp/solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
 
   - name: Copy solr contribs into place (need to fix this in a production environment)
-    command: cp -a /vagrant/solr/lib /opt/solr/lib
+    action: copy src=solr-contrib.tar dest=/opt/solr-contrib.tar
+
+  - name: Unpack solr-contrib tarball
+    action: command tar xf solr-contrib.tar chdir=/opt
 
   - name: Setup SOLR core -- need to refine this step
     action: command rsync -av /tmp/apache-solr-${solr_version}/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
