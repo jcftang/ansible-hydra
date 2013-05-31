@@ -1,6 +1,6 @@
 # order matters!
 ---
-- hosts: kraken-sl
+- hosts: all
   user: vagrant
   sudo: True
 

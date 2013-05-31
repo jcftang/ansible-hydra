@@ -1,6 +1,6 @@
 # order matters!
 ---
-- hosts: kraken-sl
+- hosts: fedora-sl
   user: vagrant
   sudo: True
 
