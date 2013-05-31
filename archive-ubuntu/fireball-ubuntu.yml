@@ -1,0 +1,30 @@
+---
+# install the required dependancies
+- hosts: all
+  gather_facts: false
+  user: vagrant
+  sudo: True
+  tasks:
+    - action: apt pkg=$item state=present
+      with_items:
+        - python-crypto
+        - python-pyasn1
+        - python-keyczar
+        - python-zmq
+
+##  # set up the fireball transport
+##  - hosts: all
+##    gather_facts: False
+##    connection: ssh # or paramiko
+##    sudo: True
+##    tasks:
+##        - action: fireball
+##  
+##  # these operations will occur over the fireball transport
+##  - hosts: all
+##    connection: fireball
+##    tasks:
+##        - action: shell echo "Hello ${item}"
+##          with_items:
+##              - one
+##              - two

@@ -1,0 +1,28 @@
+---
+  - name: Enable EPEL
+    action: yum pkg=$item state=present
+    with_items:
+      - epel-release
+
+  - name: Common packages
+    action: yum pkg=$item state=present
+    with_items:
+      - tsocks
+      - ansible
+      - git
+      - etckeeper
+      - python-pip
+      - python-virtualenv
+      - python-setuptools
+      - MySQL-python
+      - python-psycopg2
+      - avahi
+      - avahi-dnsconfd
+      - nc
+    notify:
+      - startup avahi-daemon and avahi-dnsconfd
+
+  - name: Stop and disable iptables
+    action: service name=$item state=stopped enabled=no
+    with_items:
+      - iptables

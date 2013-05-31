@@ -1,0 +1,36 @@
+# Playbook for downloading upstream tarball, unpacking and deploying to a fresh
+# system
+---
+- hosts: kraken-ubuntu
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - name: Download SOLR
+    #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz dest=/tmp/solr-4.1.0.tgz
+    action: shell curl http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz > /tmp/solr-4.1.0.tgz creates=/tmp/solr-4.1.0.tgz
+
+  - name: Unpack SOLR
+    action: command tar -C /tmp -xvzf /tmp/solr-4.1.0.tgz creates=/tmp/solr-4.1.0/dist/solr-4.1.0.war
+# create /opt/solr/data and conf directories SOLR_HOME=/opt/solr
+  - name: Setup directory
+    action: file path=/opt/solr/production state=directory owner=tomcat6 group=tomcat6
+
+  - name: Setup data directory
+    action: file path=/opt/solr/production/collection1/data state=directory owner=tomcat6 group=tomcat6
+
+  - name: Copy solr.war into place
+    action: command cp /tmp/solr-4.1.0/dist/solr-4.1.0.war /opt/solr/solr.war creates=/opt/solr/solr.war
+
+  - name: Setup SOLR core -- need to refine this step
+    action: command rsync -av /tmp/solr-4.1.0/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
+
+  - name: Install solrconfig
+    action: template src=templates/solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat6 group=tomcat6
+
+  - name: Correct ownership
+    #action: file path=/opt/solr/solr.war owner=tomcat6 group=tomcat6
+    action: command chown -R tomcat6:tomcat6 /opt/solr
+
+  - name: Install tomcat context
+    action: template src=templates/solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat6 group=tomcat6

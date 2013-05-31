@@ -1,0 +1,9 @@
+---
+  - name: Get phantomjs binary
+    command: curl -O https://phantomjs.googlecode.com/files/phantomjs-1.9.0-linux-x86_64.tar.bz2 creates=/tmp/phantomjs-1.9.0-linux-x86_64.tar.bz2 chdir=/tmp
+
+  - name: Unpack phantomjs
+    command: tar jxvf phantomjs-1.9.0-linux-x86_64.tar.bz2 chdir=/tmp creates=/tmp/phantomjs-1.9.0-linux-x86_64/bin/phantomjs
+
+  - name: Install binary to /usr/local/bin
+    command: install -m 0755 phantomjs-1.9.0-linux-x86_64/bin/phantomjs /usr/local/bin chdir=/tmp creates=/usr/local/bin/phantomjs

@@ -1,0 +1,99 @@
+# order matters!
+---
+- hosts: kraken-sl
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+
+  vars:
+    host_group: nuig-rnag
+    solr_version: 4.0.0
+    fedora_version: 3.6.2
+
+    # buildbot
+    venv_user: vagrant
+
+    # user that will have rvm and ruby etc...
+    rvm_user: vagrant
+
+    # RVM/RoR related
+    home_directory: /home/${rvm_user}
+    rvm_home: ${home_directory}/.rvm
+    rvm_bindir: ${rvm_home}/bin
+
+    # Ceph
+    mon_port: 6789                                                              
+    mon_ip_a: ${ansible_default_ipv4.address}                                   
+    mon_fqdn_a: ${ansible_default_ipv4.address}                                 
+    mds_fqdn_a: ${ansible_default_ipv4.address}                                 
+    osd_fqdn_0: ${ansible_default_ipv4.address}                                 
+    osd_fqdn_1: ${ansible_default_ipv4.address}
+
+  roles:
+    - role: proxy
+      proxy_server: proxy.tchpc.tcd.ie
+      proxy_port: 8080
+      socks_server: 134.226.112.43
+      socks_port: 1080
+    - etckeeper
+    - common
+    - tomcat
+    - redis
+
+  tasks:
+    - name: /root/.pip
+      file: path=/root/.pip/ owner=root  mode=0755 state=directory
+
+    - name: write /root/.pip/pip.conf
+      action: template src=../templates/pip.j2 dest=/root/.pip/pip.conf owner=root
+      tags: configuration
+
+    - name: install insecure ssh config for root
+      template: src=../files/insecure_config_proxy dest=${home_directory}/.ssh/config mode=0600
+      sudo: False
+
+    ## setup some users
+    - include: ../tasks/users-admin.yml
+    - include: ../tasks/users-dri.yml
+
+    ## install rvm and basic ruby install
+    - include: ../tasks/rvm-setup-sl.yml
+    - include: ../tasks/rvm-setup-common.yml
+
+    ## install rails and mod passenger
+    - include: ../tasks/rails-sl.yml
+
+    ## install phantomjs for testing
+    ## must configure vhosts to look for a rails app deployment to serve out
+    - include: ../tasks/phantomjs.yml
+
+    ## additional dependancies needed for hydra-head
+    - include: ../tasks/mysql-sl.yml
+    #- include: ../tasks/postgresql-sl.yml
+    - include: ../tasks/solr-sl.yml
+    - include: ../tasks/fedora-sl.yml
+
+    ## storage component
+    #- include: ../tasks/ceph-sl.yml
+
+    ## continuous builder/tester
+    #- include: ../tasks/buildbot.yml
+
+    # optional can be commented out, ruby versions are taken from a previous task
+#    - name: Run bundle
+#      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && bundle chdir=/vagrant/nuig-rnag
+#
+#    - name: generate assets
+#      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && rake RAILS_ENV=production assets:precompile chdir=/vagrant/nuig-rnag
+#
+#    - name: load schema
+#      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && rake RAILS_ENV=production db:schema:load chdir=/vagrant/nuig-rnag
+#
+#    - name: db migrate
+#      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && rake RAILS_ENV=production db:migrat chdir=/vagrant/nuig-rnag
+
+  handlers:
+    - include: ../handlers/ceph-sl.yml

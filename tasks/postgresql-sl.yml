@@ -1,0 +1,21 @@
+---
+  - name: Install postgresql client and server
+    action: yum pkg=$item state=present
+    with_items:
+      - postgresql 
+      - postgresql-server
+
+  - name: initialise postgresdb
+    action: shell creates=/var/lib/pgsql/data/PG_VERSION service postgresql initdb
+
+  - name: enable postgresqld service
+    action: service name=postgresql state=started enabled=yes 
+
+  - name: create db 'dridb'
+    sudo_user: postgres
+    action: postgresql_db db=dridb state=present login_user=postgres
+
+  # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+  - name: create user 'driuser' with password 'dripass' for 'dridb' and grant all priveleges
+    sudo_user: postgres
+    action: postgresql_user state=present name=driuser password=dripass db=dridb role_attr_flags=CREATEDB,NOSUPERUSER

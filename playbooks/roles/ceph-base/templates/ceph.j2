@@ -1,0 +1,23 @@
+[client.radosgw.gateway]
+        host = ${radosgw_hostname}
+        keyring = /etc/ceph/keyring.radosgw.gateway
+        rgw socket path = /tmp/radosgw.sock
+        log file = /var/log/ceph/radosgw.log
+        rgw data = /var/lib/ceph/radosgw/${radosgw_hostname}
+
+[osd]
+        osd journal size = 1000
+        filestore xattr use omap = true
+
+[mon.a]
+        host = ${mon_fqdn_a}
+        mon addr = ${mon_ip_a}:${mon_port}
+
+[osd.0]
+        host = ${osd_fqdn_0}
+
+[osd.1]
+        host = ${osd_fqdn_1}
+
+[mds.a]
+        host = ${mds_fqdn_a}

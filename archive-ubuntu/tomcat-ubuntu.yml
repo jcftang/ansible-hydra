@@ -1,0 +1,26 @@
+---
+- hosts: kraken-ubuntu
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - name: Install Tomcat
+    sudo: True
+    action: apt pkg=$item state=present
+    with_items:
+      - tomcat6
+      - tomcat6-admin
+#      - tomcat6-webapps
+#      - tomcat6-admin-webapps
+#      - java-1.6.0-openjdk
+
+  - name: install tomcat-users.xml
+    action: template src=templates/tomcat-users-ubuntu.j2 dest=/etc/tomcat6/tomcat-users.xml
+    notify: restart tomcat
+
+  - name: enable tomcat service                                                 
+    action: service name=tomcat6 state=started enabled=yes
+
+  handlers:
+    - name: restart tomcat
+      action: service name=tomcat6 state=restarted enabled=yes

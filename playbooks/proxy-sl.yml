@@ -1,0 +1,20 @@
+# order matters!
+---
+- hosts: kraken-sl
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+
+  roles:
+    - role: proxy
+      proxy_server: proxy.tchpc.tcd.ie
+      proxy_port: 8080
+      socks_server: 134.226.112.43
+      socks_port: 1080
+
+  tasks:
+
+  handlers:

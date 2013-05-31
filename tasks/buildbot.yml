@@ -1,0 +1,11 @@
+---
+  - name: add ${venv_user} to rvm group
+    sudo: True
+    action: command gpasswd -a ${venv_user} rvm
+
+  - name: Upload buildbot requirements file
+    action: copy src=../files/pip-buildbot.txt dest=/home/${venv_user}/pip-buildbot.txt
+
+  - name: Install buildbot via pip
+    action: pip requirements=/home/${venv_user}/pip-buildbot.txt virtualenv=/home/${venv_user}/venv
+

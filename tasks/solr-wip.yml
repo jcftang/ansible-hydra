@@ -1,0 +1,40 @@
+# see also http://mvnrepository.com/artifact/org.apache.solr/solr/${solr_version}
+---
+  - name: Check variable solr_version is set
+    fail: msg="Please set 'solr_version' variable in the playbook"
+    when_unset: $solr_version
+
+  - name: Download SOLR
+    #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/${solr_version}/solr-${solr_version}.tgz dest=/tmp/solr-${solr_version}.tgz
+    action: shell curl http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/${solr_version}/solr-${solr_version}.tgz > /tmp/solr-${solr_version}.tgz creates=/tmp/solr-${solr_version}.tgz
+    #action: shell curl http://repo1.maven.org/maven2/org/apache/solr/solr/${solr_version}/solr-${solr_version}.war > /tmp/solr-${solr_version}.war creates=/tmp/solr-${solr_version}.war
+    #action: shell curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/solr-${solr_version}.tgz creates=/tmp/solr-${solr_version}.tgz
+
+  - name: Setup directory
+    action: file path=/opt/solr/production state=directory owner=tomcat group=tomcat
+
+  - name: Setup data directory
+    action: file path=/opt/solr/production/collection1/data/index state=directory owner=tomcat group=tomcat
+
+  - name: Unpack SOLR
+    action: command tar -C /tmp -xvzf /tmp/solr-${solr_version}.tgz creates=/tmp/solr-${solr_version}/dist/solr-${solr_version}.war
+
+  - name: Copy solr.war into place
+    action: command cp /tmp/solr-${solr_version}/dist/solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+    #action: command cp /tmp/solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+
+  - name: Setup SOLR core -- need to refine this step
+    action: command rsync -av /tmp/solr-${solr_version}/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
+
+  - name: Install solrconfig
+    action: template src=../templates/solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat group=tomcat
+
+  - name: Install solr schema (custom hydra/dri one)
+    action: template src=../files/solr-schema.xml  dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat group=tomcat
+
+  - name: Correct ownership
+    #action: file path=/opt/solr/solr.war owner=tomcat group=tomcat
+    action: command chown -R tomcat:tomcat /opt/solr
+
+  - name: Install tomcat context
+    action: template src=../templates/solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat group=tomcat

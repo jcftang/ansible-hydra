@@ -1,0 +1,6 @@
+---
+- name: restart ceph
+  action: service name=ceph state=restarted
+                                                                            
+- name: start ceph
+  action: command service ceph -a start

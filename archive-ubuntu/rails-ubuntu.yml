@@ -1,0 +1,69 @@
+---
+- hosts: webservers-ubuntu;kraken-ubuntu
+  user: vagrant
+  sudo: True
+
+  vars:
+    home_directory: /home/${user}
+    rvm_bindir: /usr/local/rvm/bin
+
+  vars_files:                                                                   
+    - global_vars.yml
+
+  tasks:
+
+  - include: ./rvm-setup-ubuntu.yml
+  - include: ./rvm-setup-common.yml
+
+  #
+  # base of rails
+  #
+  - name: install rails
+    action: shell ${rvm_bindir}/gem install rails creates=${gemdir.stdout}/bin/rails
+
+  - name: install bundler
+    action: shell ${rvm_bindir}/gem install bundler creates=${gemdir.stdout}/bin/bundle
+
+  - name: install unicorn
+    action: shell ${rvm_bindir}/gem install unicorn creates=${gemdir.stdout}/bin/unicorn
+
+  #
+  # mod_passenger
+  #
+  - name: install mod_passenger dependencies
+    action: apt pkg=$item state=present
+    with_items:
+      - apache2 
+      - apache2-prefork-dev
+      - libcurl4-openssl-dev
+      - libapr1-dev
+      - libaprutil1-dev
+
+  - name: start and enable apache2
+    action: service name=apache2 state=started enabled=yes
+
+  - name: install mod_passenger
+    action: shell /usr/local/rvm/bin/gem install passenger creates=${gemdir.stdout}/bin/passenger-install-apache2-module
+
+  - name: register passenger version variable
+    action: shell . /usr/local/rvm/environments/default && ${gemdir.stdout}/bin/passenger-config --version
+    register: passenger_version
+
+  - name: pre-configure mod_passenger
+    action: shell . /usr/local/rvm/environments/default && ${gemdir.stdout}/bin/passenger-install-apache2-module -a creates=/usr/local/rvm/gems/${ruby_version.stdout}/gems/passenger-${passenger_version.stdout}/ext/apache2/mod_passenger.so
+
+  # this should be a two step process with a2enmod
+  - name: configure apache for mod_passenger
+    action: template src=templates/passenger.j2 dest=/etc/apache2/mods-enabled/passenger.conf
+    notify:
+      - restart apache2
+
+  # this should be a two step process
+  - name: configure rails app
+    action: template src=templates/rails-app.j2 dest=/etc/apache2/sites-enabled/rails-app.conf
+    notify:
+      - restart apache2
+
+  handlers:
+    - name: restart apache2
+      action: service name=apache2 state=restarted

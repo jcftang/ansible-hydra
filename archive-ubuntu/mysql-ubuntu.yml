@@ -1,0 +1,21 @@
+---
+- hosts: kraken-ubuntu
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - name: Install mysql client and server
+    action: apt pkg=$item state=present
+    with_items:
+      - mysql-client
+      - mysql-server
+
+  - name: enable mysql service
+    action: service name=mysql state=started enabled=yes 
+
+  - name: create db 'dridb'
+    action: mysql_db db=dridb state=present
+
+  # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+  - name: create user 'driuser' with password 'dripass' for 'dridb' and grant all priveleges
+    action: mysql_user state=present name=driuser password=dripass priv=dridb.*:ALL

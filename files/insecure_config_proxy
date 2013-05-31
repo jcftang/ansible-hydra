@@ -1,0 +1,5 @@
+Host *
+	StrictHostKeyChecking no
+
+Host *.forasfeasa.ie
+	ProxyCommand nc -x{{ socks_server }}:1080 -w1 %h %p

@@ -1,0 +1,17 @@
+LoadModule passenger_module {{ rvm_home }}/gems/{{ ruby_version.stdout }}/gems/passenger-{{ passenger_version.stdout }}/libout/apache2/mod_passenger.so
+<IfModule mod_passenger.c>
+  PassengerRoot {{ rvm_home }}/gems/{{ ruby_version.stdout }}/gems/passenger-{{ passenger_version.stdout }}
+  PassengerRuby {{ rvm_home }}/wrappers/{{ ruby_version.stdout }}/ruby
+</IfModule>
+
+#   <VirtualHost *:80>
+#      ServerName www.yourhost.com
+#      # !!! Be sure to point DocumentRoot to 'public'!
+#      DocumentRoot /somewhere/public    
+#      <Directory /somewhere/public>
+#         # This relaxes Apache security settings.
+#         AllowOverride all
+#         # MultiViews must be turned off.
+#         Options -MultiViews
+#      </Directory>
+#   </VirtualHost>

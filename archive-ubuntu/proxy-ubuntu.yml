@@ -1,0 +1,61 @@
+---
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  vars:
+    proxy_server: proxy.tchpc.tcd.ie
+    proxy_port: 8080
+    socks_server: 134.226.112.43
+    socks_port: 1080
+
+  vars_files:
+    - global_vars.yml
+
+  tasks:
+  - name: write /etc/profile.d/proxy.sh
+    action: template src=templates/proxy.j2 dest=/etc/profile.d/proxy.sh
+    tags: configuration
+
+  - name: Configure apt to use a proxy
+    action: template src=templates/apt.j2 dest=/etc/apt/apt.conf
+    tags: configuration
+
+  - name: Install python-software-properties and python-apt
+    action: apt pkg=$item state=installed update_cache=yes
+    with_items:
+      - python-software-properties
+      - python-apt
+    tags: packages
+
+  - name: Install tsocks
+    action: apt name=$item state=installed
+    with_items:
+      - tsocks
+    tags: packages
+
+  - name: Configure tsocks
+    action: template src=templates/tsocks.j2 dest=/etc/tsocks.conf
+    tags: configuration
+
+  - name: configure curlrc for root
+    action: template src=templates/curlrc.j2 dest=/root/.curlrc
+    tags: configuration
+
+  - name: configure gemrc for root
+    action: template src=templates/gemrc.j2 dest=/root/.gemrc
+    tags: configuration
+
+  - name: Configure wgetrc for the system
+    action: template src=templates/wgetrc.j2 dest=/etc/wgetrc
+    tags: configuration
+
+  - name: configure curlrc for vagrant
+    action: template src=templates/curlrc.j2 dest=/home/vagrant/.curlrc
+    tags: configuration
+
+  - name: configure gemrc for vagrant
+    action: template src=templates/gemrc.j2 dest=/home/vagrant/.gemrc
+    tags: configuration
+
+  - include: ./pip-proxy-common.yml

@@ -1,0 +1,11 @@
+# order matters!
+---
+- include: proxy-ubuntu.yml
+- include: common-ubuntu.yml
+- include: rails-ubuntu.yml
+- include: mysql-ubuntu.yml
+#- include: postgresql-ubuntu.yml
+- include: tomcat-ubuntu.yml
+- include: solr-ubuntu.yml
+- include: fedora-ubuntu.yml
+- include: ../ceph-playbooks/ceph/setup-ubuntu.yml

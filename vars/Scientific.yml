@@ -1,0 +1,2 @@
+---
+dist_tag: sl${ansible_distribution_version[0]}

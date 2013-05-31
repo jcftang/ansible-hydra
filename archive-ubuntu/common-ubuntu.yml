@@ -1,0 +1,31 @@
+---
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - global_vars.yml
+
+  tasks:
+  - name: Install python-software-properties and python-apt
+    action: apt pkg='python-software-properties' state=installed update_cache=yes
+
+  - name: Enable ppa:rquillo/ansible
+    action: apt_repository repo=ppa:rquillo/ansible
+
+  - name: Common packages
+    action: apt pkg=$item state=present update_cache=yes force=yes
+    with_items:
+      - ansible
+      - git
+      - etckeeper
+      - python-pip
+      - python-setuptools
+      - python-mysqldb
+      - python-psycopg2
+      - avahi-daemon
+
+  - name: Startup avahi-daemon
+    action: service name=$item state=started enabled=yes
+    with_items:
+      - avahi-daemon

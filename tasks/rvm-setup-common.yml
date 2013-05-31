@@ -1,0 +1,27 @@
+---
+#  - name: configure curlrc for vagrant
+#    action: template src=templates/curlrc.j2 dest=/home/vagrant/.curlrc
+#    tags: configuration
+
+  - name: install rvm
+    sudo: False
+    action: shell curl -L https://get.rvm.io | bash -s stable creates=${rvm_bindir}/rvm
+
+  - name: install ruby 2.0.0-p195
+    sudo: False
+    shell: ${rvm_bindir}/rvm install 2.0.0-p195
+
+  - name: use ruby 1.9.3 by default
+    sudo: False
+    shell: ${rvm_bindir}/rvm alias create default 2.0.0-p195
+
+  # register variables for later use
+  - name: register gem dir variable
+    sudo: False
+    shell: ${rvm_bindir}/rvm gemdir
+    register: gemdir
+
+  - name: register ruby version variable
+    sudo: False
+    shell: ${rvm_bindir}/rvm current
+    register: ruby_version

@@ -1,0 +1,15 @@
+---
+- name: restart httpd
+  action: service name=httpd state=restarted
+
+- name: startup avahi-daemon and avahi-dnsconfd
+  action: service name=$item state=started enabled=yes
+  with_items:
+    - avahi-daemon
+    - avahi-dnsconfd
+
+- name: restart avahi-daemon and avahi-dnsconfd
+  action: service name=$item state=restarted
+  with_items:
+    - avahi-daemon
+    - avahi-dnsconfd

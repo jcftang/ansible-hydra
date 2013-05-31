@@ -1,0 +1,60 @@
+# Playbook for downloading upstream tarball, unpacking and deploying to a fresh
+# system
+---
+- hosts: kraken-ubuntu
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - name: Download Fedora Commons
+    #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz dest=/tmp/solr-4.1.0.tgz
+    action: shell curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/3.6.2/fcrepo-installer-3.6.2.jar > /tmp/fcrepo-installer-3.6.2.jar creates=/tmp/fcrepo-installer-3.6.2.jar
+
+  - name: Upload install.properties file for automated install
+    action: template src=templates/fedora-install-properties.j2 dest=/tmp/fedora-install.properties
+
+  - name: Setup directory
+    action: file path=/opt/fedora state=directory owner=tomcat6 group=tomcat6
+
+  - name: Run automated install of fedora-commons
+    action: command java -jar /tmp/fcrepo-installer-3.6.2.jar /tmp/fedora-install.properties creates=/opt/fedora/server/config/fedora.fcfg
+    sudo: True
+    sudo_user: tomcat6
+
+  - name: Install tomcat context for fedora
+    action: template src=templates/fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat6 group=tomcat6
+
+  ## could be smarter below here as a loop can be written
+  - name: Install tomcat context for fop
+    action: template src=templates/fop-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fop.xml owner=tomcat6 group=tomcat6
+
+  - name: Install tomcat context for imagemanip
+    action: template src=templates/imagemanip-xml.j2 dest=/etc/tomcat6/Catalina/localhost/imagemanip.xml owner=tomcat6 group=tomcat6
+
+  - name: Install tomcat context for saxon
+    action: template src=templates/saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat6 group=tomcat6
+
+#  - name: Unpack SOLR
+#    action: command tar -C /tmp -xvzf /tmp/solr-4.1.0.tgz creates=/tmp/solr-4.1.0/dist/solr-4.1.0.war
+## create /opt/solr/data and conf directories SOLR_HOME=/opt/solr
+#  - name: Setup directory
+#    action: file path=/opt/solr/production state=directory owner=tomcat6 group=tomcat6
+#
+#  - name: Setup data directory
+#    action: file path=/opt/solr/production/collection1/data state=directory owner=tomcat6 group=tomcat6
+#
+#  - name: Copy solr.war into place
+#    action: command cp /tmp/solr-4.1.0/dist/solr-4.1.0.war /opt/solr/solr.war creates=/opt/solr/solr.war
+#
+#  - name: Setup SOLR core -- need to refine this step
+#    action: command rsync -av /tmp/solr-4.1.0/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
+#
+#  - name: Install solrconfig
+#    action: template src=templates/solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat6 group=tomcat6
+#
+#  - name: Correct ownership
+#    #action: file path=/opt/solr/solr.war owner=tomcat6 group=tomcat6
+#    action: command chown -R tomcat:tomcat /opt/solr
+#
+#  - name: Install tomcat context
+#    action: template src=templates/solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat6 group=tomcat6
