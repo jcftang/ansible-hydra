@@ -53,8 +53,16 @@
       sudo: False
 
     ## install phantomjs for testing
-    ## must configure vhosts to look for a rails app deployment to serve out
     - include: ../tasks/phantomjs.yml
+
+    ## must configure vhosts to look for a rails app deployment to serve out
+ #  - name: configure rails app
+ #    action: template src=$item dest=/etc/httpd/conf.d/rails-app.conf
+ #    first_available_file:
+ #      - ../templates/rails-app-${host_group}.j2
+ #      - ../templates/rails-app.j2
+ #    notify:
+ #      - restart httpd 
 
     ## additional dependancies needed for hydra-head
     - include: ../tasks/mysql-sl.yml
@@ -83,3 +91,4 @@
 
   handlers:
     - include: ../handlers/ceph-sl.yml
+    - include: ../handlers/main.yml
