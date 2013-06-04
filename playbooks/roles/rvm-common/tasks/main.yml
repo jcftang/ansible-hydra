@@ -1,0 +1,55 @@
+---
+  - name: Set up ruby and rails dependancies
+    sudo: True
+    action: yum pkg=$item state=present
+    with_items:
+      - bzip2
+      - cpio
+      - expat-devel
+      - gcc
+      - gcc-c++
+      - gettext-devel
+      - git
+      - libcurl-devel
+      - libxml2
+      - libxml2-devel
+      - libxslt
+      - libxslt-devel
+      - mailx
+      - make
+      - openssl-devel
+      - patch
+      - perl
+      - readline-devel
+      - sendmail
+      - wget
+      - which
+      - zlib-devel
+      - bison
+      - libyaml-devel
+      - libffi-devel
+      - libtool
+      - qtwebkit-devel
+
+  - name: install rvm
+    sudo: False
+    action: shell curl -L https://get.rvm.io | bash -s stable creates=${rvm_bindir}/rvm
+
+  - name: install ruby ${ruby_version}
+    sudo: False
+    shell: ${rvm_bindir}/rvm install ${ruby_version}
+
+  - name: use ruby ${ruby_version} by default
+    sudo: False
+    shell: ${rvm_bindir}/rvm alias create default ${ruby_version}
+
+  # register variables for later use
+  - name: register gem dir variable
+    sudo: False
+    shell: ${rvm_bindir}/rvm gemdir
+    register: gemdir
+
+  - name: register ruby version variable
+    sudo: False
+    shell: ${rvm_bindir}/rvm current
+    register: ruby_version

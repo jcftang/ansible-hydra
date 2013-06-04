@@ -16,14 +16,6 @@
     # buildbot
     venv_user: vagrant
 
-    # user that will have rvm and ruby etc...
-    rvm_user: vagrant
-
-    # RVM/RoR related
-    home_directory: /home/${rvm_user}
-    rvm_home: ${home_directory}/.rvm
-    rvm_bindir: ${rvm_home}/bin
-
     # Ceph
     mon_port: 6789                                                              
     mon_ip_a: ${ansible_default_ipv4.address}                                   
@@ -40,6 +32,16 @@
       socks_port: 1080
     - etckeeper
     - common
+    - role: rvm-common
+      rvm_user: vagrant
+      ruby_version: 2.0.0-p195
+      rvm_home: /home/${rvm_user}/.rvm
+      rvm_bindir: ${rvm_home}/bin
+    - role: rvm-passenger
+      rvm_user: vagrant
+      ruby_version: 2.0.0-p195
+      rvm_home: /home/${rvm_user}/.rvm
+      rvm_bindir: ${rvm_home}/bin
     - tomcat
     - redis
 
@@ -52,15 +54,8 @@
       tags: configuration
 
     - name: install insecure ssh config for root
-      template: src=../files/insecure_config_proxy dest=${home_directory}/.ssh/config mode=0600
+      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
       sudo: False
-
-    ## install rvm and basic ruby install
-    - include: ../tasks/rvm-setup-sl.yml
-    - include: ../tasks/rvm-setup-common.yml
-
-    ## install rails and mod passenger
-    - include: ../tasks/rails-sl.yml
 
     ## install phantomjs for testing
     ## must configure vhosts to look for a rails app deployment to serve out
