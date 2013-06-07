@@ -13,17 +13,6 @@
     solr_version: 4.0.0
     fedora_version: 3.6.2
 
-    # buildbot
-    venv_user: vagrant
-
-    # Ceph
-    mon_port: 6789                                                              
-    mon_ip_a: ${ansible_default_ipv4.address}                                   
-    mon_fqdn_a: ${ansible_default_ipv4.address}                                 
-    mds_fqdn_a: ${ansible_default_ipv4.address}                                 
-    osd_fqdn_0: ${ansible_default_ipv4.address}                                 
-    osd_fqdn_1: ${ansible_default_ipv4.address}
-
   roles:
     - role: proxy
       proxy_server: proxy.tchpc.tcd.ie
@@ -83,12 +72,6 @@
     - include: ../tasks/solr-sl.yml
     - include: ../tasks/fedora-sl.yml
 
-    ## storage component
-    #- include: ../tasks/ceph-sl.yml
-
-    ## continuous builder/tester
-    #- include: ../tasks/buildbot.yml
-
     # optional can be commented out, ruby versions are taken from a previous task
 #    - name: Run bundle
 #      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && bundle chdir=/vagrant/nuig-rnag
@@ -103,5 +86,4 @@
 #      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && rake RAILS_ENV=production db:migrat chdir=/vagrant/nuig-rnag
 
   handlers:
-    - include: ../handlers/ceph-sl.yml
     - include: ../handlers/main.yml
