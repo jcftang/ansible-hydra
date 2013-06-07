@@ -44,6 +44,8 @@
       rvm_bindir: ${rvm_home}/bin
     - tomcat
     - redis
+    - role: mysql
+      mysql_root_password: CHANGEME
 
   tasks:
     - name: /root/.pip
@@ -70,7 +72,13 @@
  #      - restart httpd 
 
     ## additional dependancies needed for hydra-head
-    - include: ../tasks/mysql-sl.yml
+    - name: create db 'dridb'
+      action: mysql_db db=dridb state=present
+
+    # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+    - name: create user 'driuser' with password 'dripass' for 'dridb' and grant all priveleges
+      action: mysql_user state=present name=driuser password=dripass priv=dridb.*:ALL
+
     #- include: ../tasks/postgresql-sl.yml
     - include: ../tasks/solr-sl.yml
     - include: ../tasks/fedora-sl.yml
