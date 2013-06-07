@@ -1,0 +1,32 @@
+# order matters!
+---
+- hosts: hydra
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+
+  vars:
+    host_group: nuig-rnag
+
+  roles:
+    - role: proxy
+      proxy_server: proxy.tchpc.tcd.ie
+      proxy_port: 8080
+      socks_server: 134.226.112.43
+      socks_port: 1080
+    - etckeeper
+    - common
+    - { role: mysql, mysql_root_password: CHANGEME }
+
+  tasks:
+    - name: create db 'dridb'
+      action: mysql_db db=dridb state=present
+
+    # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+    - name: create user 'driuser' with password 'dripass' for 'dridb' and grant all priveleges
+      action: mysql_user state=present name=driuser password=dripass priv=dridb.*:ALL
+
+  handlers:
