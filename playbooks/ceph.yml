@@ -1,6 +1,6 @@
 # order matters!
 ---
-- hosts: ceph-sl
+- hosts: hydra
   user: vagrant
   sudo: True
 

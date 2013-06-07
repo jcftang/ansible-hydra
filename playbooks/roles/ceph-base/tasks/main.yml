@@ -9,7 +9,8 @@
     command: rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc'
 
   - name: Enable upstream stable repo
-    command: yum-config-manager --add-repo=http://www.ceph.com/rpm-bobtail/el6/x86_64 creates=/etc/yum.repos.d/ceph.com_rpm-bobtail_el6_x86_64.repo 
+    #command: yum-config-manager --add-repo=http://www.ceph.com/rpm-bobtail/el6/x86_64 creates=/etc/yum.repos.d/ceph.com_rpm-bobtail_el6_x86_64.repo 
+    command: yum-config-manager --add-repo=http://www.ceph.com/rpm-cuttlefish/el6/x86_64 creates=/etc/yum.repos.d/ceph.com_rpm-cuttlefish_el6_x86_64.repo 
 
   - name: Install the latest version of ceph from EPEL or Upstream repo
     action: yum pkg=$item state=latest
