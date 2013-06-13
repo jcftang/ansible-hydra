@@ -13,17 +13,6 @@
     solr_version: 4.0.0
     fedora_version: 3.6.2
 
-    # buildbot
-    venv_user: vagrant
-
-    # Ceph
-    mon_port: 6789                                                              
-    mon_ip_a: ${ansible_default_ipv4.address}                                   
-    mon_fqdn_a: ${ansible_default_ipv4.address}                                 
-    mds_fqdn_a: ${ansible_default_ipv4.address}                                 
-    osd_fqdn_0: ${ansible_default_ipv4.address}                                 
-    osd_fqdn_1: ${ansible_default_ipv4.address}
-
   roles:
     - etckeeper
     - common
@@ -39,6 +28,8 @@
       rvm_bindir: ${rvm_home}/bin
     - tomcat
     - redis
+    - role: mysql
+      mysql_root_password: CHANGEME
 
   tasks:
     - name: /root/.pip
@@ -65,16 +56,16 @@
  #      - restart httpd 
 
     ## additional dependancies needed for hydra-head
-    - include: ../tasks/mysql-sl.yml
+    - name: create db 'dridb'
+      action: mysql_db db=dridb state=present
+
+    # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+    - name: create user 'driuser' with password 'dripass' for 'dridb' and grant all priveleges
+      action: mysql_user state=present name=driuser password=dripass priv=dridb.*:ALL
+
     #- include: ../tasks/postgresql-sl.yml
     - include: ../tasks/solr-sl.yml
     - include: ../tasks/fedora-sl.yml
-
-    ## storage component
-    #- include: ../tasks/ceph-sl.yml
-
-    ## continuous builder/tester
-    #- include: ../tasks/buildbot.yml
 
     # optional can be commented out, ruby versions are taken from a previous task
 #    - name: Run bundle
@@ -90,5 +81,4 @@
 #      shell: source ${home_directory}/.rvm/environments/${ruby_version.stdout}@global && rake RAILS_ENV=production db:migrat chdir=/vagrant/nuig-rnag
 
   handlers:
-    - include: ../handlers/ceph-sl.yml
     - include: ../handlers/main.yml
