@@ -14,7 +14,7 @@ fi
 FULL_PATH=`python -c "import os; print(os.path.realpath('$HACKING_DIR'))"`
 ANSIBLE_HOME=`dirname "$FULL_PATH"`
 
-export ANSIBLE_HOSTS="$ANSIBLE_HOME/hacking/hosts"
+export ANSIBLE_HOSTS="$ANSIBLE_HOME/hosts.vagrant"
 
 ansible() {
 	/usr/bin/env ansible --user=vagrant --private-key="$ANSIBLE_HOME/hacking/keys/insecure_private_key" $@
