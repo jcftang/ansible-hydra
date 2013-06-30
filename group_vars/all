@@ -1,0 +1,4 @@
+---
+host_group: nuig-rnag
+solr_version: 4.0.0
+fedora_version: 3.6.2
