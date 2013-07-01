@@ -55,13 +55,13 @@
 
   tasks:
     ## must configure vhosts to look for a rails app deployment to serve out
-   - name: configure rails app
-     action: template src=$item dest=/etc/httpd/conf.d/rails-app.conf
-     first_available_file:
-       - ../templates/rails-app-${host_group}.j2
-       - ../templates/rails-app.j2
-     notify:
-       - restart httpd
+    - name: configure rails app
+      action: template src=$item dest=/etc/httpd/conf.d/rails-app.conf
+      first_available_file:
+        - ../templates/rails-app-${host_group}.j2
+        - ../templates/rails-app.j2
+      notify:
+        - restart httpd
 
     ## additional dependancies needed for hydra-head
     - name: create db '{{ db_name }}'
