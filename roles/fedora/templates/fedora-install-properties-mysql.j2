@@ -1,0 +1,28 @@
+#Install Options
+#Mon Jul 01 11:10:19 UTC 2013
+ri.enabled=false
+messaging.enabled=false
+apia.auth.required=false
+database.jdbcDriverClass=com.mysql.jdbc.Driver
+upstream.auth.enabled=false
+ssl.available=true
+database.jdbcURL=jdbc\:mysql\://localhost/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+database.password={{ fedora_db_pass }}
+database.mysql.driver=included
+database.username={{ fedora_db_user }}
+fesl.authz.enabled=false
+deploy.local.services=true
+xacml.enabled=true
+database.mysql.jdbcDriverClass=com.mysql.jdbc.Driver
+fedora.serverHost=localhost
+database=mysql
+database.driver=included
+fedora.serverContext=fedora
+llstore.type=akubra-fs
+fedora.home=/opt/fedora
+database.mysql.jdbcURL=jdbc\:mysql\://localhost/fedora3?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+install.type=custom
+servlet.engine=other
+apim.ssl.required=true
+fedora.admin.pass={{ fedora_admin_pass }}
+apia.ssl.required=false

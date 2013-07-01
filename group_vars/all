@@ -4,13 +4,15 @@ solr_version: 4.0.0
 fedora_version: 3.6.2
 
 ## MySQL DB configuration
-
 mysql_root_password: CHANGEME
 
-fedora_db_name: fedora3
+## Fedora Commons configuration
+fedora_db_name: fcdb
 fedora_db_user: fcuser
 fedora_db_pass: fcpass
+fedora_admin_pass: fedoraAdmin
 
+## Hydra-Head database
 db_name: dridb
 db_user: driuser
 db_pass: dripass

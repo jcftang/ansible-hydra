@@ -11,7 +11,7 @@
   shell: curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/${fedora_version}/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
 
 - name: Upload install.properties file for automated install
-  template: src=fedora-install-properties.j2 dest=/tmp/fedora-install.properties
+  template: src=fedora-install-properties-mysql.j2 dest=/tmp/fedora-install.properties
 
 - name: Setup directory
   file: path=/opt/fedora state=directory owner=tomcat group=tomcat
