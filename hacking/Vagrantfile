@@ -25,7 +25,7 @@ Vagrant::Config.run do |global_config|
     config.vm.customize [
       "modifyvm", :id,
       "--name", "hydra VM",
-      "--memory", "1024",
+      "--memory", "2048",
       "--natdnsproxy1", "off",
       "--natdnshostresolver1", "off"
     ]
