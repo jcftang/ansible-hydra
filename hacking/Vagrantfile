@@ -10,7 +10,7 @@ Vagrant::Config.run do |global_config|
   global_config.vm.box_url = "http://thammuz.tchpc.tcd.ie/mirrors/boxes/scientificlinux-6.4-x86_64-netboot-devops.box"
 
   global_config.vm.define(:hydra) do |config|
-    config.vm.network :hostonly, "192.168.206.110"
+    config.vm.network :hostonly, "10.0.1.200"
     config.vm.host_name = "hydra.localhost"
 
 #    config.vm.provision :ansible do |ansible|
