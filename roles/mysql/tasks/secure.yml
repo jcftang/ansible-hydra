@@ -2,17 +2,17 @@
 ## taken from various places
 
 - name: MySQL | secure; check if root pw set
-  fail: msg="Set the mysql root password to be used"
+  fail: msg="Set the mysql root password to be used, set the mysql_root_password variable!"
   when_unset: ${mysql_root_password}
 
 - name: MySQL | secure
   debug: msg="Secure mysql. rootpw ${mysql_root_password}"
 
+- name: Copy .my.cnf file with root password credentials
+  template: src=root.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
+
 - name: Set mysql root password for localhost root account
   mysql_user: name=root host=localhost password=${mysql_root_password}
-
-- name: copy .my.cnf file with root password credentials
-  template: src=root.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
   
 - name: update mysql root password for all root accounts
   mysql_user: name=root host=$item password=${mysql_root_password}

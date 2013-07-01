@@ -1,0 +1,7 @@
+---
+## Create mysql DB
+- name: create db '{{ fedora_db_name }}'
+  action: mysql_db db={{ fedora_db_name }} state=present
+
+- name: create user '{{ fedora_db_user }}' with password '{{ fedora_db_pass }}' for '{{ fedora_db_name }}' and grant all priveleges
+  action: mysql_user state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL
