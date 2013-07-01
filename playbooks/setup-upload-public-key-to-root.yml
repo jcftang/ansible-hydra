@@ -1,0 +1,7 @@
+---
+- hosts: all
+  user: root
+
+  tasks:
+    - name: Upload public ssh key
+      authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"

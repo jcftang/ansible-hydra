@@ -1,0 +1,18 @@
+# for SL6 hosts
+---
+- hosts: all
+  user: root
+
+  vars_prompt:
+    - name: "rootpw"
+      prompt: "what password should be used?"
+      encrypt: "md4_crypt"
+      confirm: yes
+
+  tasks:
+    - name: Upload public ssh key
+      authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
+    - name: Set root passwd
+      user: name=root password={{rootpw}} state=present
+
