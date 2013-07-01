@@ -4,10 +4,6 @@
   user: vagrant
   sudo: True
 
-  vars_files:
-    - ../vars/global.yml
-    - ../vars/${ansible_distribution}.yml
-
   tasks:
     - name: remove proxy.sh from system
       file: path=/etc/profile.d/proxy.sh state=absent
