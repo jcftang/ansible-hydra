@@ -1,0 +1,46 @@
+# see also http://mvnrepository.com/artifact/org.apache.solr/solr/${solr_version}
+---
+- name: Check variable solr_version is set
+  fail: msg="Please set 'solr_version' variable in the playbook"
+  when_unset: $solr_version
+
+- name: Download SOLR
+  shell: curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz
+
+- name: Setup directory
+  file: path=/opt/solr/production state=directory owner=tomcat group=tomcat
+
+- name: Setup data directory
+  file: path=/opt/solr/production/collection1/data/index state=directory owner=tomcat group=tomcat
+
+- name: Unpack SOLR
+  command: tar -C /tmp -xvzf /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}/dist/solr-${solr_version}.war
+
+- name: Copy solr.war into place
+  command: cp /tmp/apache-solr-${solr_version}/dist/apache-solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+  #command: cp /tmp/solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+
+- name: Copy solr contribs into place (need to fix this in a production environment)
+  copy: src=solr-contrib.tar dest=/opt/solr-contrib.tar
+
+- name: Unpack solr-contrib tarball
+  command: tar xf solr-contrib.tar chdir=/opt
+
+- name: Setup SOLR core -- need to refine this step
+  command: rsync -av /tmp/apache-solr-${solr_version}/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
+
+- name: Setup stopwords_en
+  command: cp /opt/solr/production/collection1/conf/lang/stopwords_en.txt /opt/solr/production/collection1/conf/stopwords_en.txt creates=/opt/solr/production/collection1/conf/stopwords_en.txt
+
+- name: Install solrconfig
+  template: src=solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat group=tomcat
+
+- name: Install solr schema (custom hydra/dri one)
+  template: src=solr-schema.xml  dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat group=tomcat
+
+- name: Correct ownership
+  #file: path=/opt/solr/solr.war owner=tomcat group=tomcat
+  file: owner=tomcat group=tomcat path=/opt/solr recurse=yes state=directory
+
+- name: Install tomcat context
+  template: src=solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat group=tomcat
