@@ -15,6 +15,7 @@ ready to go for use with deploying a Hydra Head.
 * Ruby (via RVM) in a user directory
 * Passenger with the installed version of Ruby
 * MySQL (from the base repositories of RHEL6/Centos6/ScientificLinux6)
+* redis
 
 What's missing here is the deployment of the actual Hydra-Head. This part
 is not automated yet as it's not clear what we want to do this is area.
@@ -35,23 +36,17 @@ these scripts are not yet ready for production usage.
 Ideally first read up on how ansible works at <http://www.ansible.cc>.
 
 To deploy the scripts on to a fresh set of machines, first setup your
-ansible hosts file. e.g. create a file in *$HOME/.ansible_hosts* with
-the following contents.
-
-	[hydra]
-	192.168.206.110
+ansible hosts file. e.g. create a file in *$HOME/.ansible_hosts* or look
+at the hosts.vagrant file as an example. You may want to override some
+of the `group_vars/all` settings via the hosts file.
 
 The IP address will be specific to your site. Then you can run one of
 the playbooks from the playbooks directory.
 
 	$ pwd
 	/home/jtang/ansible-hydra
-	$ ansible-playbook playbooks/hydra.yml
+	$ ansible-playbook -i myhosts.file site.yml
 	[ lots of output ]
 
 There are a number of playbooks in the playbooks directory, so have a
 poke around.
-
-## TODO
-
-Move away from tasks and use roles instead as it's just plain cleaner.
