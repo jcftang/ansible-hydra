@@ -37,13 +37,6 @@
     - name: Make home directory accessible by apache and friends
       file: path=/home/{{ rvm_user }} mode=0755 state=directory
 
-    - name: Symlink public head
-      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
-
-    - name: Symlink admin head
-      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/html/admin state=link
-
-
   handlers:
     - include: ../handlers/main.yml  
 
@@ -109,3 +102,13 @@
 
     - name: db seed
       command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+- hosts: dri_app
+  user: root
+
+  tasks:
+    - name: Symlink public head
+      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
+
+    - name: Symlink admin head
+      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/html/admin state=link
