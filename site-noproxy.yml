@@ -36,6 +36,7 @@
     - rvm-common
     - rvm-passenger
 
+# deploy your rails app here (you should deploy it on the machines where you deployed passenger)
 - hosts: rails_app
   user: vagrant
   sudo: True
