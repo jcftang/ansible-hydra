@@ -1,0 +1,111 @@
+# order matters!
+---
+- hosts: dri_app
+  user: root
+
+  tasks:
+    - name: Install dependancies
+      yum: name=$item state=present
+      with_items:
+        - ImageMagick
+        - ImageMagick-devel
+        - npm
+        - clamav
+        - clamav-devel
+        - yum-conf-rpmfusion
+
+    ## Create databases needed for public and private head
+    - name: create db '{{ db_name }}'
+      mysql_db: db={{ db_name }} state=present
+
+    # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
+    - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
+      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL
+
+    ## must configure vhosts to look for a rails app deployment to serve out
+    - name: configure rails app - private and public head config
+      action: template src=$item dest=/etc/httpd/conf.d/rails-app-{{ host_group }}.conf
+      first_available_file:
+        - ../templates/rails-app-${host_group}.j2
+        - ../templates/rails-app.j2
+      notify:
+        - restart httpd
+
+    - name: Drop in auth-key so keyforwarding can work
+      authorized_key: user={{rvm_user}} key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
+    - name: Make home directory accessible by apache and friends
+      file: path=/home/{{ rvm_user }} mode=0755 state=directory
+
+    - name: Symlink public head
+      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
+
+    - name: Symlink admin head
+      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/html/admin state=link
+
+
+  handlers:
+    - include: ../handlers/main.yml  
+
+## deploy the rails applications - public head
+- hosts: dri_app
+  user: $rvm_user
+
+  tasks:
+    - name: Drop in a ssh config file that uses the socks proxy
+      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
+
+    - name: clone {{ host_group }}-public code - public head
+      git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
+
+    # optional can be commented out, ruby versions are taken from a previous task
+    - name: Configure database
+      template: src=../templates/nuig-rnag-public/database.yml dest=/home/{{rvm_user}}/{{ host_group }}-public/config/database.yml
+
+    - name: Run bundle for {{ host_group }}-public
+      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: generate assets
+      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: load schema
+      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: db migrate
+      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: db seed
+      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+## deploy the rails applications - private head
+- hosts: dri_app
+  user: $rvm_user
+
+  tasks:
+    - name: Drop in a ssh config file that uses the socks proxy
+      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
+
+    # Clone the repositories
+    - name: clone {{ host_group }} code - private head
+      git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version=develop update=yes
+
+    # configure up app 1
+    # optional can be commented out, ruby versions are taken from a previous task
+    - name: Configure database
+      template: src=../templates/nuig-rnag/database.yml dest=/home/{{rvm_user}}/{{ host_group }}/config/database.yml
+
+
+    - name: Run bundle for {{ host_group }}
+      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: generate assets
+      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: load schema
+      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: db migrate
+      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: db seed
+      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
