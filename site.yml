@@ -19,4 +19,4 @@
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
       sudo: False
 
-- include: site.yml
+- include: site-noproxy.yml

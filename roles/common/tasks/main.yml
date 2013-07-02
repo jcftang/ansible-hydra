@@ -8,7 +8,7 @@
     - yum-plugin-fastestmirror
 
 - name: Common packages
-  action: yum pkg=$item state=present update_cache=true
+  action: yum pkg=$item state=latest
   with_items:
     - tsocks
     - ansible
