@@ -4,6 +4,9 @@
   user: root
 
   tasks:
+    - name: Enable RPM Fusion
+      yum: name=yum-conf-rpmfusion state=present
+
     - name: Install dependancies
       yum: name=$item state=present
       with_items:
@@ -12,7 +15,8 @@
         - npm
         - clamav
         - clamav-devel
-        - yum-conf-rpmfusion
+        - ffmpeg
+        - ffmpeg-devel
 
     ## Create databases needed for public and private head
     - name: create db '{{ db_name }}'
@@ -105,3 +109,9 @@
 
     - name: Symlink admin head
       file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/html/admin state=link
+
+    - name: Restart Apache
+      service: name=httpd state=restarted
+
+    - name: Drop in a stub page to link to the two rails apps
+      template: src=../templates/index-{{ host_group }}.html dest=/var/www/html/index.html mode=0644
