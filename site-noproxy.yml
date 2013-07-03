@@ -7,6 +7,9 @@
     - etckeeper
     - common
 
+  post_tasks:
+    - selinux: state=permissive
+
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
   user: root
