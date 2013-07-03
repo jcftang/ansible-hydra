@@ -1,8 +1,7 @@
 # order matters!
 ---
 - hosts: all
-  user: vagrant
-  sudo: True
+  user: root
 
   roles:
     - etckeeper
@@ -10,9 +9,7 @@
 
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
-  user: vagrant
-  sudo: True
-
+  user: root
   roles:
     - tomcat
     - mysql
@@ -20,8 +17,7 @@
 
 # SOLR - search engine
 - hosts: solr
-  user: vagrant
-  sudo: True
+  user: root
 
   roles:
     - tomcat
@@ -29,8 +25,20 @@
 
 # mod_passenger for the systems that will run the rails app or the resque queues
 - hosts: passenger
-  user: vagrant
-  sudo: True
+  user: root
+
+  tasks:
+    - name: Create $rvm_user
+      user: name={{rvm_user}} generate_ssh_key=yes state=present
+
+    - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
+      template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
+      sudo_user: $rvm_user
+      sudo: True
+      when: proxy_is_set is defined
+
+- hosts: passenger
+  user: root
 
   roles:
     - rvm-common

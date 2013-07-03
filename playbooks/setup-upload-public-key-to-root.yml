@@ -5,3 +5,6 @@
   tasks:
     - name: Upload public ssh key
       authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
+    - name: Restorecon of system
+      command: restorecon -r /root

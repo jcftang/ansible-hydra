@@ -7,6 +7,9 @@
     - epel-release
     - yum-plugin-fastestmirror
 
+- name: Clear out cache
+  command: yum -y clean all
+
 - name: Common packages
   action: yum pkg=$item state=latest
   with_items:
@@ -22,6 +25,8 @@
     - avahi
     - avahi-dnsconfd
     - nc
+    - libselinux-python
+    - dstat
   notify:
     - startup avahi-daemon and avahi-dnsconfd
 

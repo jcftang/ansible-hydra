@@ -8,3 +8,5 @@ proxy_env:
   http_proxy: ${proxy_server}:${proxy_port}
   https_proxy: ${proxy_server}:${proxy_port}
   ftp_proxy: ${proxy_server}:${proxy_port}
+
+proxy_is_set: Yes
