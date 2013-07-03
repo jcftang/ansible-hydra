@@ -1,7 +1,5 @@
 # order matters!
 ---
-- include: playbooks/no-proxy.yml
-
 - hosts: all
   user: root
 
