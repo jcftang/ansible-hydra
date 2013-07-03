@@ -29,6 +29,8 @@
       - libffi-devel
       - libtool
       - qtwebkit-devel
+      - sqlite
+      - sqlite-devel
 
   - name: install rvm
     sudo: True

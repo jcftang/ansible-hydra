@@ -8,7 +8,7 @@
     - common
 
   post_tasks:
-    - selinux: state=permissive
+    - selinux: state=permissive policy=targeted
 
 - hosts: fedora,solr
   user: root
