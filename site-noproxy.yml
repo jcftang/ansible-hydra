@@ -10,11 +10,17 @@
   post_tasks:
     - selinux: state=permissive
 
+- hosts: fedora,solr
+  user: root
+
+  roles:
+    - tomcat
+
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
   user: root
+
   roles:
-    - tomcat
     - mysql
     - fedora
 
@@ -23,7 +29,6 @@
   user: root
 
   roles:
-    - tomcat
     - solr 
 
 # mod_passenger for the systems that will run the rails app or the resque queues
