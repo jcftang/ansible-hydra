@@ -45,9 +45,6 @@
   user: $rvm_user
 
   tasks:
-    - name: Drop in a ssh config file that uses the socks proxy
-      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
-
     - name: clone {{ host_group }}-public code - public head
       git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
 
@@ -75,9 +72,6 @@
   user: $rvm_user
 
   tasks:
-    - name: Drop in a ssh config file that uses the socks proxy
-      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
-
     # Clone the repositories
     - name: clone {{ host_group }} code - private head
       git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version=develop update=yes
@@ -86,7 +80,6 @@
     # optional can be commented out, ruby versions are taken from a previous task
     - name: Configure database
       template: src=../templates/nuig-rnag/database.yml dest=/home/{{rvm_user}}/{{ host_group }}/config/database.yml
-
 
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}

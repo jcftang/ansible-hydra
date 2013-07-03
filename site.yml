@@ -19,4 +19,8 @@
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
       sudo: False
 
+    - name: Drop in a ssh config file that uses the socks proxy
+      template: src=../files/insecure_config_proxy dest=~/.ssh/config mode=0600
+      sudo: False
+
 - include: site-noproxy.yml
