@@ -42,6 +42,7 @@
     command: bash -lc 'gem install passenger' creates=${rvm_home}/gems/${ruby_version.stdout}/bin/passenger-install-apache2-module
     sudo: True
     sudo_user: $rvm_user
+    ignore_errors: True
 
   - name: register passenger version variable
     command: bash -lc 'passenger-config --version'
