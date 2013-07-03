@@ -20,4 +20,4 @@
       sudo: False
 
 - include: playbooks/devel-vagrant.yml
-- include: site-noproxy.yml
+- include: site-base.yml

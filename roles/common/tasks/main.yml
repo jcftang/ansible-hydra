@@ -5,10 +5,6 @@
   action: yum pkg=$item state=present
   with_items:
     - epel-release
-    - yum-plugin-fastestmirror
-
-- name: Clear out cache
-  command: yum -y clean all
 
 - name: Common packages
   action: yum pkg=$item state=latest
