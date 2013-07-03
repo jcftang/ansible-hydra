@@ -60,16 +60,16 @@
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: generate assets
-      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'rake RAILS_ENV=development assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: load schema
-      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'rake RAILS_ENV=development db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: db migrate
-      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'rake RAILS_ENV=development db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: db seed
-      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'rake RAILS_ENV=development db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
 ## deploy the rails applications - private head
 - hosts: dri_app
@@ -89,16 +89,16 @@
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: generate assets
-      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'rake RAILS_ENV=development assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: load schema
-      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'rake RAILS_ENV=development db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: db migrate
-      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'rake RAILS_ENV=development db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: db seed
-      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'rake RAILS_ENV=development db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
 
 - hosts: dri_app
   user: root
