@@ -1,0 +1,13 @@
+# order matters!
+---
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  tasks:
+    - name: install insecure ssh config for root
+      template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
+      sudo: False
+
+- include: playbooks/devel-vagrant.yml
+- include: site-base.yml
