@@ -82,12 +82,6 @@
   user: $rvm_user
 
   tasks:
-    - name: Install redis-server
-      yum: name=redis state=present
-
-    - name: Start and enable redis
-      service: name=redis enabled=yes state=started
-
     - command: git config --global core.compression -1
 
     # Clone the repositories
@@ -122,6 +116,13 @@
   user: root
 
   tasks:
+    - name: Install redis-server
+      yum: name=redis state=present
+
+    - name: Start and enable redis
+      service: name=redis enabled=yes state=started
+
+
     - name: Symlink public head
       file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
 
