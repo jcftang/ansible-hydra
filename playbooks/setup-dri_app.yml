@@ -49,6 +49,8 @@
   user: $rvm_user
 
   tasks:
+    - command: git config --global core.compression -1
+
     - name: clone {{ host_group }}-public code - public head
       git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
 
@@ -80,6 +82,8 @@
   user: $rvm_user
 
   tasks:
+    - command: git config --global core.compression -1
+
     # Clone the repositories
     - name: clone {{ host_group }} code - private head
       git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version=develop update=yes
