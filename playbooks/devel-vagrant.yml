@@ -21,6 +21,9 @@
     - name: Upload public ssh key
       authorized_key: user=vagrant key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
 
+    - name: Upload public ssh key
+      authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
     - name: Upload .gitconfig from local machine
       copy: src=~/.gitconfig dest=~/.gitconfig
       sudo: False
