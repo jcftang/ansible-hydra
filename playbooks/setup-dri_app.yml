@@ -122,6 +122,9 @@
     - name: Start and enable redis
       service: name=redis enabled=yes state=started
 
+    - template: src=../templates/resque.init dest=/etc/init.d/{{ host_group }} mode=0755
+    - command: chkconfig --add {{ host_group }}
+    - service: name={{ host_group }} enabled=yes state=started
 
     - name: Symlink public head
       file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link

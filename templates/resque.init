@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# resque        init file for starting up the resque workers
+#
+# chkconfig:   - 20 80
+# description: Starts and stops the resque workers.
+
+### BEGIN INIT INFO
+# Provides:          {{ host_group }}
+# Required-Start:    $local_fs $remote_fs $network $syslog redis-server
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Workers for {{ host_group }}
+# Description:       Workers for {{ host_group }}
+### END INIT INFO
+
+USER={{ rvm_user }}
+APP_ROOT=/home/$USER/{{ host_group }}
+NAME={{ host_group }}
+DESC="{{ host_group }} Resque service"
+RESQUE_PID=$APP_ROOT/tmp/pids/resque_worker.pid
+LOGDIR=$APP_ROOT/log/resque_worker.log
+
+. /etc/rc.d/init.d/functions
+
+case "$1" in
+  start)
+        echo -n "Starting $DESC: "
+        if [ `whoami` = root ]; then
+          daemon --pidfile=$RESQUE_PID --user=$USER "bash -lc 'cd $APP_ROOT && bundle exec rake environment resque:work RAILS_ENV=production QUEUE=\"*\" VERBOSE=1 PIDFILE=$RESQUE_PID >> $LOGDIR 2>&1 &'"
+        else
+          echo "Please start this as root, it will run the process as the user in the end"
+        fi
+        echo "$NAME."
+        ;;
+  stop)
+        echo -n "Stopping $DESC: "
+        kill -QUIT `cat $RESQUE_PID`
+        echo "$NAME."
+        ;;
+  *)
+        echo "Usage: $NAME {start|stop}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
