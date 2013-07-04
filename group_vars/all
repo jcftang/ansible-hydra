@@ -27,7 +27,7 @@ rvm_bindir: ${rvm_home}/bin
 ## Site specific proxying
 proxy_server: proxy.tchpc.tcd.ie
 proxy_port: 8080
-socks_server: 134.226.112.43
+socks_server: 134.226.112.13
 socks_port: 1080
 
 proxy_env:
