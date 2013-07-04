@@ -8,5 +8,5 @@
 10.0.1.200
 
 [passenger]
-10.0.1.200 ansible_ssh_private_key_file=~/.ssh/id_rsa
+10.0.1.200
 
