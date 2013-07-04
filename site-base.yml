@@ -37,7 +37,10 @@
 
   tasks:
     - name: Create $rvm_user
-      user: name={{rvm_user}} generate_ssh_key=yes state=present
+      user: name={{rvm_user}} state=present
+
+    - name: Make sure .ssh directory exists
+      file: path=/home/{{rvm_user}}/.ssh state=directory
 
     - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
