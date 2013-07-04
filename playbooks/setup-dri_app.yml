@@ -49,6 +49,8 @@
   user: $rvm_user
 
   tasks:
+    - command: git config --global core.compression -1
+
     - name: clone {{ host_group }}-public code - public head
       git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
 
@@ -85,6 +87,8 @@
 
     - name: Start and enable redis
       service: name=redis enabled=yes state=started
+
+    - command: git config --global core.compression -1
 
     # Clone the repositories
     - name: clone {{ host_group }} code - private head
