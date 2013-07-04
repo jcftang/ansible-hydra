@@ -7,8 +7,8 @@
     - yum: name=yum-plugin-fastestmirror state=absent
 
   roles:
-    - common
     - etckeeper
+    - common
 
   post_tasks:
     - selinux: state=permissive policy=targeted
