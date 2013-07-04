@@ -12,6 +12,7 @@
 
   post_tasks:
     - selinux: state=permissive policy=targeted
+    - copy: src=files/sudoers.d-root-ssh-agent dest=/etc/sudoers.d/root-ssh-agent
 
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
