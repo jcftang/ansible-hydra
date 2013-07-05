@@ -17,4 +17,4 @@
     - name: install insecure ssh config for root
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
 
-- include: site-base.yml
+- include: site-base.yml proxy_is_set=True

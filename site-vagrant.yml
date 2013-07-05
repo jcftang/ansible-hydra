@@ -20,4 +20,4 @@
       sudo: False
 
 - include: playbooks/devel-vagrant.yml
-- include: site-base.yml
+- include: site-base.yml proxy_is_set=True
