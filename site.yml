@@ -14,4 +14,7 @@
       action: template src=templates/pip.j2 dest=/root/.pip/pip.conf owner=root
       tags: configuration
 
+    - name: install insecure ssh config for root
+      template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
+
 - include: site-base.yml
