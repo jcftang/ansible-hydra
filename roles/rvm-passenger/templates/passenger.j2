@@ -1,4 +1,4 @@
-LoadModule passenger_module {{ rvm_home }}/gems/{{ ruby_version.stdout }}/gems/passenger-{{ passenger_version.stdout }}/buildout/apache2/mod_passenger.so
+LoadModule passenger_module {{ rvm_home }}/gems/{{ ruby_version.stdout }}/gems/passenger-{{ passenger_version.stdout }}/libout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
   PassengerRoot {{ rvm_home }}/gems/{{ ruby_version.stdout }}/gems/passenger-{{ passenger_version.stdout }}
   PassengerRuby {{ rvm_home }}/wrappers/{{ ruby_version.stdout }}/ruby

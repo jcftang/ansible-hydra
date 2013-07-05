@@ -15,6 +15,7 @@
       # MultiViews must be turned off.
       Options -MultiViews
       #SetEnv RAILS_ENV development
+      PassengerAppRoot /home/{{rvm_user}}/{{ host_group }}-public
    </Directory>
 
    RailsBaseURI /admin
@@ -25,6 +26,7 @@
       # MultiViews must be turned off.
       Options -MultiViews
       #SetEnv RAILS_ENV development
+      PassengerAppRoot /home/{{rvm_user}}/{{ host_group }}
    </Directory>
 
 
