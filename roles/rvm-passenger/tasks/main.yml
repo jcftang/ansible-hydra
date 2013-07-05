@@ -37,9 +37,9 @@
     sudo: True
     sudo_user: $rvm_user
 
-  # 3.0.19 was the last known good version, now at 4.0.2
+  # 3.0.19 was the last known good version, now at 4.0.2, between 4.0.5 and 4.0.6 phusion changed the path of the apache module!
   - name: install mod_passenger
-    command: bash -lc 'gem install passenger 4.0.6' creates=${rvm_home}/gems/${ruby_version.stdout}/bin/passenger-install-apache2-module
+    command: bash -lc 'gem install passenger --version "4.0.6"' creates=${rvm_home}/gems/${ruby_version.stdout}/bin/passenger-install-apache2-module
     sudo: True
     sudo_user: $rvm_user
     ignore_errors: True
