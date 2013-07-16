@@ -5,4 +5,5 @@
   sudo: True
 
 - include: playbooks/devel-vagrant.yml
+- include: playbooks/no-proxy.yml
 - include: site-base.yml
