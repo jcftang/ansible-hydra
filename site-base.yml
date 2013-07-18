@@ -29,7 +29,7 @@
 
   roles:
     - tomcat
-    - solr 
+    - solr
 
 # mod_passenger for the systems that will run the rails app or the resque queues
 - hosts: passenger
@@ -40,7 +40,7 @@
       user: name={{rvm_user}} state=present
 
     - name: Make sure .ssh directory exists
-      file: path=/home/{{rvm_user}}/.ssh state=directory
+      file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
 
     - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
