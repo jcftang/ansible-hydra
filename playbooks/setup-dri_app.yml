@@ -1,5 +1,9 @@
 # order matters!
 ---
+- hosts: passenger;fedora;solr
+  user: root
+  ## dummy group just to pull in needed information for selfcontained runs
+
 - hosts: mysql
   user: root
 
@@ -31,6 +35,7 @@
         - clamav-devel
         - ffmpeg
         - ffmpeg-devel
+        - mysql-devel
 
     ## must configure vhosts to look for a rails app deployment to serve out
     - name: configure rails app - private and public head config
