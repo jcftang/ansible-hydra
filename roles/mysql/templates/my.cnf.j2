@@ -1,9 +1,12 @@
+#
+# {{ ansible_managed }}
+#
 [mysqld]
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
-bind-address=127.0.0.1
+bind-address=${groups.mysql[0]}
 
 [mysqld_safe]
 log-error=/var/log/mysqld.log

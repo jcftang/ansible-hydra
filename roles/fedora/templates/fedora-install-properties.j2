@@ -7,8 +7,8 @@ database.jdbcDriverClass=org.apache.derby.jdbc.EmbeddedDriver
 upstream.auth.enabled=false
 ssl.available=true
 database.jdbcURL=jdbc\:derby\:/opt/fedora/derby/fedora3;create\=true
-database.password=fedoraAdmin
-database.username=fedoraAdmin
+database.password={{ fedora_db_pass }}
+database.username={{ fedora_db_user }}
 fesl.authz.enabled=false
 deploy.local.services=true
 xacml.enabled=true
@@ -22,4 +22,4 @@ servlet.engine=other
 apim.ssl.required=true
 fedora.admin.pass={{ fedora_admin_pass }}
 apia.ssl.required=false
-fedora.serverHost={% for host in groups.fedora %}{{ hostvars[host]['ansible_fqdn'] }}{% endfor %}
+fedora.serverHost={{ hostvars[groups['fedora'][0]]['ansible_fqdn'] }}
