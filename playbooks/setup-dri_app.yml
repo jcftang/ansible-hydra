@@ -1,5 +1,19 @@
 # order matters!
 ---
+- hosts: mysql
+  user: root
+
+  roles:
+    - { role: ../../roles/mysql }
+
+  tasks:
+    ## Create databases needed for public and private head
+    - name: create db '{{ db_name }}'
+      mysql_db: db={{ db_name }} state=present
+
+    - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
+      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['passenger'][0] }}
+
 - hosts: dri_app
   user: root
 
@@ -18,14 +32,6 @@
         - ffmpeg
         - ffmpeg-devel
 
-    ## Create databases needed for public and private head
-    - name: create db '{{ db_name }}'
-      mysql_db: db={{ db_name }} state=present
-
-    # usernames and passwords should be included from a file outside of this git-repo, for now this is developmental.
-    - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
-      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL
-
     ## must configure vhosts to look for a rails app deployment to serve out
     - name: configure rails app - private and public head config
       action: template src=$item dest=/etc/httpd/conf.d/rails-app-{{ host_group }}.conf
@@ -42,7 +48,7 @@
       file: path=/home/{{ rvm_user }} mode=0755 state=directory
 
   handlers:
-    - include: ../handlers/main.yml  
+    - include: ../handlers/main.yml
 
 ## deploy the rails applications - public head
 - hosts: dri_app
