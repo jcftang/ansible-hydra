@@ -1,14 +1,17 @@
+## Rails apps, the dri_app and passenger blocks should have the same machines
 [dri_app]
 10.0.1.200
 
+[passenger]
+10.0.1.200
+
+## JAVA based apps
 [fedora]
 10.0.1.200
 
 [solr]
 10.0.1.200
 
-[passenger]
-10.0.1.200
-
+## Database
 [mysql]
 10.0.1.200
