@@ -58,9 +58,10 @@
 
     - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
-      sudo_user: $rvm_user
+      sudo_user: ${rvm_user}
       sudo: True
       when: proxy_is_set is defined
+      tags: passenger
 
 - hosts: passenger
   user: root
