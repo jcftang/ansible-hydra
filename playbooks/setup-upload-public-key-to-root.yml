@@ -2,12 +2,7 @@
 - hosts: all
   user: root
 
-  roles:
-    - role: ../../roles/proxy
   tasks:
-    - yum: name=epel-release state=present
-    - yum: name=libselinux-python state=present
-
     - name: Upload public ssh key
       authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
 

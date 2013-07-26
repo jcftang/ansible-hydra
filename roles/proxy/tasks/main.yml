@@ -1,4 +1,9 @@
 ---
+  - yum: name=libselinux-python state=present
+    environment:
+      http_proxy: http://{{proxy_server}}:{{proxy_port}}
+      https_proxy: http://{{proxy_server}}:{{proxy_port}}
+
   - name: write /etc/profile.d/proxy.sh
     action: template src=proxy.j2 dest=/etc/profile.d/proxy.sh mode=0644
     tags: configuration
