@@ -5,6 +5,7 @@
 
   pre_tasks:
     - yum: name=yum-plugin-fastestmirror state=absent
+    - yum: name=libselinux-python state=present
 
   roles:
     - etckeeper
