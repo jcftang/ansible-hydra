@@ -3,6 +3,7 @@
   user: root
 
   tasks:
+    - yum: name=epel-release state=present
     - yum: name=libselinux-python state=present
 
     - name: Upload public ssh key
