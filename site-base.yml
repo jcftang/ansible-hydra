@@ -69,6 +69,3 @@
   roles:
     - rvm-common
     - rvm-passenger
-
-# deploy your rails app here (you should deploy it on the machines where you deployed passenger)
-- include: playbooks/setup-dri_app.yml

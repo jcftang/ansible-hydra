@@ -7,3 +7,5 @@
 - include: playbooks/devel-vagrant.yml
 - include: playbooks/no-proxy.yml
 - include: site-base.yml
+# deploy your rails app here (you should deploy it on the machines where you deployed passenger)
+- include: playbooks/setup-dri_app.yml
