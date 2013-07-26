@@ -2,6 +2,8 @@
 - hosts: all
   user: root
 
+  roles:
+    - role: ../../roles/proxy
   tasks:
     - yum: name=epel-release state=present
     - yum: name=libselinux-python state=present
