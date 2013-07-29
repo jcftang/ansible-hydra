@@ -2,7 +2,7 @@
 ---
 - name: Check variable fedora_version is set
   fail: msg="Please set 'fedora_version' variable in the playbook"
-  when_unset: $fedora_version
+  when: fedora_version is not defined
 
 # setup db in top level site.yml
 #- include: mysql.yml

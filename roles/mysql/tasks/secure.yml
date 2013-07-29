@@ -3,7 +3,7 @@
 
 - name: MySQL | secure; check if root pw set
   fail: msg="Set the mysql root password to be used, set the mysql_root_password variable!"
-  when_unset: ${mysql_root_password}
+  when: mysql_root_password is not defined
 
 - name: MySQL | secure
   debug: msg="Secure mysql. rootpw ${mysql_root_password}"
