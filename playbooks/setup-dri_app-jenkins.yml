@@ -64,7 +64,7 @@
 
     - name: clone {{ host_group }}-public code - public head
       #git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
-      git: repo=git@lonsdale.tchpc.tcd.ie:navr/{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
+      git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
 
     # optional can be commented out, ruby versions are taken from a previous task
     - name: Configure database
