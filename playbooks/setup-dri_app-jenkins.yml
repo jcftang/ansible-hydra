@@ -49,6 +49,9 @@
     - name: Drop in auth-key so keyforwarding can work
       authorized_key: user={{rvm_user}} key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
 
+    - name: Drop in private ssh key from jenkins account
+      copy: src=~/.ssh/id_rsa dest=~{{ rvm_user }}/.ssh/id_rsa owner={{rvm_user}} group={{rvm_user}} mode=0700
+
     - name: Make home directory accessible by apache and friends
       file: path=/home/{{ rvm_user }} mode=0755 state=directory
 
