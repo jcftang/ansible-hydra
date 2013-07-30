@@ -15,6 +15,7 @@
       # MultiViews must be turned off.
       Options -MultiViews
       #SetEnv RAILS_ENV development
+      SetEnv DRI_BUNDLE_ENV tchpc
       PassengerAppRoot /home/{{rvm_user}}/{{ host_group }}-public
    </Directory>
 
@@ -26,6 +27,7 @@
       # MultiViews must be turned off.
       Options -MultiViews
       #SetEnv RAILS_ENV development
+      SetEnv DRI_BUNDLE_ENV tchpc
       PassengerAppRoot /home/{{rvm_user}}/{{ host_group }}
    </Directory>
 
