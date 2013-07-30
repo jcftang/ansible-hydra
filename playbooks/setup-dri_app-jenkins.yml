@@ -77,6 +77,9 @@
         - fedora.yml
         - solr.yml
 
+    - name: Remove the lock file
+      command: bash -lc 'rm -rf Gemfile.lock' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
     - name: Run bundle for {{ host_group }}-public
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}-public
       environment:
@@ -121,6 +124,9 @@
         - database.yml
         - fedora.yml
         - solr.yml
+
+    - name: Remove the lock file
+      command: bash -lc 'rm -rf Gemfile.lock' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
