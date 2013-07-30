@@ -26,7 +26,7 @@ production:
   pool: 5
   username: {{ db_user }}
   password: {{ db_pass }}
-  host: 127.0.0.1
+  host: {{ groups.mysql[0] }}
   port: 3306
 
 cucumber:

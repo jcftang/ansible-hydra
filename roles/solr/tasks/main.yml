@@ -2,7 +2,7 @@
 ---
 - name: Check variable solr_version is set
   fail: msg="Please set 'solr_version' variable in the playbook"
-  when_unset: $solr_version
+  when: solr_version is not defined
 
 - name: Download SOLR
   shell: curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz

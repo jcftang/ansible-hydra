@@ -2,9 +2,10 @@
 ---
 - name: Check variable fedora_version is set
   fail: msg="Please set 'fedora_version' variable in the playbook"
-  when_unset: $fedora_version
+  when: fedora_version is not defined
 
-- include: mysql.yml
+# setup db in top level site.yml
+#- include: mysql.yml
 
 - name: Download Fedora Commons
   #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz dest=/tmp/solr-4.1.0.tgz

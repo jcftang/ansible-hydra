@@ -5,6 +5,7 @@
 
   pre_tasks:
     - yum: name=yum-plugin-fastestmirror state=absent
+    - yum: name=libselinux-python state=present
 
   roles:
     - etckeeper
@@ -14,13 +15,26 @@
     - selinux: state=permissive policy=targeted
     - copy: src=files/sudoers.d-root-ssh-agent dest=/etc/sudoers.d/root-ssh-agent mode=0640
 
+# Mysql - this is needed before fedora-commons and the rails app is setup
+- hosts: mysql
+  user: root
+
+  roles:
+    - mysql
+
+  tasks:
+    - name: create db '{{ fedora_db_name }}'
+      mysql_db: db={{ fedora_db_name }} state=present
+
+    - name: create user '{{ fedora_db_user }}' with password '{{ fedora_db_pass }}' for '{{ fedora_db_name }}' and grant all priveleges
+      mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ groups['fedora'][0] }}
+
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
   user: root
 
   roles:
     - tomcat
-    - mysql
     - fedora
 
 # SOLR - search engine
@@ -29,7 +43,7 @@
 
   roles:
     - tomcat
-    - solr 
+    - solr
 
 # mod_passenger for the systems that will run the rails app or the resque queues
 - hosts: passenger
@@ -40,13 +54,14 @@
       user: name={{rvm_user}} state=present
 
     - name: Make sure .ssh directory exists
-      file: path=/home/{{rvm_user}}/.ssh state=directory
+      file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
 
     - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
-      sudo_user: $rvm_user
+      sudo_user: ${rvm_user}
       sudo: True
       when: proxy_is_set is defined
+      tags: passenger
 
 - hosts: passenger
   user: root
@@ -54,6 +69,3 @@
   roles:
     - rvm-common
     - rvm-passenger
-
-# deploy your rails app here (you should deploy it on the machines where you deployed passenger)
-- include: playbooks/setup-dri_app.yml

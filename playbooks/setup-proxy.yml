@@ -1,8 +1,7 @@
 # order matters!
 ---
 - hosts: all
-  user: vagrant
-  sudo: True
+  user: root
 
   roles:
     - { role: ../../roles/proxy }

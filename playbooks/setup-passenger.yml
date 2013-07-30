@@ -1,0 +1,7 @@
+---
+- hosts: passenger
+  user: root
+
+  roles:
+    - { role: ../../roles/rvm-common }
+    - { role: ../../roles/rvm-passenger }
