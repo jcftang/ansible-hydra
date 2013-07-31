@@ -34,3 +34,9 @@ proxy_env:
   http_proxy: ${proxy_server}:${proxy_port}
   https_proxy: ${proxy_server}:${proxy_port}
   ftp_proxy: ${proxy_server}:${proxy_port}
+
+# hostname of the smtp/mail relay in your domain, the domain will be appeneded by the template
+mail_hostname: mail
+
+# hostname of the ntp server in your domain, the domain will be appeneded by the template
+ntp_hostname: ntp

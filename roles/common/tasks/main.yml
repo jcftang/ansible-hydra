@@ -30,3 +30,13 @@
   action: service name=$item state=stopped enabled=no
   with_items:
     - iptables
+
+# enable sendmail
+- apt: name=sendmail state=present
+- template: src=sendmail.mc dest=/etc/mail/sendmail.mc
+- service: name=sendmail state=restarted enabled=yes
+
+# enable ntp
+- apt: name=ntp state=present
+- template: src=ntp.conf dest=/etc/ntp.conf
+- service: name=ntpd state=restarted enabled=yes
