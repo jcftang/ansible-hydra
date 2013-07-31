@@ -1,0 +1,39 @@
+# order matters!
+---
+- hosts: passenger;fedora;solr
+  user: root
+  ## dummy group just to pull in needed information for selfcontained runs
+
+## deploy the rails applications - public head
+- hosts: dri_app
+  user: $rvm_user
+
+  tasks:
+    - command: git config --global core.compression -1
+
+    - name: clone {{ host_group }}-public code - public head
+      #git: repo=git@dev.forasfeasa.ie:{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
+      git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }}-public dest=/home/{{rvm_user}}/{{ host_group }}-public version=develop update=yes
+
+    # optional can be commented out, ruby versions are taken from a previous task
+    - name: Configure database
+      template: src=../templates/nuig-rnag-public/$item dest=/home/{{rvm_user}}/{{ host_group }}-public/config/$item
+      with_items:
+        - database.yml
+        - fedora.yml
+        - solr.yml
+
+    - name: Run bundle for {{ host_group }}-public
+      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: generate assets
+      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: load schema
+      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: db migrate
+      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: db seed
+      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
