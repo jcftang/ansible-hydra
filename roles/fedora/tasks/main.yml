@@ -22,9 +22,6 @@
   sudo: True
   sudo_user: tomcat
 
-- name: Install tomcat context for fedora
-  template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat group=tomcat
-
 ## could be smarter below here as a loop can be written
 - name: Install tomcat context for fop
   template: src=fop-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fop.xml owner=tomcat group=tomcat
@@ -34,3 +31,7 @@
 
 - name: Install tomcat context for saxon
   template: src=saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat group=tomcat
+
+## deploy the fedora context last
+- name: Install tomcat context for fedora
+  template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat group=tomcat
