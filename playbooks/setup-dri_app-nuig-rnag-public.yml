@@ -38,6 +38,10 @@
     - name: db seed
       command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
+- hosts: dri_app
+  user: root
+
+  tasks:
     - name: Symlink public head
       file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
 
