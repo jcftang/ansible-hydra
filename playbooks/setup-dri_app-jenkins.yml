@@ -7,4 +7,4 @@
     - name: Drop in private ssh key from jenkins account
       copy: src=~/.ssh/id_rsa dest=~{{ rvm_user }}/.ssh/id_rsa owner={{rvm_user}} group={{rvm_user}} mode=0700
 
-- include: setup-dri_app-nuig-rnag.yml
+- include: setup-dri_app-common.yml
