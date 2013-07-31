@@ -38,3 +38,19 @@
 
     - name: db seed
       command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: Install redis-server
+      yum: name=redis state=present
+
+    - name: Start and enable redis
+      service: name=redis enabled=yes state=started
+
+    - template: src=../templates/resque.init dest=/etc/init.d/{{ host_group }} mode=0755
+    - command: chkconfig --add {{ host_group }}
+    - service: name={{ host_group }} enabled=yes state=started
+
+    - name: Symlink admin head
+      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/html/admin state=link
+
+    - name: Restart Apache
+      service: name=httpd state=restarted

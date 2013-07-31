@@ -1,0 +1,59 @@
+# order matters!
+---
+- hosts: passenger;fedora;solr
+  user: root
+  ## dummy group just to pull in needed information for selfcontained runs
+
+- hosts: mysql
+  user: root
+
+  roles:
+    - { role: ../../roles/mysql }
+
+  tasks:
+    ## Create databases needed for public and private head
+    - name: create db '{{ db_name }}'
+      mysql_db: db={{ db_name }} state=present
+
+    - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
+      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['passenger'][0] }}
+
+- hosts: dri_app
+  user: root
+
+  tasks:
+    - name: Enable RPM Fusion
+      yum: name=yum-conf-rpmfusion state=present
+
+    - name: Install dependancies
+      yum: name=$item state=present
+      with_items:
+        - ImageMagick
+        - ImageMagick-devel
+        - npm
+        - clamav
+        - clamav-devel
+        - ffmpeg
+        - ffmpeg-devel
+        - mysql-devel
+
+    ## must configure vhosts to look for a rails app deployment to serve out
+    - name: configure rails app - private and public head config
+      action: template src=$item dest=/etc/httpd/conf.d/rails-app-{{ host_group }}.conf
+      first_available_file:
+        - ../templates/rails-app-${host_group}.j2
+        - ../templates/rails-app.j2
+      notify:
+        - restart httpd
+
+    - name: Drop in auth-key so keyforwarding can work
+      authorized_key: user={{rvm_user}} key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
+    - name: Make home directory accessible by apache and friends
+      file: path=/home/{{ rvm_user }} mode=0755 state=directory
+
+    - name: Drop in a stub page to link to the two rails apps
+      template: src=../templates/index-{{ host_group }}.html dest=/var/www/html/index.html mode=0644
+
+  handlers:
+    - include: ../handlers/main.yml

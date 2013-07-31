@@ -37,3 +37,9 @@
 
     - name: db seed
       command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+
+    - name: Symlink public head
+      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
+
+    - name: Restart Apache
+      service: name=httpd state=restarted
