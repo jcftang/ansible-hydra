@@ -3,6 +3,11 @@ host_group: nuig-rnag
 solr_version: 4.0.0
 fedora_version: 3.6.2
 
+## radosgw/S3 access keys and endpoint
+AWS_ENDPOINT: objects.tchpc.tcd.ie
+AWS_ACCESS_KEY: CHANGEME
+AWS_SECRET_KEY: CHANGEME
+
 ## MySQL DB configuration
 mysql_root_password: CHANGEME
 

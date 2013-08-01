@@ -24,6 +24,8 @@
         - fedora.yml
         - solr.yml
 
+    - template: src=../templates/nuig-rnag/settings.yml dest=/home/{{rvm_user}}/{{ host_group }}/config/settings.local.yml
+
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
 
