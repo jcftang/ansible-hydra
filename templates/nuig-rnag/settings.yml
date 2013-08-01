@@ -1,0 +1,31 @@
+ingest:
+  steps: [collection, type, ingestmethod, metadata]
+  step_data:
+    collection: [ingestcollection]
+    type: [ingesttype]
+    ingestmethod: [ingestmethod]
+interface:
+  languages: [en, ga]
+dri:
+  files: dri_files
+queue:
+  audio: [CreateBucket, CreateChecksums, CreateMp3, CreateOgg]
+  pdfdoc: [CreateBucket, CreateChecksums, FullTextIndex]
+plugins:
+  ffmpeg_path: /opt/local/bin/ffmpeg
+mp3_web_quality_out_options:
+  codec: # default is for ffmpeg to auto-detect appropriate codec, this should be good for most scenarios
+  strip_metadata: "yes" # default is to preserve global metadata
+  channel: "2" # default is same as input file
+  bitrate: "96k" # default is same as input file
+  frequency: "44100" # default is same as input file
+ogg_web_quality_out_options:
+  codec: libvorbis # Default for ogg will produce very large files
+  strip_metadata: "yes" # default is preserve global metadata
+  channel: "2" # default is same as input file
+  bitrate: "96k" # default is same as input file
+  frequency: "44100" # default is same as input file
+S3:
+  server: {{AWS_ENDPOINT}}
+  access_key_id: {{AWS_ACCESS_KEY}}
+  secret_access_key: {{AWS_SECRET_KEY}}
