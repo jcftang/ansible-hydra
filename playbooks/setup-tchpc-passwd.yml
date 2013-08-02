@@ -1,0 +1,18 @@
+# for ubuntu 12.04 hosts
+---
+- hosts: all
+  user: root
+
+  vars_prompt:
+    - name: "rootpw"
+      prompt: "what password should be used?"
+      encrypt: "sha512_crypt"
+      confirm: yes
+
+  tasks:
+    - name: Upload public ssh key
+      authorized_key: user=tchpc key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
+    - name: Set tchpc passwd
+      user: name=tchpc password={{rootpw}} state=present update_password=always
+
