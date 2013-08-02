@@ -1,0 +1,48 @@
+---
+- hosts: dri_app
+  user: root
+# dummy play to get some information from the gateways themselves
+
+## ubuntu machine
+- hosts: dri_app-lb
+  user: root
+
+  pre_tasks:
+    - name: Install dependancies
+      apt: name=$item state=present update-cache=yes
+      with_items:
+        - python-software-properties
+        - python-virtualenv
+        - python-apt
+      environment:
+        http_proxy: http://{{proxy_server}}:{{proxy_port}}
+        https_proxy: http://{{proxy_server}}:{{proxy_port}}
+
+  roles:
+    - role: ../../roles/proxy-ubuntu
+    - role: ../../roles/common-ubuntu
+
+  tasks:
+    - apt_key: id=1C61B9CD url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x505D97A41C61B9CD
+      environment:
+        http_proxy: http://{{proxy_server}}:{{proxy_port}}
+    - apt_repository: repo=ppa:vbernat/haproxy-1.5 state=present
+    - apt: update_cache=yes name=$item state=present
+      with_items:
+        - haproxy
+        - socat
+    # self signed certs
+    # openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt
+    # openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dri_app.key -out dri_app.crt # the FQDN is done  with *.tchpc.tcd.ie
+    # cat dri_app.key chain.pem dri_app.crt > dri_app-key-cert.pem
+#    - file: path=/etc/ceph state=directory
+#    - copy: src=../private/dri_app-key-cert.pem dest=/etc/ceph/dri_app-key-cert.pem
+#      notify: restart haproxy
+    - copy: src=../files/haproxy/haproxy dest=/etc/default/haproxy
+      notify: restart haproxy
+    - template: src=../templates/haproxy/haproxy.cfg dest=/etc/haproxy/haproxy.cfg backup=yes
+      notify: restart haproxy
+
+  handlers:
+    - name: restart haproxy
+      service: name=haproxy state=restarted

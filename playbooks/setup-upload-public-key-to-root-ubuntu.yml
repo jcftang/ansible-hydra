@@ -1,0 +1,9 @@
+# run playbook with -k -K to pass both password and sudo password to the remote
+---
+- hosts: all
+  user: tchpc
+  sudo: True
+
+  tasks:
+    - name: Upload public ssh key
+      authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
