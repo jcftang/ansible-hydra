@@ -1,10 +1,10 @@
 ---
-- include: repos.yml
-
 - name: Enable EPEL
   action: yum pkg=$item state=present
   with_items:
     - epel-release
+
+- include: repos.yml
 
 - name: Common packages
   action: yum pkg=$item state=latest
