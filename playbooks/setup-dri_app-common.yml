@@ -52,8 +52,13 @@
     - name: Make home directory accessible by apache and friends
       file: path=/home/{{ rvm_user }} mode=0755 state=directory
 
-    - name: Drop in a stub page to link to the two rails apps
-      template: src=../templates/index-{{ host_group }}.html dest=/var/www/html/index.html mode=0644
+#- name: Drop in a stub page to link to the two rails apps
+#      template: src=../templates/index-{{ host_group }}.html dest=/var/www/html/index.html mode=0644
+
+    - git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/repository.dri.ie dest=/var/www/repository.dri.ie update=yes
+    - command: chdir='/var/www/repository.dri.ie' bash -lc 'bundle'
+    - command: chdir='/var/www/repository.dri.ie' bash -lc 'rake generate'
+    - command: chdir='/var/www/repository.dri.ie' rsync -a public/. ../html/.
 
   handlers:
     - include: ../handlers/main.yml
