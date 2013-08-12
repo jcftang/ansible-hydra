@@ -5,15 +5,16 @@
   ## dummy group just to pull in needed information for selfcontained runs
 
 - hosts: dri_app
-  user: {{rvm_user}}
+  user: $rvm_user
 
   tasks:
-#- name: Drop in a stub page to link to the two rails apps
-#      template: src=../templates/index-{{ host_group }}.html dest=/var/www/html/index.html mode=0644
-
     - git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/repository.dri.ie dest=/var/www/repository.dri.ie update=yes
     - command: chdir='~/repository.dri.ie' bash -lc 'bundle'
     - command: chdir='~/repository.dri.ie' bash -lc 'rake generate'
 
-  handlers:
-    - include: ../handlers/main.yml
+- hosts: dri_app
+  user: root
+
+  tasks:
+    - command: chdir='/home/{{rvm_user}}/repository.dri.ie' bash -lc 'pwd'
+
