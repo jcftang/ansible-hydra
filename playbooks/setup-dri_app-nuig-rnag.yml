@@ -32,8 +32,9 @@
     - name: generate assets
       command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
 
-    - name: load schema
-      command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
+    # This blows away the DB, be careful with this...!
+    #- name: load schema
+    #  command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     - name: db migrate
       command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
