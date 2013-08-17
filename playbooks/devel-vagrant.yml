@@ -24,6 +24,9 @@
     - name: install insecure config for root
       action: copy src=../files/insecure_config dest=/home/vagrant/.ssh/config owner=vagrant group=vagrant mode=0600 force=no
 
+    - action: copy src=~/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600 force=no
+    - action: copy src=~/.ssh/id_rsa.pub dest=/home/vagrant/.ssh/id_rsa.pub owner=vagrant group=vagrant mode=0600 force=no
+
     - name: Upload .gitconfig from local machine
       copy: src=~/.gitconfig dest=~/.gitconfig
       sudo: False
