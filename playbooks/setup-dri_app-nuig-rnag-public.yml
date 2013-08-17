@@ -38,7 +38,7 @@
         https_proxy: http://{{proxy_server}}:{{proxy_port}}
 
     - name: Run bundle for {{ host_group }}
-      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}-public
       when: proxy_is_set is not defined
 
     - name: generate assets
