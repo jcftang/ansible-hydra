@@ -11,9 +11,16 @@
   tasks:
     - command: git config --global core.compression -1
 
+    - command: git config --global http.proxy http://{{proxy_server}}:{{proxy_port}}
+      when: proxy_is_set is defined
+
+    - command: git config --global https.proxy http://{{proxy_server}}:{{proxy_port}}
+      when: proxy_is_set is defined
+
     # Clone the repositories
     - name: clone {{ host_group }} code - private head
       git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version=develop update=yes
+      ignore_errors: True
 
     # configure up app 1
     # optional can be commented out, ruby versions are taken from a previous task
@@ -28,6 +35,14 @@
 
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
+      when: proxy_is_set is defined
+      environment:
+        http_proxy: http://{{proxy_server}}:{{proxy_port}}
+        https_proxy: http://{{proxy_server}}:{{proxy_port}}
+
+    - name: Run bundle for {{ host_group }}
+      command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
+      when: proxy_is_set is not defined
 
     - name: generate assets
       command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
