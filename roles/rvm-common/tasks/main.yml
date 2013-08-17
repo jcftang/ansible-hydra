@@ -23,6 +23,10 @@
       - libtool
       - bison
       - subversion
+      - gawk
+      - libgdbm-dev
+      - pkg-config
+      - libffi-dev
 
   - name: install rvm
     sudo: True

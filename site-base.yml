@@ -46,7 +46,7 @@
 
   tasks:
     - name: Create $rvm_user
-      user: name={{rvm_user}} state=present
+      user: name={{rvm_user}} state=present shell=/bin/bash
 
     - name: Make sure .ssh directory exists
       file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
@@ -55,6 +55,12 @@
       template: src=files/insecure_config_proxy dest=/home/{{rvm_user}}/.ssh/config mode=0600 owner={{ rvm_user }} group={{rvm_user}}
       when: proxy_is_set is defined
       tags: passenger
+
+    - template: src=roles/proxy/templates/curlrc.j2 dest=/home/{{rvm_user}}/.curlrc owner={{rvm_user}} group={{rvm_user}}
+      when: proxy_is_set is defined
+
+    - template: src=roles/proxy/templates/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
+      when: proxy_is_set is defined
 
 - hosts: passenger
   user: root
