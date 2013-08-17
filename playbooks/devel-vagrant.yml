@@ -21,6 +21,9 @@
     - name: Upload public ssh key
       authorized_key: user=vagrant key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
 
+    - name: install insecure config for root
+      action: copy src=../files/insecure_config dest=/home/vagrant/.ssh/config owner=vagrant group=vagrant mode=0600 force=no
+
     - name: Upload .gitconfig from local machine
       copy: src=~/.gitconfig dest=~/.gitconfig
       sudo: False

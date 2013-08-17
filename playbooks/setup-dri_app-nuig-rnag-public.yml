@@ -44,7 +44,7 @@
 
   tasks:
     - name: Symlink public head
-      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/html/repository state=link
+      file: src=/home/{{rvm_user}}/{{ host_group }}-public/public dest=/var/www/repository state=link
 
     - name: Restart Apache
-      service: name=httpd state=restarted
+      service: name=apache2 state=restarted

@@ -9,13 +9,13 @@
       file: path=/etc/profile.d/proxy.sh state=absent
 
     - name: remove proxy configuration from /etc/yum.conf
-      lineinfile: dest=/etc/yum.conf regexp="^proxy=" state=absent 
+      lineinfile: dest=/etc/yum.conf regexp="^proxy=" state=absent
 
     - name: remove proxy configuration from /root/.curlrc
-      lineinfile: dest=/root/.curlrc regexp="^proxy = " state=absent 
+      lineinfile: dest=/root/.curlrc regexp="^proxy = " state=absent
 
     - name: remove proxy configuration from /root/.gemrc
-      lineinfile: dest=/root/.gemrc regexp="^gem.*--http-proxy" state=absent 
+      lineinfile: dest=/root/.gemrc regexp="^gem.*--http-proxy" state=absent
 
     - name: remove proxy configuration from /root/.pip/pip.conf
       lineinfile: dest=/root/.pip/pip.conf regexp="^proxy =" state=absent

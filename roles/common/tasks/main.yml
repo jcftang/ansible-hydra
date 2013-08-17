@@ -1,42 +1,26 @@
 ---
-- name: Enable EPEL
-  action: yum pkg=$item state=present
+## boiler plate
+- name: Install dependancies
+  apt: name=$item state=present update-cache=yes
   with_items:
-    - epel-release
-
-- include: repos.yml
-
-- name: Common packages
-  action: yum pkg=$item state=latest
-  with_items:
-    - tsocks
-    - ansible
     - git
+    - bzr
     - etckeeper
-    - python-pip
-    - python-virtualenv
-    - python-setuptools
-    - MySQL-python
-    - python-psycopg2
-    - avahi
+    - curl
+    - avahi-daemon
+    - avahi-utils
+    - avahi-discover
     - avahi-dnsconfd
-    - nc
-    - libselinux-python
+    - ruby-json
+    - facter
     - dstat
-  notify:
-    - startup avahi-daemon and avahi-dnsconfd
-
-- name: Stop and disable iptables
-  action: service name=$item state=stopped enabled=no
-  with_items:
-    - iptables
 
 # enable sendmail
-- yum: name=sendmail state=present
+- apt: name=sendmail state=present
 - template: src=sendmail.mc dest=/etc/mail/sendmail.mc
 - service: name=sendmail state=restarted enabled=yes
 
 # enable ntp
-- yum: name=ntp state=present
+- apt: name=ntp state=present
 - template: src=ntp.conf dest=/etc/ntp.conf
-- service: name=ntpd state=restarted enabled=yes
+- service: name=ntp state=restarted enabled=yes

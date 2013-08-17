@@ -1,19 +1,19 @@
 ---
 - name: Install mysql client and server
-  action: yum pkg=$item state=present
+  apt: pkg=$item state=present
   with_items:
-    - mysql 
+    - mysql-client
     - mysql-server
-    - mysql-devel
-    - MySQL-python
+    - libmysqlclient-dev
+    - python-mysqldb
   notify:
     - restart mysql
 
 - name: enable mysqld service
-  action: service name=mysqld state=started enabled=yes 
+  action: service name=mysql state=started enabled=yes
 
 - name: create my.cnf file
-  template: src=my.cnf.j2 dest=/etc/my.cnf
+  template: src=my.cnf.j2 dest=/etc/mysql/my.cnf backup=yes
   notify:
     - restart mysql
 

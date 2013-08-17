@@ -12,26 +12,26 @@
   shell: curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/${fedora_version}/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
 
 - name: Upload install.properties file for automated install
-  template: src=fedora-install-properties-mysql.j2 dest=/tmp/fedora-install.properties owner=tomcat group=tomcat
+  template: src=fedora-install-properties-mysql.j2 dest=/tmp/fedora-install.properties owner=tomcat6 group=tomcat6
 
 - name: Setup directory
-  file: path=/opt/fedora state=directory owner=tomcat group=tomcat
+  file: path=/opt/fedora state=directory owner=tomcat6 group=tomcat6
 
 - name: Run automated install of fedora-commons
   command: java -jar /tmp/fcrepo-installer-${fedora_version}.jar /tmp/fedora-install.properties creates=/opt/fedora/server/config/fedora.fcfg
   sudo: True
-  sudo_user: tomcat
+  sudo_user: tomcat6
 
 ## could be smarter below here as a loop can be written
 - name: Install tomcat context for fop
-  template: src=fop-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fop.xml owner=tomcat group=tomcat
+  template: src=fop-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fop.xml owner=tomcat6 group=tomcat6
 
 - name: Install tomcat context for imagemanip
-  template: src=imagemanip-xml.j2 dest=/etc/tomcat6/Catalina/localhost/imagemanip.xml owner=tomcat group=tomcat
+  template: src=imagemanip-xml.j2 dest=/etc/tomcat6/Catalina/localhost/imagemanip.xml owner=tomcat6 group=tomcat6
 
 - name: Install tomcat context for saxon
-  template: src=saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat group=tomcat
+  template: src=saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat6 group=tomcat6
 
 ## deploy the fedora context last
 - name: Install tomcat context for fedora
-  template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat group=tomcat
+  template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat6 group=tomcat6

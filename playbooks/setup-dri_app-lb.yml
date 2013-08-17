@@ -19,8 +19,8 @@
         https_proxy: http://{{proxy_server}}:{{proxy_port}}
 
   roles:
-    - role: ../../roles/proxy-ubuntu
-    - role: ../../roles/common-ubuntu
+    - role: ../../roles/proxy
+    - role: ../../roles/common
 
   tasks:
     - apt_key: id=1C61B9CD url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x505D97A41C61B9CD

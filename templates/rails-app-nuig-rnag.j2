@@ -5,10 +5,10 @@
 <VirtualHost *:80>
    ServerName {{ ansible_fqdn }}
 #   # !!! Be sure to point DocumentRoot to 'public'!
-   DocumentRoot /var/www/html
+   DocumentRoot /var/www
 
   #RailsBaseURI /repository
-   <Directory /var/www/html/repository>
+   <Directory /var/www/repository>
    #<Directory /home/{{rvm_user}}/{{ host_group }}-public>
       # This relaxes Apache security settings.
       #AllowOverride all
@@ -20,7 +20,7 @@
    </Directory>
 
   #RailsBaseURI /admin
-   <Directory /var/www/html/admin>
+   <Directory /var/www/admin>
    #<Directory /home/{{rvm_user}}/{{ host_group }}>
       # This relaxes Apache security settings.
       #AllowOverride all

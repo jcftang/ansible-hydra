@@ -8,10 +8,10 @@
   shell: curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz
 
 - name: Setup directory
-  file: path=/opt/solr/production state=directory owner=tomcat group=tomcat
+  file: path=/opt/solr/production state=directory owner=tomcat6 group=tomcat6
 
 - name: Setup data directory
-  file: path=/opt/solr/production/collection1/data/index state=directory owner=tomcat group=tomcat
+  file: path=/opt/solr/production/collection1/data/index state=directory owner=tomcat6 group=tomcat6
 
 - name: Unpack SOLR
   command: tar -C /tmp -xvzf /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}/dist/solr-${solr_version}.war
@@ -33,17 +33,17 @@
   command: cp /opt/solr/production/collection1/conf/lang/stopwords_en.txt /opt/solr/production/collection1/conf/stopwords_en.txt creates=/opt/solr/production/collection1/conf/stopwords_en.txt
 
 - name: Install solrconfig
-  template: src=solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat group=tomcat
+  template: src=solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat6 group=tomcat6
 
 - name: Install solr schema (custom hydra/dri one)
-  template: src=$item  dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat group=tomcat
+  template: src=$item  dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat6 group=tomcat6
   first_available_file:
     - solr-schema-{{host_group}}.xml
     - solr-schema.xml
 
 - name: Correct ownership
-  #file: path=/opt/solr/solr.war owner=tomcat group=tomcat
-  file: owner=tomcat group=tomcat path=/opt/solr recurse=yes state=directory
+  #file: path=/opt/solr/solr.war owner=tomcat6 group=tomcat6
+  file: owner=tomcat6 group=tomcat6 path=/opt/solr recurse=yes state=directory
 
 - name: Install tomcat context
-  template: src=solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat group=tomcat
+  template: src=solr-production.j2 dest=/etc/tomcat6/Catalina/localhost/solr.xml owner=tomcat6 group=tomcat6

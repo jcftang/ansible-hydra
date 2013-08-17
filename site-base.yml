@@ -3,16 +3,11 @@
 - hosts: all
   user: root
 
-  pre_tasks:
-    - yum: name=yum-plugin-fastestmirror state=absent
-    - yum: name=libselinux-python state=present
-
   roles:
     - etckeeper
     - common
 
   post_tasks:
-    - selinux: state=permissive policy=targeted
     - copy: src=files/sudoers.d-root-ssh-agent dest=/etc/sudoers.d/root-ssh-agent mode=0640
 
 # Mysql - this is needed before fedora-commons and the rails app is setup
