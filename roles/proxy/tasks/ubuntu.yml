@@ -1,0 +1,18 @@
+---
+  - name: write /etc/profile.d/proxy.sh
+    action: template src=proxy.j2 dest=/etc/profile.d/proxy.sh mode=0644
+
+  - name: Configure apt to use a proxy
+    action: template src=apt.j2 dest=/etc/apt/apt.conf
+
+  - name: configure curlrc for root
+    action: template src=curlrc.j2 dest=/root/.curlrc
+
+  - name: Configure wgetrc for the system
+    action: template src=wgetrc.j2 dest=/etc/wgetrc mode=0644
+
+  - name: /root/.pip
+    file: path=/root/.pip/ owner=root  mode=0755 state=directory
+
+  - name: write /root/.pip/pip.conf
+    template: src=../templates/pip.j2 dest=/root/.pip/pip.conf owner=root
