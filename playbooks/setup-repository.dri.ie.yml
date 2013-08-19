@@ -16,5 +16,5 @@
   user: root
 
   tasks:
-    - command: chdir='/home/{{rvm_user}}/repository.dri.ie' bash -lc 'rsync -a public/. /var/www/html/.'
+    - command: chdir='/home/{{rvm_user}}/repository.dri.ie' bash -lc 'rsync -a public/. /var/www/.'
     - file: path=/var/www/html/ state=directory owner=root group=root
