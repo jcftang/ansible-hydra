@@ -9,7 +9,8 @@
 
 - name: Download Fedora Commons
   #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz dest=/tmp/solr-4.1.0.tgz
-  shell: curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/${fedora_version}/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
+#shell: curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/${fedora_version}/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
+  shell: curl http://public.objects.tchpc.tcd.ie/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
 
 - name: Upload install.properties file for automated install
   template: src=fedora-install-properties-mysql.j2 dest=/tmp/fedora-install.properties owner=tomcat6 group=tomcat6

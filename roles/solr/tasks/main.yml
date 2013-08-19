@@ -5,7 +5,8 @@
   when: solr_version is not defined
 
 - name: Download SOLR
-  shell: curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz
+#shell: curl http://archive.apache.org/dist/lucene/solr/${solr_version}/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz
+  shell: curl http://public.objects.tchpc.tcd.ie/apache-solr-${solr_version}.tgz > /tmp/apache-solr-${solr_version}.tgz creates=/tmp/apache-solr-${solr_version}.tgz
 
 - name: Setup directory
   file: path=/opt/solr/production state=directory owner=tomcat6 group=tomcat6
@@ -21,7 +22,8 @@
   #command: cp /tmp/solr-${solr_version}.war /opt/solr/solr.war creates=/opt/solr/solr.war
 
 - name: Copy solr contribs into place (need to fix this in a production environment)
-  copy: src=solr-contrib.tar dest=/opt/solr-contrib.tar
+  shell: curl http://public.objects.tchpc.tcd.ie/solr-contrib.tar > /opt/solr-contrib.tar creates=/opt/solr-contrib.tar
+#copy: src=solr-contrib.tar dest=/opt/solr-contrib.tar
 
 - name: Unpack solr-contrib tarball
   command: tar xf solr-contrib.tar chdir=/opt
