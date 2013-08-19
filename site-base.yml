@@ -51,6 +51,8 @@
     - name: Make sure .ssh directory exists
       file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
 
+    - authorized_key: user={{rvm_user}} key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+
     - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
       template: src=files/insecure_config_proxy dest=/home/{{rvm_user}}/.ssh/config mode=0600 owner={{ rvm_user }} group={{rvm_user}}
       when: proxy_is_set is defined

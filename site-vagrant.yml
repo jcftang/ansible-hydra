@@ -22,4 +22,4 @@
 - include: playbooks/devel-vagrant.yml
 - include: site-base.yml proxy_is_set=True
 # deploy your rails app here (you should deploy it on the machines where you deployed passenger)
-- include: playbooks/setup-dri_app.yml
+- include: playbooks/setup-dri_app.yml proxy_is_set=True
