@@ -9,6 +9,7 @@
 
   post_tasks:
     - copy: src=files/sudoers.d-root-ssh-agent dest=/etc/sudoers.d/root-ssh-agent mode=0640
+    - template: src=templates/hosts dest=/etc/hosts mode=0644
 
 # Mysql - this is needed before fedora-commons and the rails app is setup
 - hosts: mysql
