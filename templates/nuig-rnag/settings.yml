@@ -12,7 +12,7 @@ queue:
   audio: [CreateBucket, CreateChecksums, CreateMp3, CreateOgg]
   pdfdoc: [CreateBucket, CreateChecksums, FullTextIndex]
 plugins:
-  ffmpeg_path: /opt/local/bin/ffmpeg
+  ffmpeg_path: /usr/bin/ffmpeg
 mp3_web_quality_out_options:
   codec: # default is for ffmpeg to auto-detect appropriate codec, this should be good for most scenarios
   strip_metadata: "yes" # default is to preserve global metadata
