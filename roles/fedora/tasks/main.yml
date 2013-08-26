@@ -33,6 +33,10 @@
 - name: Install tomcat context for saxon
   template: src=saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat6 group=tomcat6
 
+## disable default xacml policy of denying everything except localhost
+- file: path=/opt/fedora/server/fedora-internal-use/fedora-internal-use-repository-policies-approximating-2.0/deny-apim-if-not-localhost.xml state=absent
+- file: path=/opt/fedora/data/fedora-xacml-policies/repository-policies/default/deny-apim-if-not-localhost.xml state=absent
+
 ## deploy the fedora context last
 - name: Install tomcat context for fedora
   template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat6 group=tomcat6

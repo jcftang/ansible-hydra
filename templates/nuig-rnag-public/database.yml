@@ -28,6 +28,7 @@ production:
   password: {{ db_pass }}
   host: {{ groups.mysql[0] }}
   port: 3306
+  reconnect: true
 
 cucumber:
   <<: *test

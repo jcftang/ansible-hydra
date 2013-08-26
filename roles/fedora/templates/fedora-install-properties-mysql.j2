@@ -25,7 +25,7 @@ fedora.home=/opt/fedora
 database.mysql.jdbcURL=jdbc\:mysql\://${groups.mysql[0]}/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
 install.type=custom
 servlet.engine=other
-apim.ssl.required=true
+apim.ssl.required=false
 fedora.admin.pass={{ fedora_admin_pass }}
 apia.ssl.required=false
 fedora.serverHost={{ hostvars[groups['fedora'][0]]['ansible_fqdn'] }}
