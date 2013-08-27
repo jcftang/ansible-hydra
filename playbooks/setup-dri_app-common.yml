@@ -31,6 +31,7 @@
         - clamav
         - libclamav-dev
         - ffmpeg
+        - libavcodec-extra-53
         - libmysqlclient-dev
 
     ## must configure vhosts to look for a rails app deployment to serve out
