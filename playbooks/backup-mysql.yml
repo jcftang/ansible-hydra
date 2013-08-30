@@ -1,0 +1,13 @@
+---
+- hosts: mysql
+  user: root
+
+  tasks:
+    - name: Backup fedoradb
+      mysql_db: name={{fedora_db_name}} state=dump target=~/{{fedora_db_name}}-{{ansible_date_time.epoch}}.sql
+
+    - name: Backup railsdb
+      mysql_db: name={{db_name}} state=dump target=~/{{db_name}}-{{ansible_date_time.epoch}}.sql
+
+    - cron: special_time=daily name="daily backup of fedoradb database" job="mysqldump {{fedora_db_name}} > /ceph/{{fedora_db_name}}-$(date -I).sql"
+    - cron: special_time=daily name="daily backup of railsdb database" job="mysqldump {{db_name}} > /ceph/{{db_name}}-$(date -I).sql"
