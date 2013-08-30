@@ -11,6 +11,22 @@
     - copy: src=files/sudoers.d-root-ssh-agent dest=/etc/sudoers.d/root-ssh-agent mode=0640
     - template: src=templates/hosts dest=/etc/hosts mode=0644
 
+    ## install ceph from upstream repos
+    - name: Get ceph release key
+      apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
+      environment:
+        https_proxy: http://{{proxy_server}}:{{proxy_port}}
+      when: proxy_is_set is defined
+
+    - name: Get ceph release key
+      apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
+      when: proxy_is_set is not defined
+
+    - copy: src=files/ceph.list dest=/etc/apt/sources.list.d/ceph.list owner=root group=root mode=0644
+
+    - apt: name=ceph-fs-common state=present update_cache=yes
+
+
 # Mysql - this is needed before fedora-commons and the rails app is setup
 - hosts: mysql
   user: root
@@ -65,23 +81,8 @@
     - template: src=roles/proxy/templates/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
       when: proxy_is_set is defined
 
-    ## install ceph from upstream repos
-    - name: Get ceph release key
-      apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
-      environment:
-        https_proxy: http://{{proxy_server}}:{{proxy_port}}
-      when: proxy_is_set is defined
-
-    - name: Get ceph release key
-      apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
-      when: proxy_is_set is not defined
-
-    - copy: src=files/ceph.list dest=/etc/apt/sources.list.d/ceph.list owner=root group=root mode=0644
-
-    - apt: name=ceph-fs-common state=present update_cache=yes
-
-- hosts: passenger
-  user: root
+ - hosts: passenger
+   user: root
 
   roles:
     - rvm-common
