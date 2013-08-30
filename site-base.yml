@@ -78,7 +78,7 @@
 
     - copy: src=files/ceph.list dest=/etc/apt/sources.list.d/ceph.list owner=root group=root mode=0644
 
-    apt: name=ceph-fs-common state=present update_cache=yes
+    - apt: name=ceph-fs-common state=present update_cache=yes
 
 - hosts: passenger
   user: root
