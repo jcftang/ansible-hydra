@@ -81,8 +81,8 @@
     - template: src=roles/proxy/templates/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
       when: proxy_is_set is defined
 
- - hosts: passenger
-   user: root
+- hosts: passenger
+  user: root
 
   roles:
     - rvm-common
