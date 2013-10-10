@@ -75,10 +75,10 @@
       when: proxy_is_set is defined
       tags: passenger
 
-    - template: src=roles/proxy/templates/curlrc.j2 dest=/home/{{rvm_user}}/.curlrc owner={{rvm_user}} group={{rvm_user}}
+    - template: src=roles/proxy/templates/precise/curlrc.j2 dest=/home/{{rvm_user}}/.curlrc owner={{rvm_user}} group={{rvm_user}}
       when: proxy_is_set is defined
 
-    - template: src=roles/proxy/templates/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
+    - template: src=roles/proxy/templates/precise/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
       when: proxy_is_set is defined
 
 - hosts: passenger
