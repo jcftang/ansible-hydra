@@ -1,0 +1,16 @@
+---
+## Site specific proxying
+proxy_port: 8080
+proxy_server: proxy.tchpc.tcd.ie
+proxy_port: 8080
+socks_server: 134.226.112.13
+socks_port: 1080
+
+# caching/proxying of debian, ubuntu and SL repositories
+apt_cacher_server: apt-cacher.tchpc.tcd.ie
+apt_cacher_port: 3142
+
+proxy_env:
+  http_proxy: ${proxy_server}:${proxy_port}
+  https_proxy: ${proxy_server}:${proxy_port}
+  ftp_proxy: ${proxy_server}:${proxy_port}

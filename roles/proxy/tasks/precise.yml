@@ -1,0 +1,29 @@
+---
+- name: write /etc/profile.d/proxy.sh
+  action: template src=precise/proxy.j2 dest=/etc/profile.d/proxy.sh mode=0644 owner=root group=root
+
+- name: Configure apt to use a proxy
+  action: template src=precise/apt.j2 dest=/etc/apt/apt.conf.d/02proxy.conf owner=root group=root
+
+- name: configure curlrc for root
+  action: template src=precise/curlrc.j2 dest=/root/.curlrc
+
+- name: Configure wgetrc for the system
+  action: template src=precise/wgetrc.j2 dest=/etc/wgetrc mode=0644
+
+- name: /root/.pip
+  file: path=/root/.pip/ owner=root  mode=0755 state=directory
+
+- name: write /root/.pip/pip.conf
+  template: src=precise/pip.j2 dest=/root/.pip/pip.conf owner=root
+
+- name: environment
+  template: src=precise/environment dest=/etc/environment mode=0644 owner=root group=root
+
+- name: sudo should keep proxy environment
+  copy: src=precise/sudoers dest=/etc/sudoers.d/proxy owner=root group=root mode=0440
+
+- file: path=~/.m2/conf state=directory owner=root group=root
+
+- name: maven proxy settings
+  template: src=precise/maven3/settings.xml dest=~/.m2/settings.xml owner=root group=root

@@ -1,0 +1,35 @@
+---
+  - yum: name=libselinux-python state=present
+    environment:
+      http_proxy: http://{{proxy_server}}:{{proxy_port}}
+      https_proxy: http://{{proxy_server}}:{{proxy_port}}
+
+  - name: write /etc/profile.d/proxy.sh
+    action: template src=Carbon/proxy.j2 dest=/etc/profile.d/proxy.sh mode=0644
+    tags: configuration
+
+  - name: Configure yum to use a proxy
+    action: template src=Carbon/yum.j2 dest=/etc/yum.conf mode=0644
+    tags: configuration
+
+  - name: Configure curlrc for root
+    action: template src=Carbon/curlrc.j2 dest=/root/.curlrc
+    tags: configuration
+
+  - name: Configure gemrc for root
+    action: template src=Carbon/gemrc.j2 dest=/root/.gemrc
+    tags: configuration
+
+  - name: Configure tsocks
+    action: template src=Carbon/tsocks.j2 dest=/etc/tsocks.conf mode=0644
+    tags: configuration
+
+#  - name: /root/.pip
+#    file: path=/root/.pip/ owner=root  mode=0755 state=directory
+#
+#  - name: write /root/.pip/pip.conf
+#    action: template src=../templates/pip.j2 dest=/root/.pip/pip.conf owner=root
+#    tags: configuration
+
+  - name: Restorecon of system
+    command: restorecon -r /etc
