@@ -1,0 +1,27 @@
+---
+## boiler plate
+- name: Install dependancies
+  apt: name=$item state=present update-cache=yes
+  with_items:
+    - git
+    - bzr
+    - etckeeper
+    - curl
+    - ruby-json
+    - facter
+    - dstat
+    - python-keyczar
+
+# enable sendmail
+- apt: name=sendmail state=present
+- template: src=precise/sendmail.mc dest=/etc/mail/sendmail.mc
+- service: name=sendmail state=restarted enabled=yes
+
+# enable ntp
+- apt: name=ntp state=present
+- template: src=precise/ntp.conf dest=/etc/ntp.conf
+- service: name=ntp state=restarted enabled=yes
+
+# enable tmpreaper
+- apt: name=tmpreaper state=present
+- copy: src=precise/tmpreaper.conf dest=/etc/tmpreaper.conf owner=root group=root

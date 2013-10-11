@@ -1,0 +1,54 @@
+[sl-fastbugs]
+name=Scientific Linux $releasever - $basearch - fastbug updates
+baseurl=http://ftp.heanet.ie/mirrors/rsync.scientificlinux.org/$releasever/$basearch/updates/fastbugs/
+#		http://thammuz.tchpc.tcd.ie/mirrors/rsync.scientificlinux.org/$releasever/$basearch/updates/fastbugs/
+#		http://ftp.scientificlinux.org/linux/scientific/$releasever/$basearch/updates/fastbugs/
+#		http://ftp1.scientificlinux.org/linux/scientific/$releasever/$basearch/updates/fastbugs/
+#		http://ftp2.scientificlinux.org/linux/scientific/$releasever/$basearch/updates/fastbugs/
+#		ftp://ftp.scientificlinux.org/linux/scientific/$releasever/$basearch/updates/fastbugs/
+#mirrorlist=http://ftp.scientificlinux.org/linux/scientific/mirrorlist/sl-fastbugs-6.txt
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl6 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern
+
+[sl-debuginfo]
+name=Scientific Linux Debuginfo
+baseurl=http://ftp.scientificlinux.org/linux/scientific/$releasever/archive/debuginfo/
+		http://ftp1.scientificlinux.org/linux/scientific/$releasever/archive/debuginfo/
+		http://ftp2.scientificlinux.org/linux/scientific/$releasever/archive/debuginfo/
+		ftp://ftp.scientificlinux.org/linux/scientific/$releasever/archive/debuginfo/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl6 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern
+
+
+[sl-testing]
+name=Scientific Linux Testing - $basearch
+baseurl=http://ftp.scientificlinux.org/linux/scientific/6rolling/testing/$basearch/
+		http://ftp1.scientificlinux.org/linux/scientific/6rolling/testing/$basearch/
+		http://ftp2.scientificlinux.org/linux/scientific/6rolling/testing/$basearch/
+		ftp://ftp.scientificlinux.org/linux/scientific/6rolling/testing/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl6 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern
+
+[sl-testing-source]
+name=Scientific Linux Testing - Source
+baseurl=http://ftp.scientificlinux.org/linux/scientific/6rolling/testing/SRPMS/
+		http://ftp1.scientificlinux.org/linux/scientific/6rolling/testing/SRPMS/
+		http://ftp2.scientificlinux.org/linux/scientific/6rolling/testing/SRPMS/
+		ftp://ftp.scientificlinux.org/linux/scientific/6rolling/testing/SRPMS/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl6 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern
+
+# Packages in sl-addons may not be production ready
+[sl-addons]
+name=Scientific Linux Addon Packages
+baseurl=http://ftp.scientificlinux.org/linux/scientific/$releasever/$basearch/addons
+		http://ftp1.scientificlinux.org/linux/scientific/$releasever/$basearch/addons
+		http://ftp2.scientificlinux.org/linux/scientific/$releasever/$basearch/addons
+		ftp://ftp.scientificlinux.org/linux/scientific/$releasever/$basearch/addons
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl6 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern

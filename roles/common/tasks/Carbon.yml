@@ -1,0 +1,40 @@
+---
+- name: Enable EPEL
+  action: yum pkg=$item state=present
+  with_items:
+    - epel-release
+
+- name: Install modified repo files which enables mirrors
+  copy: src=Carbon/$item dest=/etc/yum.repos.d/$item owner=root group=root mode=0644
+  with_items:
+    - epel.repo
+    - epel-testing.repo
+    - sl6x.repo
+    - sl-other.repo
+    - sl.repo
+
+- name: Common packages
+  action: yum pkg=$item state=latest
+  with_items:
+    - tsocks
+    - ansible
+    - git
+    - etckeeper
+    - python-pip
+    - python-virtualenv
+    - python-setuptools
+    - MySQL-python
+    - python-psycopg2
+    - nc
+    - libselinux-python
+    - dstat
+
+# enable sendmail
+- yum: name=sendmail state=present
+- template: src=Carbon/sendmail.mc dest=/etc/mail/sendmail.mc
+- service: name=sendmail state=restarted enabled=yes
+
+# enable ntp
+- yum: name=ntp state=present
+- template: src=Carbon/ntp.conf dest=/etc/ntp.conf
+- service: name=ntpd state=restarted enabled=yes
