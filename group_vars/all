@@ -36,9 +36,9 @@ socks_server: 134.226.112.13
 socks_port: 1080
 
 proxy_env:
-  http_proxy: ${proxy_server}:${proxy_port}
-  https_proxy: ${proxy_server}:${proxy_port}
-  ftp_proxy: ${proxy_server}:${proxy_port}
+  http_proxy: http://${proxy_server}:${proxy_port}
+  https_proxy: http://${proxy_server}:${proxy_port}
+  ftp_proxy: http://${proxy_server}:${proxy_port}
 
 # hostname of the smtp/mail relay in your domain, the domain will be appeneded by the template
 mail_hostname: mail
