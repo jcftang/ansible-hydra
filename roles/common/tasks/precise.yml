@@ -11,6 +11,8 @@
     - facter
     - dstat
     - python-keyczar
+    - unattended-upgrades
+- copy: src=precise/10periodic  dest=/etc/apt/apt.conf.d/10periodic owner=root group=root
 
 # enable sendmail
 - apt: name=sendmail state=present
