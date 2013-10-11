@@ -5,5 +5,14 @@
   sudo: True
 
   tasks:
-    - name: Upload public ssh key
-      authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+    - authorized_key: user=root key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+    - authorized_key: user=tchpc key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
+    - authorized_key: user=tchpc key='$FILE(../private/keys/$item.pub)' state=present
+      with_items:
+        - jtang-dsa
+        - jtang-rsa
+        - jtang-mba
+        - skenny
+        - kcassidy
+        - ptiernan
+    - copy: src=../files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
