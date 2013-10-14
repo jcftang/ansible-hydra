@@ -26,6 +26,17 @@
 
     - apt: name=ceph-fs-common state=present update_cache=yes
 
+- hosts: monitoring
+  user: root
+
+  roles:
+    - collectd-server
+
+- hosts: all:!monitoring
+  user: root
+
+  roles:
+    - collectd-client
 
 # Mysql - this is needed before fedora-commons and the rails app is setup
 - hosts: mysql

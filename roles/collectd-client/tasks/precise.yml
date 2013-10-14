@@ -1,0 +1,6 @@
+---
+- apt: name={{item}} state=present
+  with_items:
+    - collectd
+- template: src=precise/collectd-client.conf dest=/etc/collectd/collectd.conf owner=root group=root
+  notify: restart collectd

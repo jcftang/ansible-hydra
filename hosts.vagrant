@@ -19,3 +19,6 @@
 ## Load balancer, this is an ubuntu machine
 #[dri_app-lb]
 #10.0.1.200
+
+[monitoring]
+10.0.1.200
