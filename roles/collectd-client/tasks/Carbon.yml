@@ -1,0 +1,11 @@
+---
+- yum: name={{item}} state=present
+  with_items:
+    - collectd
+    - collectd-rrdtool
+  notify:
+    - start collectd
+
+- template: src=Carbon/collectd.conf dest=/etc/collectd.conf owner=root group=root
+  notify:
+    - restart collectd

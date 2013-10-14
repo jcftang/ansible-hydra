@@ -1,0 +1,19 @@
+---
+- yum: name={{item}} state=present
+  with_items:
+    - collectd
+    - collectd-rrdtool
+    - collectd-web
+  notify:
+    - start collectd
+    - start httpd
+
+- file: src=Carbon/collection.conf dest=/etc/collection.conf owner=root group=root
+- template: src=Carbon/collectd.conf dest=/etc/collectd.conf owner=root group=root
+  notify:
+    - restart collectd
+
+- template: src=Carbon/collectd-apache.conf dest=/etc/httpd/conf.d/collectd.conf owner=root group=root
+  notify:
+    - restart httpd
+

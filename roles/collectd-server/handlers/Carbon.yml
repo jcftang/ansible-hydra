@@ -1,0 +1,12 @@
+---
+- name: restart collectd
+  service: name=collectd state=restarted
+
+- name: restart httpd
+  service: name=httpd state=restarted
+
+- name: start collectd
+  service: name=collectd state=started enabled=yes
+
+- name: start httpd
+  service: name=httpd state=started enabled=yes
