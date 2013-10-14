@@ -1,7 +1,10 @@
 ---
+- file: path=/var/lib/rrdcached/journal/ state=directory
+
 - apt: name={{item}} state=present
   with_items:
     - collectd
+    - rrdcached
     - apache2
     - libconfig-general-perl
     - librrds-perl
@@ -13,3 +16,4 @@
 
 - copy: src=precise/collectd-apache.conf dest=/etc/apache2/sites-enabled/collectd owner=root group=root
   notify: restart apache2
+
