@@ -29,6 +29,9 @@ rvm_user: vagrant
 rvm_home: /home/${rvm_user}/.rvm
 rvm_bindir: ${rvm_home}/bin
 
+## Redis
+redis_pass: foobar
+
 ## Site specific proxying
 proxy_server: proxy.tchpc.tcd.ie
 proxy_port: 8080
