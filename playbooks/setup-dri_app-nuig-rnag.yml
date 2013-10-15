@@ -30,6 +30,7 @@
         - database.yml
         - fedora.yml
         - solr.yml
+        - redis.yml
 
     - template: src=../templates/nuig-rnag/settings.yml dest=/home/{{rvm_user}}/{{ host_group }}/config/settings.local.yml
 
