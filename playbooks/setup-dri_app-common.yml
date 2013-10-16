@@ -16,7 +16,9 @@
       mysql_db: db={{ db_name }} state=present
 
     - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
-      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['passenger'][0] }}
+      mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ item }}
+      with_items:
+        - '{{ groups.passenger }}'
 
 - hosts: dri_app
   user: root
