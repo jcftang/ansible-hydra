@@ -62,12 +62,6 @@
   user: root
 
   tasks:
-    - name: Install redis-server
-      apt: name=redis-server state=present
-
-    - name: Start and enable redis
-      service: name=redis-server enabled=yes state=started
-
 #- template: src=../templates/resque.init dest=/etc/init.d/{{ host_group }} mode=0755
 #- command: chkconfig --add {{ host_group }}
     - template: src=../templates/resque-worker.conf dest=/etc/init/resque-worker.conf mode=644
