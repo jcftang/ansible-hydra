@@ -7,7 +7,7 @@ ingest:
 interface:
   languages: [en, ga]
 dri:
-  files: dri_files
+  files: /ceph/dri_files
 queue:
   audio: [CreateBucket, CreateChecksums, CreateMp3, CreateOgg]
   pdfdoc: [CreateBucket, CreateChecksums, FullTextIndex]
