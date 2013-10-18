@@ -1,0 +1,31 @@
+---
+## install and configure slapd for some form of centralised service
+- apt: name={{item}} state=present
+  with_items:
+    - slapd
+    - ldap-utils
+    - ldapscripts
+
+- shell: "[ -f /etc/ldap/.done_slapd ] && echo 'done' || echo ''"
+  register: done_slapd
+
+- dpkg_reconfigure:
+    pkg: slapd
+    answers:
+      slapd/password2: $ldap_pass
+      slapd/password1: $ldap_pass
+      slapd/invalid_config: true
+      shared/organization: $ldap_org
+      slapd/no_configuration: false
+      slapd/purge_database: false
+      slapd/domain: $ldap_domain
+      slapd/backend: HDB
+  when: done_slapd.stdout.find('done') == -1
+
+- command: touch /etc/ldap/.done_slapd creates=/etc/ldap/.done_slapd
+
+# must define ldap_server, ldap_dc, etc... variables
+- template: src=precise/ldapscripts.conf dest=/etc/ldapscripts/ldapscripts.conf owner=root group=root
+- template: src=precise/ldapscripts.passwd dest=/etc/ldapscripts/ldapscripts.passwd owner=root group=root mode=0600
+- template: src=precise/structure.ldif dest=/root/structure.ldif
+- shell: ldapadd -w $ldap_pass -x -D cn=admin,$ldap_dc -f /root/structure.ldif && touch /etc/ldap/.done_structure creates=/etc/ldap/.done_structure

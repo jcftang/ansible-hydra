@@ -1,0 +1,28 @@
+---
+## make a client authenticate against ldap
+- apt: name=libnss-ldap state=present
+
+- shell: "[ -f /etc/ldap/.done_ldap-auth-config ] && echo 'done' || echo ''"
+  register: done_ldap_auth_config
+
+- dpkg_reconfigure:
+    pkg: ldap-auth-config
+    answers:
+      ldap-auth-config/bindpw: $ldap_pass
+      ldap-auth-config/rootbindpw: $ldap_pass
+      ldap-auth-config/dbrootlogin: true
+      ldap-auth-config/rootbinddn: cn=admin,$ldap_dc
+      ldap-auth-config/pam_password: crypt
+      ldap-auth-config/move-to-debconf: true
+      ldap-auth-config/ldapns/ldap-server: ldap://$ldap_server
+      ldap-auth-config/ldapns/base-dn: $ldap_dc
+      ldap-auth-config/override: true
+      ldap-auth-config/ldapns/ldap_version: 3
+      ldap-auth-config/dblogin: false
+  when: done_ldap_auth_config.stdout.find('done') == -1
+
+- command: touch /etc/ldap/.done_ldap-auth-config creates=/etc/ldap/.done_ldap-auth-config
+
+- shell: auth-client-config -t nss -p lac_ldap
+- shell: DEBIAN_FRONTEND=noninteractive pam-auth-update
+- copy: src=precise/common-password dest=/etc/pam.d/common-password owner=root group=root mode=0644
