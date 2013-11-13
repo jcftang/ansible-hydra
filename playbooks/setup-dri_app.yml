@@ -2,4 +2,3 @@
 ---
 - include: setup-dri_app-common.yml
 - include: setup-dri_app-nuig-rnag.yml
-- include: setup-dri_app-nuig-rnag-public.yml

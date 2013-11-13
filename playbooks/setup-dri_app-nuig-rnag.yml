@@ -46,7 +46,7 @@
       when: proxy_is_set is not defined
 
     - name: generate assets
-      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/admin"' chdir=/home/{{rvm_user}}/{{ host_group }}
+      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/v1"' chdir=/home/{{rvm_user}}/{{ host_group }}
 
     # This blows away the DB, be careful with this...!
     #- name: load schema
@@ -68,8 +68,8 @@
     - template: src=../templates/resque-workers.conf dest=/etc/init/resque-workers.conf mode=644
 #- service: name=resque-workers enabled=yes state=started
 
-    - name: Symlink admin head
-      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/admin state=link
+    - name: Symlink hydra head
+      file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/v1 state=link
 
     - name: Restart Apache
       service: name=apache2 state=restarted
