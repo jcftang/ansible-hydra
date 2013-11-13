@@ -73,3 +73,7 @@
 
     - name: Restart Apache
       service: name=apache2 state=restarted
+
+    # house cleaning
+    - file: path=/var/www/admin state=absent
+    - file: path=/var/www/repository state=absent
