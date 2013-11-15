@@ -27,3 +27,6 @@
 # enable tmpreaper
 - apt: name=tmpreaper state=present
 - copy: src=precise/tmpreaper.conf dest=/etc/tmpreaper.conf owner=root group=root
+
+# configure remote syslog
+- template: src=precise/remote-log.conf dest=/etc/rsyslog.d/remote-log.conf mode=0644
