@@ -30,3 +30,4 @@
 
 # configure remote syslog
 - template: src=precise/remote-log.conf dest=/etc/rsyslog.d/remote-log.conf mode=0644
+  notify: restart rsyslog
