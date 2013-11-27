@@ -1,0 +1,7 @@
+---
+- name: restart source
+  shell: source /etc/profile executable=/bin/bash
+
+- name: restart tomcat6
+  service: name=tomcat6 state=restarted
+

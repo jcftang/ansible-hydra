@@ -51,3 +51,17 @@ ntp_hostname: ntp
 
 #syslog-ng server location
 syslog_ng_server: 134.226.115.149
+
+
+#shibboleth-idp
+idp_hostname: dri-guest020.tchpc.tcd.ie
+idp_URI: https://dri-guest020.tchpc.tcd.ie:8443
+idp_keystore_password: test
+tomcat_keystore_pass: test123
+tomcat_key_pass: test123
+shibboleth_user_ldap_server: dri-guest018.tchpc.tcd.ie
+shibboleth_user_ldap_port: 389
+shibboleth_user_base_DN: ou=people,dc=example,dc=com
+shibboleth_user_ldap_principal: cn=admin,dc=example,dc=com
+shibboleth_user_ldap_principal_password: admin
+
