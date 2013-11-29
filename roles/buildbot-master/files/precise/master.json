@@ -18,6 +18,30 @@
       "builders": [
           { "os": "precise64", "branch": "master" }
         ]
+    },
+    {
+      "name": "rubydariah",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/rubydariah",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
+    },
+    {
+      "name": "user_group",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/user_group",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "dri_data_models",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dri_data_models",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
     }
 
   ]

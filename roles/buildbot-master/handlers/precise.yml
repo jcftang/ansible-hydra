@@ -1,4 +1,3 @@
 ---
 - name: restart buildmaster
-  service: name=buildmaster state=restarted
-
+  command: buildbot restart /home/{{rvm_user}}/masters
