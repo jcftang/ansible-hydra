@@ -80,7 +80,7 @@
 
   tasks:
     - name: Create $rvm_user
-      user: name={{rvm_user}} state=present shell=/bin/bash
+      user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes
 
     - name: Make sure .ssh directory exists
       file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
@@ -110,7 +110,24 @@
   user: root
 
   roles:
-    - proxy
-    - common
     - slapd
     - shibboleth-idp
+
+- hosts: buildbot
+  user: root
+
+  roles:
+    - buildbot-master
+
+  tasks:
+    - name: Install dependancies
+      apt: name=$item state=present
+      with_items:
+        - imagemagick
+        - libgraphicsmagick1-dev
+        - npm
+        - clamav
+        - libclamav-dev
+        - ffmpeg
+        - libavcodec-extra-53
+        - libmysqlclient-dev

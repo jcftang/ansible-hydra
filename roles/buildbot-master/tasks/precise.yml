@@ -1,0 +1,15 @@
+---
+- apt: name={{ item }} state=present
+  with_items:
+    - python-virtualenv
+    - python-dev
+- pip: name=sqlalchemy version=0.7.10 state=present
+- pip: name=buildbot state=present
+- pip: name=buildbot-slave state=present
+- command: creates=/home/{{rvm_user}}/masters/master.cfg chdir=/home/{{rvm_user}} buildbot create-master masters
+- copy: src=precise/master.cfg dest=/home/{{rvm_user}}/masters/master.cfg owner={{rvm_user}} group={{rvm_user}}
+- copy: src=precise/master.json dest=/home/{{rvm_user}}/masters/master.json owner={{rvm_user}} group={{rvm_user}}
+- copy: src=precise/myconfig.json dest=/home/{{rvm_user}}/myconfig.json owner={{rvm_user}} group={{rvm_user}}
+- copy: src=precise/requirements.txt dest=/home/{{rvm_user}}/requirements.txt owner={{rvm_user}} group={{rvm_user}}
+- copy: src=precise/SimpleConfig.py dest=/home/{{rvm_user}}/masters/SimpleConfig.py owner={{rvm_user}} group={{rvm_user}}
+- file: path=/home/{{rvm_user}} owner={{rvm_user}} group={{rvm_user}} recurse=yes

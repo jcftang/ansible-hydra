@@ -1,0 +1,24 @@
+{
+  "slaves": [
+      { "os": "precise64", "name": "slave01" }
+    ],
+  "projects": [
+    {
+      "name": "dri",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dri",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "dcmd",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dcmd",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
+    }
+
+  ]
+}

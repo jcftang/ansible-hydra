@@ -1,0 +1,4 @@
+---
+- name: restart buildmaster
+  service: name=buildmaster state=restarted
+

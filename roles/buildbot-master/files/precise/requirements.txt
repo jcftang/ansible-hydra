@@ -1,0 +1,3 @@
+sqlalchemy==0.7.10
+buildbot
+buildbot-slave
