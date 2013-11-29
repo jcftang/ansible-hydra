@@ -105,3 +105,12 @@
     - rvm-common
     - rvm-passenger
     - fits
+
+- hosts: shibboleth-idp
+  user: root
+
+  roles:
+    - proxy
+    - common
+    - slapd
+    - shibboleth-idp
