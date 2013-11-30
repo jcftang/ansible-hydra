@@ -12,6 +12,7 @@
     - sl6x.repo
     - sl-other.repo
     - sl.repo
+    - fish.release-2.repo
 
 - name: Common packages
   action: yum pkg=$item state=latest
