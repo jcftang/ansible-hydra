@@ -42,7 +42,16 @@
       "builders": [
           { "os": "precise64", "branch": "develop" }
         ]
+    },
+    {
+      "name": "nuig-rnag",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/nuig-rnag",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
     }
+
 
   ]
 }
