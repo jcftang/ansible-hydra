@@ -26,6 +26,9 @@
 
     - apt: name=ceph-fs-common state=present update_cache=yes
 
+    - apt_repository: repo='ppa:fish-shell/release-2' state=present
+    - apt: name=fish state=present
+
 - hosts: monitoring
   user: root
 
