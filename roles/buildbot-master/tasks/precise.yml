@@ -8,18 +8,18 @@
 - pip: name=buildbot-slave state=present
 
 - command: creates=/home/{{rvm_user}}/masters/master.cfg chdir=/home/{{rvm_user}} buildbot create-master masters
-  notify: restart buildmaster
+#  notify: restart buildmaster
 
 - copy: src=precise/master.cfg dest=/home/{{rvm_user}}/masters/master.cfg owner={{rvm_user}} group={{rvm_user}}
-  notify: restart buildmaster
+#  notify: restart buildmaster
 
 - copy: src=precise/master.json dest=/home/{{rvm_user}}/masters/master.json owner={{rvm_user}} group={{rvm_user}}
-  notify: restart buildmaster
+#  notify: restart buildmaster
 
 - copy: src=precise/requirements.txt dest=/home/{{rvm_user}}/requirements.txt owner={{rvm_user}} group={{rvm_user}}
-  notify: restart buildmaster
+#  notify: restart buildmaster
 
 - copy: src=precise/SimpleConfig.py dest=/home/{{rvm_user}}/masters/SimpleConfig.py owner={{rvm_user}} group={{rvm_user}}
-  notify: restart buildmaster
+#  notify: restart buildmaster
 
 - file: path=/home/{{rvm_user}} owner={{rvm_user}} group={{rvm_user}} recurse=yes
