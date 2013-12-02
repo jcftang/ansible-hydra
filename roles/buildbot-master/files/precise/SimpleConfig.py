@@ -235,10 +235,10 @@ class SimpleConfig(dict):
             html.WebStatus(http_port=self.__http_port, authz=authz_cfg, order_console_by_time=True))
 
         self['status'].append(
-            MailNotifier(fromaddr="buildbot@example.com",
+            MailNotifier(fromaddr="buildbot@tchpc.tcd.ie",
                          mode=('problem'),
                          sendToInterestedUsers=True,
-                         extraRecipients=['buildteam@example.com']))
+                         extraRecipients=['dri-devel@tchpc.tcd.ie']))
 
         # DB URL
         self['db'] = {
