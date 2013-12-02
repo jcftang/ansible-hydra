@@ -1,0 +1,8 @@
+---
+- hosts: all
+  serial: 3
+  sudo: True
+  user: tchpc
+
+  tasks:
+    - apt: upgrade=yes update_cache=yes cache_valid_time=300
