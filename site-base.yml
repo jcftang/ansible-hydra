@@ -134,3 +134,5 @@
         - ffmpeg
         - libavcodec-extra-53
         - libmysqlclient-dev
+    - apt_repository: repo="ppa:pcarrier/ppa" state=present
+    - apt: name=phantomjs state=present
