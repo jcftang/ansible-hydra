@@ -262,7 +262,8 @@ class SimpleConfig(dict):
         # with an externally-visible host name which the buildbot cannot figure out
         # without some help.
 
-        self['buildbotURL'] = "http://" + socket.gethostname() + ":%d/" % self.__http_port
+        #self['buildbotURL'] = "http://" + socket.gethostname() + ":%d/" % self.__http_port
+        self['buildbotURL'] = "http://tracker.dri.i/bb/"
 
         # SLAVES
         self._os2slaves = {}
