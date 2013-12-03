@@ -263,7 +263,7 @@ class SimpleConfig(dict):
         # without some help.
 
         #self['buildbotURL'] = "http://" + socket.gethostname() + ":%d/" % self.__http_port
-        self['buildbotURL'] = "http://tracker.dri.i/bb/"
+        self['buildbotURL'] = "http://tracker.dri.i/ci/"
 
         # SLAVES
         self._os2slaves = {}
