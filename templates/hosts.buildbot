@@ -80,5 +80,5 @@ redis_pass={{redis_pass}}
 
 [buildbot]
 {% for host in groups['buildbot'] %}
-{{ hostvars[host].ansible_hostname }}
+{{ hostvars[host].ansible_fqdn }}
 {% endfor %}
