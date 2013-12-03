@@ -57,7 +57,7 @@
       "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/ansible-hydra",
       "category": "active",
       "builders": [
-          { "os": "precise64", "branch": "develop" }
+          { "os": "precise64", "branch": "master" }
         ]
     }
   ]
