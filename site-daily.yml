@@ -9,7 +9,7 @@
 - hosts: all
   sudo: True
   user: tchpc
-  accelerate: True
+  #accelerate: True
 
   tasks:
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
@@ -27,7 +27,7 @@
 - hosts: passenger
   sudo: True
   user: tchpc
-  accelerate: True
+  #accelerate: True
 
   tasks:
     - copy: src=/srv/infrastructure/private/keys/dri-deploy dest=/home/{{rvm_user}}/.ssh/id_rsa owner={{rvm_user}} group={{rvm_user}} mode=0600
@@ -36,7 +36,7 @@
 - hosts: nuig_rnag
   sudo: True
   user: tchpc
-  accelerate: True
+  #accelerate: True
 
   tasks:
     - authorized_key: user={{rvm_user}} key="{{ lookup('file', '/srv/infrastructure/private/keys/dri-deploy.pub') }}"
@@ -48,7 +48,7 @@
 - hosts: buildbot
   sudo: True
   user: tchpc
-  accelerate: True
+  #accelerate: True
 
   tasks:
     - template: src=templates/hosts.buildbot dest=/home/{{rvm_user}}/hosts.buildbot owner={{rvm_user}} group={{rvm_user}} mode=0600 
