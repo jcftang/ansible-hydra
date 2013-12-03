@@ -1,9 +1,37 @@
+[nuig_rnag:children]
+dri_app
+passenger
+solr
+passenger
+mysql
+redis
+monitoring
+shibboleth-idp
+buildbot
+
+[nuig_rnag:vars]
+AWS_ENDPOINT={{AWS_ENDPOINT}}
+AWS_ACCESS_KEY={{AWS_ACCESS_KEY}}
+AWS_SECRET_KEY={{AWS_SECRET_KEY}}
+
+mysql_root_password={{mysql_root_password}}
+
+fedora_db_name={{fedora_db_name}}
+fedora_db_user={{fedora_db_user}}
+fedora_db_pass={{fedora_db_pass}}
+fedora_admin_pass={{fedora_admin_pass}}
+
+db_name={{db_name}}
+db_user={{db_user}}
+db_pass={{db_pass}}
+
+redis_pass={{redis_pass}}
+
 ## Rails apps, the dri_app and passenger blocks should have the same machines
 [dri_app]
 {% for host in groups['dri_app'] %}
 {{ hostvars[host].ansible_fqdn }}
 {% endfor %}
-
 
 [passenger]
 {% for host in groups['passenger'] %}
