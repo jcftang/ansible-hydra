@@ -33,39 +33,39 @@ redis_pass={{redis_pass}}
 ## Rails apps, the dri_app and passenger blocks should have the same machines
 [dri_app]
 {% for host in groups['dri_app'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [passenger]
 {% for host in groups['passenger'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 ## JAVA based apps
 [fedora]
 {% for host in groups['fedora'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [solr]
 {% for host in groups['solr'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [mysql]
 {% for host in groups['mysql'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [redis]
 {% for host in groups['redis'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 ## Load balancer, this is an ubuntu machine
 [dri_app-lb]
 {% for host in groups['dri_app-lb'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [monitoring]
