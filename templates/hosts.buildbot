@@ -1,0 +1,47 @@
+## Rails apps, the dri_app and passenger blocks should have the same machines
+[dri_app]
+{% for host in groups['dri_app'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+
+[passenger]
+{% for host in groups['passenger'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+## JAVA based apps
+[fedora]
+{% for host in groups['fedora'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[solr]
+{% for host in groups['solr'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[mysql]
+{% for host in groups['mysql'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[redis]
+{% for host in groups['redis'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[monitoring]
+{% for host in groups['monitoring'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[shibboleth-idp]
+{% for host in groups['shibboleth-idp'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+[buildbot]
+{% for host in groups['buildbot'] %}
+{{ hostvars[host].ansible_hostname }}
+{% endfor %}
