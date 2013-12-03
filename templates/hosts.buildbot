@@ -70,15 +70,15 @@ redis_pass={{redis_pass}}
 
 [monitoring]
 {% for host in groups['monitoring'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [shibboleth-idp]
 {% for host in groups['shibboleth-idp'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
 [buildbot]
 {% for host in groups['buildbot'] %}
-{{ hostvars[host].ansible_fqdn }}
+{{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
