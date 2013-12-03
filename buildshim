@@ -1,0 +1,31 @@
+#!/bin/bash
+
+case $1 in
+patch)
+    ;;
+install_deps)
+    git submodule init
+    git submodule update
+    ;;
+configure)
+    if [[ -s "$HOME/hosts.buildbot" ]] ; then
+      cp $HOME/hosts.buildbot deploy/hosts.buildbot
+    else
+      printf "Can't upload and deploy, can't find hosts.buildbot file"
+      exit 1
+    fi
+    ;;
+compile)
+    #ansible-playbook -i deploy/hosts.buildbot deploy/playbooks/setup-dri_app-nuig-rnag.yml
+    ;;
+check)
+    ;;
+package)
+    ;;
+upload)
+    ;;
+compile_extra)
+    ;;
+uninstall_deps)
+    ;;
+esac
