@@ -8,6 +8,8 @@ redis
 monitoring
 shibboleth-idp
 buildbot
+fedora
+solr
 
 [nuig_rnag:vars]
 AWS_ENDPOINT={{AWS_ENDPOINT}}
@@ -56,6 +58,12 @@ redis_pass={{redis_pass}}
 
 [redis]
 {% for host in groups['redis'] %}
+{{ hostvars[host].ansible_fqdn }}
+{% endfor %}
+
+## Load balancer, this is an ubuntu machine
+[dri_app-lb]
+{% for host in groups['dri_app-lb'] %}
 {{ hostvars[host].ansible_fqdn }}
 {% endfor %}
 
