@@ -139,6 +139,6 @@
     - apt: name=phantomjs state=present
 
     - apt_repository: repo="ppa:rquillo/ansible" state=present
-    - apt: name=ansible state=present
+    - apt: name=ansible state=latest
 
     - template: src=templates/hosts.buildbot dest=/home/{{rvm_user}}/hosts.buildbot owner={{rvm_user}} group={{rvm_user}} mode=0600
