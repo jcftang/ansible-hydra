@@ -1,6 +1,7 @@
 {
   "slaves": [
-      { "os": "precise64", "name": "slave01" }
+      { "os": "precise64", "name": "slave01" },
+      { "os": "precise64", "name": "slave02" }
     ],
   "projects": [
     {
