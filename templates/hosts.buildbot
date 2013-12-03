@@ -12,6 +12,7 @@ fedora
 solr
 
 [nuig_rnag:vars]
+rvm_user={{rvm_user}}
 AWS_ENDPOINT={{AWS_ENDPOINT}}
 AWS_ACCESS_KEY={{AWS_ACCESS_KEY}}
 AWS_SECRET_KEY={{AWS_SECRET_KEY}}
