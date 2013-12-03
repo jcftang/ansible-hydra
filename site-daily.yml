@@ -41,6 +41,7 @@
   tasks:
     - authorized_key: user={{rvm_user}} key="{{ lookup('file', '/srv/infrastructure/private/keys/dri-deploy.pub') }}"
       ignore_errors: True
+    - template: src=files/insecure_config_proxy dest=/home/{{rvm_user}}/.ssh/config mode=0600 owner={{rvm_user}} group={{rvm_user}}
     - authorized_key: user=root key="{{ lookup('file', '/srv/infrastructure/private/keys/dri-deploy.pub') }}"
 
 - hosts: buildbot
