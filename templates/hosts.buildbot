@@ -10,6 +10,7 @@ shibboleth-idp
 buildbot
 fedora
 solr
+dri_app-lb
 
 [nuig_rnag:vars]
 rvm_user={{rvm_user}}
