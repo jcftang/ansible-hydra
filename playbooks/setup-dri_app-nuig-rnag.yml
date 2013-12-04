@@ -19,7 +19,7 @@
 
     # Clone the repositories
     - name: clone {{ host_group }} code - private head
-      git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version=develop update=yes
+      git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/{{ host_group }} dest=/home/{{rvm_user}}/{{ host_group }} version={{deploy_branch}} update=yes
       ignore_errors: True
 
     # configure up app 1
