@@ -18,7 +18,7 @@ configure)
 compile)
     ;;
 check)
-    ansible-playbook -i hosts.buildbot site.yml -C
+    #ansible-playbook -i hosts.buildbot site.yml -C
     ;;
 package)
     ;;
