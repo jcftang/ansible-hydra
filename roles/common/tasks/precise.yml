@@ -11,6 +11,7 @@
     - facter
     - dstat
     - python-keyczar
+    - python-pycurl
     - unattended-upgrades
 - copy: src=precise/10periodic  dest=/etc/apt/apt.conf.d/10periodic owner=root group=root
 

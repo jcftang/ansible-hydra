@@ -26,6 +26,9 @@
 
     - apt: name=ceph-fs-common state=present update_cache=yes
 
+    - apt_repository: repo='ppa:fish-shell/release-2' state=present
+    - apt: name=fish state=present
+
 - hosts: monitoring
   user: root
 
@@ -80,7 +83,7 @@
 
   tasks:
     - name: Create $rvm_user
-      user: name={{rvm_user}} state=present shell=/bin/bash
+      user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes
 
     - name: Make sure .ssh directory exists
       file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
@@ -104,3 +107,38 @@
   roles:
     - rvm-common
     - rvm-passenger
+    - fits
+
+- hosts: shibboleth-idp
+  user: root
+
+  roles:
+    - slapd
+    - shibboleth-idp
+
+- hosts: buildbot
+  user: root
+
+  roles:
+    - buildbot-master
+
+  tasks:
+    - name: Install dependancies
+      apt: name=$item state=present
+      with_items:
+        - imagemagick
+        - libgraphicsmagick1-dev
+        - npm
+        - clamav
+        - libclamav-dev
+        - ffmpeg
+        - libavcodec-extra-53
+        - libmysqlclient-dev
+
+    - apt_repository: repo="ppa:pcarrier/ppa" state=present
+    - apt: name=phantomjs state=present
+
+    - apt_repository: repo="ppa:rquillo/ansible" state=present
+    - apt: name=ansible state=latest
+
+    - template: src=templates/hosts.buildbot dest=/home/{{rvm_user}}/hosts.buildbot owner={{rvm_user}} group={{rvm_user}} mode=0600

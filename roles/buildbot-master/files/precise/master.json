@@ -1,0 +1,64 @@
+{
+  "slaves": [
+      { "os": "precise64", "name": "slave01" },
+      { "os": "precise64", "name": "slave02" }
+    ],
+  "projects": [
+    {
+      "name": "dri",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dri",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "dcmd",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dcmd",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
+    },
+    {
+      "name": "rubydariah",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/rubydariah",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
+    },
+    {
+      "name": "user_group",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/user_group",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "dri_data_models",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/dri_data_models",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "nuig-rnag",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/nuig-rnag",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "develop" }
+        ]
+    },
+    {
+      "name": "ansible-hydra",
+      "repourl": "ssh://git@lonsdale.tchpc.tcd.ie/navr/ansible-hydra",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
+    }
+  ]
+}
