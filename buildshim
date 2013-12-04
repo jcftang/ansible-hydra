@@ -16,13 +16,14 @@ configure)
     fi
     ;;
 compile)
-    ansible-playbook -i hosts.buildbot site.yml
     ;;
 check)
+    ansible-playbook -i hosts.buildbot site.yml -C
     ;;
 package)
     ;;
 upload)
+    ansible-playbook -i hosts.buildbot site.yml
     ;;
 compile_extra)
     ;;
