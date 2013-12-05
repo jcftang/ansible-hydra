@@ -1,6 +1,6 @@
 ---
-- hosts: dri_app
-  user: root
+- hosts: dri_app;shibboleth-idp
+  user: tchpc
 # dummy play to get some information from the gateways themselves
 
 ## ubuntu machine
