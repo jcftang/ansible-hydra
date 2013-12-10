@@ -240,6 +240,16 @@ class SimpleConfig(dict):
                          sendToInterestedUsers=True,
                          extraRecipients=['dri-devel@tchpc.tcd.ie']))
 
+        irc = words.IRC("irc.tchpc.tcd.ie", "buildbot",
+                useColors=False,
+                channels=[{"channel": "#dri"},
+                    notify_events={
+                        'exception': 1,
+                        'successToFailure': 1,
+                        'failureToSuccess': 1,
+                        })
+        self['status'].append(irc)
+
         # DB URL
         self['db'] = {
             # This specifies what database buildbot uses to store its state.
