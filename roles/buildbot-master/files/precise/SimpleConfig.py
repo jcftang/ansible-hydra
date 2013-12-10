@@ -109,6 +109,7 @@ from buildbot.steps import trigger
 from buildbot.steps.shell import ShellCommand
 from buildbot.steps.source.git import Git
 from twisted.python import log
+from buildbot.status import words
 
 
 class SimpleConfig(dict):
@@ -242,7 +243,7 @@ class SimpleConfig(dict):
 
         irc = words.IRC("irc.tchpc.tcd.ie", "buildbot",
                 useColors=False,
-                channels=[{"channel": "#dri"},
+                channels=[{"channel": "#dri"}],
                     notify_events={
                         'exception': 1,
                         'successToFailure': 1,
