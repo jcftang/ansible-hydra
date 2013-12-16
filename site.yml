@@ -21,10 +21,5 @@
 # deploy your rails app here (you should deploy it on the machines where you deployed passenger)
 #- include: site-daily.yml
 - include: playbooks/setup-dri_app.yml proxy_is_set=True
-- local_action: irc port=6669
-  server=irc.tchpc.tcd.ie
-  channel="#dri"
-  msg="All finished at {{ ansible_date_time.iso8601 }}"
-  color=red
-  nick=ansibleIRC
+- local_action: irc port=6669 server=irc.tchpc.tcd.ie channel="#dri" msg="All finished at {{ ansible_date_time.iso8601 }}" color=red nick=ansibleIRC
 
