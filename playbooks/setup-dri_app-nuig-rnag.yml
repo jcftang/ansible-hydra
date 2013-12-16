@@ -52,11 +52,11 @@
     #- name: load schema
     #  command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}
 
-    - name: db seed
-      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
-
     - name: db migrate
       command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}
+
+    - name: db seed
+      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
 
 - hosts: dri_app
   user: root
