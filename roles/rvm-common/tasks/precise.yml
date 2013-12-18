@@ -31,7 +31,7 @@
   - name: install rvm
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'curl -4 -L https://get.rvm.io | bash -s stable' creates=${rvm_bindir}/rvm
+    command: bash -lc 'curl -4 -L https://get.rvm.io | bash -s 1.23.7' creates=${rvm_bindir}/rvm
 
   - name: install ruby ${ruby_version}
     sudo: True
