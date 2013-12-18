@@ -1,0 +1,6 @@
+---
+- name: enable sl-addons repo
+  command: yum-config-manager --add-repo=http://ftp1.scientificlinux.org/linux/scientific/6.4/x86_64/addons/
+
+- name: install zfs latest rpms
+  yum: name=zfs state=latest

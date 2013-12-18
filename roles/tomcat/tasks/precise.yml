@@ -1,0 +1,12 @@
+---
+- name: Install Tomcat
+  apt: pkg=$item state=present
+  with_items:
+    - tomcat6
+    - tomcat6-admin
+
+- name: install tomcat-users.xml
+  action: template src=tomcat-users.j2 dest=/etc/tomcat6/tomcat-users.xml owner=root group=tomcat6
+
+- name: enable tomcat service
+  action: service name=tomcat6 state=started enabled=yes

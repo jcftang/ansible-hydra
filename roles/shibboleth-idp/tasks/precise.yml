@@ -1,0 +1,81 @@
+---
+
+- name: install packages
+  action: apt pkg=$item state=latest
+  with_items:
+   - tomcat6
+   - openjdk-6-jre 
+   - openjdk-6-jdk
+  environment:
+    http_proxy: http://{{proxy_server}}:{{proxy_port}}
+    https_proxy: http://{{proxy_server}}:{{proxy_port}}
+        
+- name: Configure Env variables
+  template: src=shibboleth.sh dest=/etc/profile.d/shibboleth.sh owner=root group=root mode=0644
+  notify: restart source
+  
+  #check if shibboleth is already installed
+- name: Check if Shibboleth already installed
+  command: ls /opt/shibboleth-idp/war/idp.war
+  register: result
+  ignore_errors: yes
+
+  #configure Tomcat
+- name: create Tomcat Key folder
+  file: path=/opt/shibboleth-idp/cert state=directory owner=tomcat6 group=tomcat6 
+
+- name: Generate Tomcat Key
+  command: keytool -genkey -alias tomcat -storepass {{ tomcat_keystore_pass }} -keypass {{ tomcat_keystore_pass }} -dname CN=Unknown,OU=Unknown,O=Unknown,L=Unknown,ST=Unknown,C=Unknown -keyalg RSA -keysize 2048 -keystore /opt/shibboleth-idp/cert/keystore.jks creates=/opt/shibboleth-idp/cert/keystore.jks       
+
+- name: configure Tomcat Server.xml connectors
+  template: src=server.xml dest=/etc/tomcat6/server.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+
+- name: configure tomcat defaults
+  template: src=tomcat6.default dest=/etc/default/tomcat6 
+  notify: restart tomcat6
+
+- name: Configure idp tomcat docbase
+  template: src=idp.xml dest=/etc/tomcat6/Catalina/localhost/idp.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+
+- name: create Tomcat endorsed jar folder
+  file: path=/usr/share/tomcat6/endorsed state=directory owner=tomcat6 group=tomcat6 
+  
+- name: unarchive endorsed jar files
+  unarchive: src=endorsed.tar.gz dest=/usr/share/tomcat6/endorsed/
+  when: result|failed 
+
+
+  #install shibboleth
+- name: unarchive Shibboleth Files
+  unarchive: src=shibboleth.tar.gz dest=/opt/shibboleth-idp/
+  when: result|failed
+  
+- name: Chown idp_home directory to tomcat6 user
+  command: chown -R tomcat6:tomcat6 /opt/shibboleth-idp 
+  when: result|failed
+   
+- name: copy idp war file
+  copy: src=idp.war dest=/opt/shibboleth-idp/war/idp.war owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+  
+  #configure shibboleth
+- name: configure idp handler.xml
+  template: src=handler.xml dest=/opt/shibboleth-idp/conf/handler.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+  
+- name: configure idp login.config
+  template: src=login.config dest=/opt/shibboleth-idp/conf/login.config owner=tomcat6 group=tomcat6      
+  
+- name: configure idp attribute-resolver.xml
+  template: src=attribute-resolver.xml dest=/opt/shibboleth-idp/conf/attribute-resolver.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+
+- name: configure idp metadata.xml
+  template: src=idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6
+  
+- name: configure idp relying-party.xml
+  template: src=relying-party.xml dest=/opt/shibboleth-idp/conf/relying-party.xml owner=tomcat6 group=tomcat6 mode=0644
+  notify: restart tomcat6

@@ -1,0 +1,11 @@
+---
+- name: install etckeeper
+  apt: name=$item state=present
+  with_items:
+    - etckeeper
+    - git
+  tags:
+   - packages
+   - etckeeper
+  notify:
+    - initialise etckeeper

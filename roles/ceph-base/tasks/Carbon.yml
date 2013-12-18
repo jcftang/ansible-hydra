@@ -1,0 +1,101 @@
+#
+# the ceph.conf template could be far more clever, this is just a start of the
+# automation process, the osd, mon and mds components should all be seperated
+# out into fragments then re-assembled
+# 
+#
+---
+  - name: Enable gpg key for upstream
+    command: rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc'
+
+  - name: Enable upstream stable repo
+    #command: yum-config-manager --add-repo=http://www.ceph.com/rpm-bobtail/el6/x86_64 creates=/etc/yum.repos.d/ceph.com_rpm-bobtail_el6_x86_64.repo 
+    command: yum-config-manager --add-repo=http://www.ceph.com/rpm-cuttlefish/el6/x86_64 creates=/etc/yum.repos.d/ceph.com_rpm-cuttlefish_el6_x86_64.repo 
+
+  - name: Install the latest version of ceph from EPEL or Upstream repo
+    action: yum pkg=$item state=latest
+    with_items:
+      - ceph-fuse
+      - ceph
+
+  - name: authorized_keys for root
+    authorized_key: user=root key="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" state=present
+    
+  - name: install insecure private key for root
+    action: copy src=../files/insecure_private_key dest=/root/.ssh/id_rsa owner=root group=root mode=0600
+
+  - name: install insecure config for root
+    action: copy src=../files/insecure_config dest=/root/.ssh/config owner=root group=root mode=0600
+
+  - name: authorized_keys for vagrant
+    authorized_key: user=vagrant key="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" state=present
+    
+  - name: install insecure private key for vagrant
+    action: copy src=../files/insecure_private_key dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600
+
+  - name: install insecure config for vagrant
+    action: copy src=../files/insecure_config dest=/home/vagrant/.ssh/config owner=vagrant group=vagrant mode=0600
+
+  - name: install reference ceph.conf
+    action: template src=../templates/ceph.j2 dest=/etc/ceph/ceph.conf owner=root group=root
+
+  - name: create directories for ceph mons and osds
+    action: file path=$item state=directory
+    with_items:
+      - /var/lib/ceph/osd/ceph-0
+      - /var/lib/ceph/osd/ceph-1
+      - /var/lib/ceph/mon/ceph-a
+      - /var/lib/ceph/mds/ceph-a
+      - /var/lib/ceph/radosgw/${radosgw_hostname}
+
+  - name: Make sure root fs is mounted with correct settings
+    mount: name=/ fstype=ext4 opts=errors=remount-ro,user_xattr src=/dev/mapper/VolGroup-lv_root passno=1 state=mounted
+
+  - name: create the ceph filesystem
+    action: command mkcephfs -a -c /etc/ceph/ceph.conf -k /etc/ceph/ceph.keyring chdir=/etc/ceph creates=/etc/ceph/ceph.keyring
+
+  - name: start ceph
+    action: command service ceph -a start
+
+  - name: Wait for mon to come up
+    wait_for: host=${mon_ip_a} port=${mon_port}
+
+  - name: ensure ceph is enabled
+    action: service name=ceph state=started enabled=yes
+
+  - name: register ceph secret key
+    action: shell grep key /etc/ceph/ceph.keyring | awk '{print $3}' > /etc/ceph/admin.secret creates=/etc/ceph/admin.secret
+
+  - name: Wait for mon to come up
+    wait_for: host=${mon_ip_a} port=${mon_port}
+
+  - name: Make mount point for ceph
+    action: file path=/ceph state=directory
+
+  - name: configure fstab to mount /ceph via fuse
+    mount: name=/ceph src=id=admin,conf=/etc/ceph/ceph.conf opts=defaults fstype=fuse.ceph state=present
+
+  - name: copy mount.fuse.ceph into sbin
+    command: cp -a /usr/sbin/mount.fuse.ceph /sbin/mount.fuse.ceph creates=/sbin/mount.fuse.ceph
+
+  - name: configure fstab to mount /ceph via fuse
+    mount: name=/ceph src=id=admin,conf=/etc/ceph/ceph.conf opts=defaults fstype=fuse.ceph state=mounted
+
+  ## radosgw -- docs at http://ceph.com/docs/master/radosgw/config/ -- seems out of sync
+  - name: install radosgw
+    yum: name=ceph-radosgw state=present
+
+  - name: create keyring for radosgw
+    command: ceph-authtool --create-keyring /etc/ceph/keyring.radosgw.gateway creates=/etc/ceph/keyring.radosgw.gateway
+
+  - name: generate a client
+    command: ceph-authtool /etc/ceph/keyring.radosgw.gateway -n client.radosgw.gateway --gen-key
+
+  - name: add capability
+    command: ceph-authtool -n client.radosgw.gateway --cap osd 'allow rwx' --cap mon 'allow r' /etc/ceph/keyring.radosgw.gateway
+
+  - name: add radosgw keys to ceph keyring
+    command: ceph -k /etc/ceph/ceph.keyring auth add client.radosgw.gateway -i /etc/ceph/keyring.radosgw.gateway
+
+  - name: install s3gw.fcgi script
+    copy: src=../files/s3gw.fcgi dest=/var/www/s3gw.fcgi mode=0555 owner=root group=root
