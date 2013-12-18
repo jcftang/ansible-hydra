@@ -5,8 +5,26 @@
 
   tasks:
     - authorized_key: user=tchpc key="{{ lookup('file', '~/.ssh/id_rsa.pub' ) }}" state=present
+    - group_by: key="{{ansible_distribution_release}}"
 
-- hosts: all
+- hosts: Carbon
+  sudo: True
+  user: tchpc
+  #accelerate: True
+
+  tasks:
+    #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
+    - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
+      with_items:
+        - jtang-dsa
+        - jtang-rsa
+        - jtang-mba
+        - skenny
+        - kcassidy
+        - ptiernan
+    - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
+
+- hosts: precise
   sudo: True
   user: tchpc
   #accelerate: True
