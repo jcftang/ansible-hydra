@@ -1,0 +1,64 @@
+---
+
+#check if replication already setup on sql backend server1
+- name: Check if replication already setup
+  shell: 'mysql -u root --password=password -e "show slave status;" | wc -l'
+  register: check_result1
+  delegate_to: "{{ groups.sql_backend[0] }}"
+  ignore_errors: yes
+
+#check if replication already setup on sql backend server2
+- name: Check if replication already setup
+  shell: 'mysql -u root --password=password -e "show slave status;" | wc -l'
+  register: check_result2
+  delegate_to: "{{ groups.sql_backend[1] }}"
+  ignore_errors: yes
+  
+# Configure backendserver1 Mysql my.cnf  
+- name: configure my.cnf.1
+  template: src=my.cnf.1 dest=/etc/mysql/my.cnf
+  notify: reload mysql
+  delegate_to: "{{ groups.sql_backend[0] }}"
+ 
+  
+ # Configure backendserver2 Mysql my.cnf  
+- name: configure my.cnf.2
+  template: src=my.cnf.2 dest=/etc/mysql/my.cnf
+  notify: reload mysql
+  delegate_to: "{{ groups.sql_backend[1] }}" 
+  
+# Force restart of mysql service 
+- name: restart mysql
+  service: name=mysql state=restarted 
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+   
+# Create replication slave user on backend servers 
+- name: create SQL replication slave user
+  command: mysql -u root --password={{ mysql_root_password }} -e  "GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'%' IDENTIFIED BY '{{ mysql_slave_user_password }}'";   
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+
+# Reset master state on backend servers
+- name: reset masters
+  command: mysql -u root --password={{ mysql_root_password }} -e  "RESET MASTER;"
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+
+# Stop Slave replication on backend servers
+- name: stop slaves
+  mysql_replication: mode=stopslave login_user=root login_password={{ mysql_root_password }}
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+ 
+# Configure Slave replication on backend server1  
+- name: Connect sql1 Slave to Master
+  mysql_replication: mode=changemaster login_user=root login_password={{ mysql_root_password }} master_host={{ groups.sql_backend[1] }} master_user=slave_user master_password={{ mysql_slave_user_password }} master_log_file=mysql-bin.000001 master_log_pos=107
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+  delegate_to: "{{ groups.sql_backend[0] }}"
+  
+# Configure Slave replication on backend server2  
+- name: Connect sql2 Slave to Master
+  command: mysql -u root --password={{ mysql_root_password }} -e  "CHANGE MASTER TO MASTER_HOST = '{{ groups.sql_backend[0] }}', MASTER_USER = 'slave_user', MASTER_PASSWORD = '{{ mysql_slave_user_password }}', MASTER_LOG_FILE = 'mysql-bin.000001', MASTER_LOG_POS = 107; "
+  when: check_result1.stdout == "0" and check_result2.stdout == "0"
+  delegate_to: "{{ groups.sql_backend[1] }}"
+  
+# Start Slave replication  
+- name: Start Slaves
+  mysql_replication: mode=startslave login_user=root login_password={{ mysql_root_password }}
