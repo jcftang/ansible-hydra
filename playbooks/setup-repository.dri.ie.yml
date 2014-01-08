@@ -8,7 +8,7 @@
   user: $rvm_user
 
   tasks:
-    - git: repo=ssh://git@lonsdale.tchpc.tcd.ie/navr/repository.dri.ie dest=~/repository.dri.ie update=yes
+    - git: repo=ssh://git@tracker.dri.ie/navr/repository.dri.ie dest=~/repository.dri.ie update=yes
     - command: chdir='~/repository.dri.ie' bash -lc 'bundle'
     - command: chdir='~/repository.dri.ie' bash -lc 'bundle exec rake generate'
 
