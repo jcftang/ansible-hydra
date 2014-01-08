@@ -42,17 +42,17 @@
       when: proxy_is_set is not defined
 
     - name: generate assets
-      command: bash -lc 'rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'bundle exec rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/repository"' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     # this blows away the DB and recreates it
     #- name: load schema
     #  command: bash -lc 'rake RAILS_ENV=production db:schema:load' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: db migrate
-      command: bash -lc 'rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'bundle exec rake RAILS_ENV=production db:migrate' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
     - name: db seed
-      command: bash -lc 'rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
+      command: bash -lc 'bundle exec rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}-public
 
 - hosts: dri_app
   user: root

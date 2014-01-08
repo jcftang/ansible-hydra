@@ -13,7 +13,7 @@
   tasks:
     ## Create databases needed for public and private head
     - name: create db '{{ db_name }}'
-      mysql_db: db={{ db_name }} state=present
+      mysql_db: db={{ db_name }} state=present encoding=utf8 collation=utf8_unicode_ci
 
     - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
       mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ item }}
