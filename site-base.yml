@@ -3,6 +3,19 @@
 - hosts: all
   user: root
 
+  tasks:
+    - group_by: key="{{ansible_distribution_release}}"
+
+- hosts: Carbon
+  user: root
+
+  roles:
+    - etckeeper
+    - common
+
+- hosts: precise
+  user: root
+
   roles:
     - etckeeper
     - common
