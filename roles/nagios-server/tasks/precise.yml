@@ -30,6 +30,7 @@
      - solr.cfg
      - shibboleth.cfg
      - dbservers.cfg
+     - radosgw.cfg
   notify: restart nagios
 
 - service: name=nagios3 state=started enabled=yes
