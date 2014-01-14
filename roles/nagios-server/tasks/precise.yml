@@ -24,6 +24,9 @@
   with_items:
      - servers.cfg
      - haproxy.cfg
+     - webservers.cfg
+     - tomcat.cfg
+     - dbservers.cfg
   notify: restart nagios
 
 - service: name=nagios3 state=started enabled=yes
