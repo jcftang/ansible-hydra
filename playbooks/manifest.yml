@@ -1,0 +1,7 @@
+# order matters!
+---
+- hosts: all
+  user: root
+
+  tasks:
+    - local_action: template src=../templates/manifest.j2 dest=../manifest.txt
