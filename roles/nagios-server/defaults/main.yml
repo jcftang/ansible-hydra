@@ -1,0 +1,9 @@
+# nagios admin user details
+nagiosadmin: nagiosadmin
+nagiosadminpasswd: RbdO4ou4PNyMg
+
+# apache url alias path
+apachealias: monitoring
+
+#ip address of nagios core server
+nagios_core_server: nagios_core_ip

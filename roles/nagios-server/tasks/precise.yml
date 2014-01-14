@@ -1,0 +1,29 @@
+---
+- apt: name={{item}} state=present
+  with_items:
+    - apache2
+    - nagios3
+    - nagios-plugins
+
+- template: src=precise/passwd dest=/etc/nagios3/htpasswd.users owner=root group=www-data mode=0640
+  notify: restart apache2
+
+- template: src=precise/cgi.cfg dest=/etc/nagios3/cgi.cfg owner=root group=root mode=0644
+  notify: restart nagios
+
+- template: src=precise/apache2.conf dest=/etc/nagios3/apache2.conf owner=root group=root mode=0644
+  notify: restart apache2
+
+- template: src=precise/config.inc.php dest=/usr/share/nagios3/htdocs/config.inc.php owner=root group=root mode=0644
+  notify: restart nagios
+
+- template: src=precise/commands.cfg dest=/etc/nagios3/commands.cfg owner=root group=root mode=0644
+  notify: restart nagios
+
+- template: src=precise/{{ item  }} dest=/etc/nagios3/conf.d/{{ item }} owner=root group=root mode=0644
+  with_items:
+     - servers.cfg
+  notify: restart nagios
+
+- service: name=nagios3 state=started enabled=yes
+- service: name=apache2 state=started enabled=yes
