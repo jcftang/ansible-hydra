@@ -23,6 +23,7 @@
 - template: src=precise/{{ item  }} dest=/etc/nagios3/conf.d/{{ item }} owner=root group=root mode=0644
   with_items:
      - servers.cfg
+     - monitoring.cfg
      - haproxy.cfg
      - webservers.cfg
      - fedora.cfg
