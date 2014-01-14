@@ -25,7 +25,9 @@
      - servers.cfg
      - haproxy.cfg
      - webservers.cfg
-     - tomcat.cfg
+     - fedora.cfg
+     - solr.cfg
+     - shibboleth.cfg
      - dbservers.cfg
   notify: restart nagios
 
