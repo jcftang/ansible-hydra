@@ -31,6 +31,7 @@
      - shibboleth.cfg
      - dbservers.cfg
      - radosgw.cfg
+     - sites.cfg
   notify: restart nagios
 
 - service: name=nagios3 state=started enabled=yes
