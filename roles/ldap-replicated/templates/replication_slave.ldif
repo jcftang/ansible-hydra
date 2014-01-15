@@ -1,0 +1,50 @@
+#set server ID
+dn: cn=config
+changetype: modify
+add: olcServerID
+olcServerID: 2
+
+#Turn on syncprov replication module
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: {1}syncprov.la
+
+#identify servers in replication cluster
+dn: cn=config
+changetype: modify
+replace: olcServerID
+olcServerID: 1 ldap://{{ hostvars[groups['ldap_backend'][0]]['ansible_fqdn'] }}/
+olcServerID: 2 ldap://{{ hostvars[groups['ldap_backend'][1]]['ansible_fqdn'] }}/
+
+#Now set frontend database bdb ('example.com') to replicate
+dn: olcDatabase={2}bdb,cn=config
+changetype: modify
+add: olcLimits
+olcLimits: dn.exact="{{ ldap_admin_user_dn }}" time.soft=unlimited 
+  time.hard=unlimited size.soft=unlimited size.hard=unlimited
+-
+add: olcSyncRepl
+olcSyncRepl: rid=001 provider=ldap://{{ hostvars[groups['ldap_backend'][0]]['ansible_fqdn'] }}/ binddn="{{ ldap_admin_user_dn }}" 
+  bindmethod=simple credentials={{ ldap_password }} searchbase="{{ ldap_dc }}" 
+  type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1
+olcSyncRepl: rid=002 provider=ldap://{{ hostvars[groups['ldap_backend'][1]]['ansible_fqdn'] }}/ binddn="{{ ldap_admin_user_dn }}" 
+  bindmethod=simple credentials={{ ldap_password }} searchbase="{{ ldap_dc }}" 
+  type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1
+-
+add: olcDbIndex
+olcDbIndex: entryUUID  eq
+-
+add: olcDbIndex
+olcDbIndex: entryCSN  eq
+-
+add: olcMirrorMode
+olcMirrorMode: TRUE
+
+
+dn: olcOverlay=syncprov,olcDatabase={2}bdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+
