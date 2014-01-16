@@ -1,4 +1,3 @@
 ---
-- name: reload mysql
-  service: name=mysql state=restarted
-#  delegate_to: "{{ groups.sql_backend }}"
+- include: precise.yml
+  when: ansible_distribution_release == 'precise'
