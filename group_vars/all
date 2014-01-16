@@ -9,9 +9,6 @@ AWS_ENDPOINT: objects.tchpc.tcd.ie
 AWS_ACCESS_KEY: CHANGEME
 AWS_SECRET_KEY: CHANGEME
 
-## MySQL DB configuration
-mysql_root_password: CHANGEME
-
 ## Fedora Commons configuration
 fedora_db_name: fcdb
 fedora_db_user: fcuser

@@ -4,13 +4,15 @@
   user: root
   ## dummy group just to pull in needed information for selfcontained runs
 
-- hosts: mysql
+- hosts: mysql_replicated[0]
   user: root
 
-  roles:
-    - { role: ../../roles/mysql }
+  #roles:
+  #  - { role: ../../roles/mysql }
 
   tasks:
+    - apt: name=python-mysqldb state=present
+    - template: src=../roles/mysql/templates/root.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
     ## Create databases needed for public and private head
     - name: create db '{{ db_name }}'
       mysql_db: db={{ db_name }} state=present encoding=utf8 collation=utf8_unicode_ci
@@ -18,13 +20,15 @@
     - name: create user '{{ db_user }}' with password '{{ db_pass }}' for '{{ db_name }}' and grant all priveleges
       mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ item }}
       with_items: groups.passenger
+      #delegate_to: groups.mysql_replicated[0]
+    - mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
 
 - hosts: dri_app
   user: root
 
   tasks:
     - name: Install dependancies
-      apt: name=$item state=present
+      apt: name={{item}} state=present
       with_items:
         - imagemagick
         - libgraphicsmagick1-dev
@@ -40,7 +44,7 @@
     - name: configure rails app - private and public head config
       action: template src=$item dest=/etc/apache2/sites-enabled/rails-app-{{ host_group }}.conf
       first_available_file:
-        - ../templates/rails-app-${host_group}.j2
+        - ../templates/rails-app-{{host_group}}.j2
         - ../templates/rails-app.j2
       notify:
         - restart httpd

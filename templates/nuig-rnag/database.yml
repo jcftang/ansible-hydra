@@ -26,7 +26,7 @@ production:
   pool: 5
   username: {{ db_user }}
   password: {{ db_pass }}
-  host: {{ groups.mysql[0] }}
+  host: {{ groups['dri_app-lb'][0] }}
   port: 3306
   reconnect: true
 
