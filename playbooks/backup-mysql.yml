@@ -1,5 +1,5 @@
 ---
-- hosts: mysql
+- hosts: mysql_replicated
   user: root
 
   tasks:
@@ -8,6 +8,12 @@
 
     - name: Backup railsdb
       mysql_db: name={{db_name}} state=dump target=~/{{db_name}}-{{ansible_date_time.epoch}}.sql
+
+    - file: path=/ceph state=directory
+    - file: path=/etc/ceph state=directory
+    - copy: src=../../private/ceph/keyring.pilot-mysql dest=/etc/ceph/secret owner=root group=root mode=0600
+
+    - mount: name=/ceph src="134.226.115.110,134.226.115.111,134.226.115.112:6789:/machines/{{ansible_hostname}}" fstype=ceph opts="name=mysql,secretfile=/etc/ceph/secret,noatime" state=mounted
 
     - cron: special_time=daily name="daily backup of fedoradb database" job="mysqldump {{fedora_db_name}} > /ceph/{{fedora_db_name}}-$(date -I).sql"
     - cron: special_time=daily name="daily backup of railsdb database" job="mysqldump {{db_name}} > /ceph/{{db_name}}-$(date -I).sql"
