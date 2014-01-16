@@ -30,6 +30,7 @@
      - solr.cfg
      - shibboleth.cfg
      - dbservers.cfg
+     - mysql_replicated.cfg
      - radosgw.cfg
      - sites.cfg
   notify: restart nagios
