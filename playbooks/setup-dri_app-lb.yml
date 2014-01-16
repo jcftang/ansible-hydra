@@ -1,5 +1,5 @@
 ---
-- hosts: dri_app;shibboleth-idp
+- hosts: dri_app;shibboleth-idp;mysql_replicated
   user: tchpc
 # dummy play to get some information from the gateways themselves
 
