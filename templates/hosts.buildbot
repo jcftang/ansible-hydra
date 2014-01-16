@@ -4,6 +4,7 @@ passenger
 solr
 passenger
 mysql
+mysql_replicated
 redis
 monitoring
 shibboleth-idp
@@ -19,6 +20,7 @@ AWS_ACCESS_KEY={{AWS_ACCESS_KEY}}
 AWS_SECRET_KEY={{AWS_SECRET_KEY}}
 
 mysql_root_password={{mysql_root_password}}
+mysql_replication_user_password={{mysql_replication_user_password}}
 
 fedora_db_name={{fedora_db_name}}
 fedora_db_user={{fedora_db_user}}
@@ -55,6 +57,11 @@ redis_pass={{redis_pass}}
 
 [mysql]
 {% for host in groups['mysql'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}
+
+[mysql_replicated]
+{% for host in groups['mysql_replicated'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
