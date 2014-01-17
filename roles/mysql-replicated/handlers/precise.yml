@@ -1,0 +1,4 @@
+---
+- name: reload mysql
+  service: name=mysql state=restarted
+#  delegate_to: "{{ groups.sql_backend }}"

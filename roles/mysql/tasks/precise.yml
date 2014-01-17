@@ -1,6 +1,6 @@
 ---
 - name: Install mysql client and server
-  apt: pkg=$item state=present
+  apt: pkg={{item}} state=present
   with_items:
     - mysql-client
     - mysql-server
