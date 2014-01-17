@@ -11,6 +11,7 @@
     - facter
     - dstat
     - python-keyczar
+    - python-curl
     - python-pycurl
     - python-software-properties
     - python-virtualenv
