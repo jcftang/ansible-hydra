@@ -20,8 +20,16 @@
 - template: src=precise/commands.cfg dest=/etc/nagios3/commands.cfg owner=root group=root mode=0644
   notify: restart nagios
 
+- file: path=/etc/nagios3/conf.d/{{item}} state=absent
+  with_items:
+    - extinfo_nagios2.cfg
+    - hostgroups_nagios2.cfg
+    - localhost_nagios2.cfg
+    - services_nagios2.cfg
+ 
 - template: src=precise/{{ item  }} dest=/etc/nagios3/conf.d/{{ item }} owner=root group=root mode=0644
   with_items:
+     - all.cfg
      - servers.cfg
      - monitoring.cfg
      - haproxy.cfg
@@ -29,9 +37,10 @@
      - fedora.cfg
      - solr.cfg
      - shibboleth.cfg
-     - dbservers.cfg
      - mysql_replicated.cfg
      - radosgw.cfg
+     - buildbot.cfg
+     - redis.cfg
      - sites.cfg
   notify: restart nagios
 
