@@ -1,32 +1,45 @@
-#Check if replication already configured
+#Check if replication is already configured
 - name: Check if replication already configured
   shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={2}bdb,cn=config'
-  register: result
+  register: result1
   ignore_errors: True
+  delegate_to: "{{ groups.ldap_backend[0] }}"
+  
+#Check if replication is already configured
+- name: Check if replication already configured
+  shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={2}bdb,cn=config'
+  register: result2
+  ignore_errors: True
+  delegate_to: "{{ groups.ldap_backend[1] }}"
 
 #deliver replication_master.ldif database file to master
 - name: deliver replication_master.ldif file
   template: src=replication_master.ldif dest=/tmp/replication.ldif
-  when: result|failed
+#  when: result|failed
+  when: result1.rc != 0 and result2.rc != 0
   delegate_to: "{{ groups.ldap_backend[0] }}"
 
 #deliver replication_slave.ldif database file to slave
 - name: deliver replication_slave.ldif file
   template: src=replication_slave.ldif dest=/tmp/replication.ldif
-  when: result|failed
+#  when: result|failed
+  when: result1.rc != 0 and result2.rc != 0
   delegate_to: "{{ groups.ldap_backend[1] }}"
 
 #modify ldap backends on servers
 - name: modify backend database
   command: ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/replication.ldif
-  when: result|failed  
+#  when: result|failed  
+  when: result1.rc != 0 and result2.rc != 0
   
 #cleanup replication.ldif file from ldap servers
 - name: cleanup replication.ldif file from servers
   file: path=/tmp/replication.ldif state=absent
-  when: result|failed
-  
+#  when: result|failed
+  when: result1.rc != 0 and result2.rc != 0
+    
 #restart slapd 
 - name: restart slapd
   service: name=slapd state=restarted
-  when: result|failed
+#  when: result|failed
+  when: result1.rc != 0 and result2.rc != 0
