@@ -14,22 +14,21 @@ olcModuleLoad: {1}syncprov.la
 dn: cn=config
 changetype: modify
 replace: olcServerID
-olcServerID: 1 ldap://{{ hostvars[groups['ldap_backend'][0]]['ansible_fqdn'] }}/
-olcServerID: 2 ldap://{{ hostvars[groups['ldap_backend'][1]]['ansible_fqdn'] }}/
+olcServerID: 1 ldap://{{ hostvars[groups['ldap_replicated'][0]]['ansible_fqdn'] }}/
+olcServerID: 2 ldap://{{ hostvars[groups['ldap_replicated'][1]]['ansible_fqdn'] }}/
 
-#Now set frontend database bdb ('example.com') to replicate
 dn: olcDatabase={2}bdb,cn=config
 changetype: modify
 add: olcLimits
-olcLimits: dn.exact="{{ ldap_admin_user_dn }}" time.soft=unlimited 
+olcLimits: dn.exact="cn=admin,{{ ldap_dc }}" time.soft=unlimited 
   time.hard=unlimited size.soft=unlimited size.hard=unlimited
 -
 add: olcSyncRepl
-olcSyncRepl: rid=001 provider=ldap://{{ hostvars[groups['ldap_backend'][0]]['ansible_fqdn'] }}/ binddn="{{ ldap_admin_user_dn }}" 
-  bindmethod=simple credentials={{ ldap_password }} searchbase="{{ ldap_dc }}" 
+olcSyncRepl: rid=001 provider=ldap://{{ hostvars[groups['ldap_replicated'][0]]['ansible_fqdn'] }}/ binddn="cn=admin,{{ ldap_dc }}" 
+  bindmethod=simple credentials={{ ldap_pass }} searchbase="{{ ldap_dc }}" 
   type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1
-olcSyncRepl: rid=002 provider=ldap://{{ hostvars[groups['ldap_backend'][1]]['ansible_fqdn'] }}/ binddn="{{ ldap_admin_user_dn }}" 
-  bindmethod=simple credentials={{ ldap_password }} searchbase="{{ ldap_dc }}" 
+olcSyncRepl: rid=002 provider=ldap://{{ hostvars[groups['ldap_replicated'][1]]['ansible_fqdn'] }}/ binddn="cn=admin,{{ ldap_dc }}" 
+  bindmethod=simple credentials={{ ldap_pass }} searchbase="{{ ldap_dc }}" 
   type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1
 -
 add: olcDbIndex
@@ -47,4 +46,3 @@ changetype: add
 objectClass: olcOverlayConfig
 objectClass: olcSyncProvConfig
 olcOverlay: syncprov
-
