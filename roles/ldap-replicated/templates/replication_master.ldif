@@ -17,7 +17,7 @@ replace: olcServerID
 olcServerID: 1 ldap://{{ hostvars[groups['ldap_replicated'][0]]['ansible_fqdn'] }}/
 olcServerID: 2 ldap://{{ hostvars[groups['ldap_replicated'][1]]['ansible_fqdn'] }}/
 
-dn: olcDatabase={2}bdb,cn=config
+dn: olcDatabase={1}hdb,cn=config
 changetype: modify
 add: olcLimits
 olcLimits: dn.exact="cn=admin,{{ ldap_dc }}" time.soft=unlimited 
@@ -41,7 +41,7 @@ add: olcMirrorMode
 olcMirrorMode: TRUE
 
 
-dn: olcOverlay=syncprov,olcDatabase={2}bdb,cn=config
+dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
 changetype: add
 objectClass: olcOverlayConfig
 objectClass: olcSyncProvConfig
