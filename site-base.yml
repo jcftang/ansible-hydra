@@ -126,11 +126,17 @@
     - rvm-passenger
     - fits
 
+- hosts: ldap_replicated
+  user: root
+
+  roles:
+    - ldap-replicated
+
+
 - hosts: shibboleth-idp
   user: root
 
   roles:
-    - slapd
     - shibboleth-idp
 
 - hosts: buildbot
