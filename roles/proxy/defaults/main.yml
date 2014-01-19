@@ -11,6 +11,6 @@ apt_cacher_server: apt-cacher.tchpc.tcd.ie
 apt_cacher_port: 3142
 
 proxy_env:
-  http_proxy: ${proxy_server}:${proxy_port}
-  https_proxy: ${proxy_server}:${proxy_port}
-  ftp_proxy: ${proxy_server}:${proxy_port}
+  http_proxy: '{{proxy_server}}:{{proxy_port}}'
+  https_proxy: '{{proxy_server}}:{{proxy_port}}'
+  ftp_proxy: '{{proxy_server}}:{{proxy_port}}'
