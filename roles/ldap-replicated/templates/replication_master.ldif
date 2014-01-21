@@ -1,8 +1,8 @@
 #set server ID
-dn: cn=config
-changetype: modify
-add: olcServerID
-olcServerID: 1
+#dn: cn=config
+#changetype: modify
+#add: olcServerID
+#olcServerID: 1
 
 #Turn on syncprov replication module
 dn: cn=module{0},cn=config
