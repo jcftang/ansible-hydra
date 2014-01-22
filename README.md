@@ -17,9 +17,11 @@ ready to go for use with deploying a Hydra Head.
 * Ruby (via RVM) in a user directory
 * Passenger with the installed version of Ruby
 * MySQL (from the base repositories)
-* redis
+* Redis
 * Shibboleth
 * HAProxy
+* LDAP
+* Corosync/Pacemaker *coming soon*
 
 What's missing here is the deployment of the actual Hydra-Head. This part
 is not automated yet as it's not clear what we want to do this is area.
