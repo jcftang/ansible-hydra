@@ -25,3 +25,11 @@
 
 [monitoring]
 10.0.1.200
+
+#[mysql_replicated]
+#
+#[ldap_replicated]
+#
+#[shibboleth-idp]
+#
+#[buildbot]
