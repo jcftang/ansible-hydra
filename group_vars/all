@@ -24,8 +24,8 @@ db_pass: dripass
 ## Where ever RVM is install is where the rails app will be deployed
 ruby_version: 2.0.0-p195
 rvm_user: vagrant
-rvm_home: /home/${rvm_user}/.rvm
-rvm_bindir: ${rvm_home}/bin
+rvm_home: /home/{{rvm_user}}/.rvm
+rvm_bindir: '{{rvm_home}}/bin'
 
 ## Redis
 redis_pass: foobar

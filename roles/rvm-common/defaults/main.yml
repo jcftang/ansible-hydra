@@ -1,0 +1,5 @@
+---
+ruby_version: 2.0.0-p195
+rvm_user: vagrant
+rvm_home: /home/{{rvm_user}}/.rvm
+rvm_bindir: '{{rvm_home}}/bin'
