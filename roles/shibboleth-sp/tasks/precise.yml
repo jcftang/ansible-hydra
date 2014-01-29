@@ -19,7 +19,6 @@
     - opensaml2-tools
 
 
-    
 # Enable apache2-mod-shib2
 - name: Enable apache Shib module
   command: a2enmod shib2 creates=/etc/apache2/mods-enabled/shib2.load

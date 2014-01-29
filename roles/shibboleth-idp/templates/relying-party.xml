@@ -79,7 +79,21 @@
         <metadata:MetadataProvider id="IdPMD" xsi:type="metadata:FilesystemMetadataProvider"
                                    metadataFile="/opt/shibboleth-idp/metadata/idp-metadata.xml"
                                    maxRefreshDelay="P1D" />
-        
+   
+   
+ <!-- DRI SP Servers -->
+ 
+{% set count = 1 %} 
+ {% for host in groups['dri_app'] %}
+
+     <metadata:MetadataProvider id="URLMD{{ count }}" xsi:type="metadata:FileBackedHTTPMetadataProvider"
+                          metadataURL="https://{{ hostvars[host].ansible_fqdn }}/Shibboleth.sso/Metadata"
+                          backingFile="/opt/shibboleth-idp/metadata/{{ hostvars[host].ansible_hostname }}.xml">
+     </metadata:MetadataProvider>
+
+{% set count = count + 1 %}
+{% endfor %}
+      
         <!-- Example metadata provider. -->
         <!-- Reads metadata from a URL and store a backup copy on the file system. -->
         <!-- Validates the signature of the metadata and filters out all by SP entities in order to save memory -->
