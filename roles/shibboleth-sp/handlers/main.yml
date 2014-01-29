@@ -1,0 +1,6 @@
+---
+
+- name: reload shibd_apache2
+  service: name=apache2 state=restarted
+  service: name=shibd state=restarted
+ 
