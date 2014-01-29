@@ -1,0 +1,66 @@
+---
+#Check for apache install
+- name: Check for apache
+  shell: dpkg -l | grep ' apache2 '
+
+#Check for apache SSL 
+- name: Check for modssl
+  command: ls -l /etc/apache2/mods-enabled/ssl.load
+  register: command_result
+  failed_when: command_result.rc != 0
+  
+#install Packages
+- name: Install Packages
+  apt: name=$item state=present
+  with_items:
+    - shibboleth-sp2-schemas 
+    - libshibsp-dev
+    - libapache2-mod-shib2
+    - opensaml2-tools
+
+
+    
+# Enable apache2-mod-shib2
+- name: Enable apache Shib module
+  command: a2enmod shib2 creates=/etc/apache2/mods-enabled/shib2.load
+  register: result
+
+#Restart Apache2
+- name: Restart apache
+  service: name=apache2 state=restarted
+  when: result|changed
+
+#create SAML ssl cert directory
+- name: Create cert directory
+  file: path=/etc/shibboleth/cert state=directory
+  
+#generate SAML certs
+#- name: Create SAML ssl certs
+#  command: openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -subj "/C=IE/ST=Dublin/L=Dublin/O=IT/CN=dri.ie" -out saml.crt -keyout saml.pem chdir=/etc/shibboleth/cert creates=/etc/shibboleth/cert/saml.pem
+
+#Push SAML cert 
+- name: Push SAML certs
+  template: src=saml.crt dest=/etc/shibboleth/cert/saml.crt mode=0644 
+  notify: reload shibd_apache2
+
+#Push SAML private key
+- name: Push SAML private key
+  template: src=saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
+  notify: reload shibd_apache2
+
+#Configure shibboleth2.xml
+- name: Configure Shibboleth SP xml file
+  template: src=shibboleth2.xml dest=/etc/shibboleth/shibboleth2.xml mode=0644
+  notify: reload shibd_apache2
+  
+#fetch idp Metadata File from idp server
+#- name: fetch idp metadata xml file
+#  command: wget https://dri-guest036.tchpc.tcd.ie/idp/profile/Metadata/SAML --no-check-certificate -O idp-metadata.xml chdir=/etc/shibboleth/ creates=chdir=/etc/shibboleth/idp-metadata.xml
+#  notify: reload shibd
+
+
+#Deliver idp metadata file
+- name: Deliver IDP metadata xml file
+  template: src=idp-metadata.xml dest=/etc/shibboleth/idp-metadata.xml mode=0644
+  notify: reload shibd_apache2
+
