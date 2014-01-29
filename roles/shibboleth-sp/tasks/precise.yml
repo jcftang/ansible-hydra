@@ -60,6 +60,6 @@
 
 #Deliver idp metadata file
 - name: Deliver IDP metadata xml file
-  template: src=idp-metadata.xml dest=/etc/shibboleth/idp-metadata.xml mode=0644
+  template: src=../../private/idp-metadata.xml dest=/etc/shibboleth/idp-metadata.xml mode=0644
   notify: reload shibd_apache2
 

@@ -59,6 +59,13 @@
 - name: copy idp war file
   copy: src=idp.war dest=/opt/shibboleth-idp/war/idp.war owner=tomcat6 group=tomcat6
   notify: restart tomcat6
+
+- name: Copy IDP keys
+  copy: src=../../private/shibboleth/{{ item }} dest=/opt/shibboleth-idp/credentials/{{ item }} owner=tomcat6 group=tomcat6
+  with_items:
+    - idp.crt
+    - idp.key
+    - idp.jks
   
   #configure shibboleth
 - name: configure idp handler.xml
@@ -73,7 +80,7 @@
   notify: restart tomcat6
 
 - name: configure idp metadata.xml
-  template: src=idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
+  template: src=../../private/idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
   notify: restart tomcat6
 
 - name: configure idp relying-party.xml
