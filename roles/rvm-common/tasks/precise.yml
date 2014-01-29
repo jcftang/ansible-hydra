@@ -36,12 +36,12 @@
   - name: install ruby {{ruby_version}}
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'rvm install {{ruby_version}}'
+    command: bash -lc 'rvm install "{{ruby_version}}"'
 
-  - name: use ruby ${ruby_version} by default
+  - name: use ruby {{ruby_version}} by default
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'rvm alias create default {{ruby_version}}'
+    command: bash -lc 'rvm alias create default "{{ruby_version}}"'
 
   # register variables for later use
   - name: register gem dir variable
