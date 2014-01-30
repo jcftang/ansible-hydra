@@ -80,7 +80,7 @@
   notify: restart tomcat6
 
 - name: configure idp metadata.xml
-  template: src=../../private/idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
+  template: src=../../private/shibboleth/idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
   notify: restart tomcat6
 
 - name: configure idp relying-party.xml
