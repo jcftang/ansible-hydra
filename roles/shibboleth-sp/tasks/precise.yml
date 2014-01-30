@@ -39,12 +39,12 @@
 
 #Push SAML cert 
 - name: Push SAML certs
-  template: src=saml.crt dest=/etc/shibboleth/cert/saml.crt mode=0644 
+  template: src=../../private/saml.crt dest=/etc/shibboleth/cert/saml.crt mode=0644 
   notify: reload shibd_apache2
 
 #Push SAML private key
 - name: Push SAML private key
-  template: src=saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
+  template: src=../../private/saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
   notify: reload shibd_apache2
 
 #Configure shibboleth2.xml

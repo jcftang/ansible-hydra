@@ -20,7 +20,7 @@
     -->
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
-    <ApplicationDefaults entityID="https://{{ ansible_fqdn }}/shibboleth"
+    <ApplicationDefaults entityID="http://{{ ansible_fqdn }}/shibboleth"
                          REMOTE_USER="eppn persistent-id targeted-id">
 
         <!--
