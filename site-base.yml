@@ -35,7 +35,15 @@
       apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
       when: proxy_is_set is not defined
 
-    - copy: src=files/ceph.list dest=/etc/apt/sources.list.d/ceph.list owner=root group=root mode=0644
+    # remove previous stables
+    - apt_repository: repo='deb http://eu.ceph.com/debian-cuttlefish/ $(lsb_release -sc) main' state=absent
+    - apt_repository: repo='deb http://eu.ceph.com/debian-cuttlefish/ precise main' state=absent
+    - apt_repository: repo='deb-src http://eu.ceph.com/debian-cuttlefish/ precise main' state=absent
+    - apt_repository: repo='deb http://eu.ceph.com/debian-dumpling/ $(lsb_release -sc) main' state=absent
+    - apt_repository: repo='deb http://eu.ceph.com/debian-dumpling/ precise main' state=absent
+    - apt_repository: repo='deb http://eu.ceph.com/debian-emperor/ $(lsb_release -sc) main' state=absent
+    # latest stable
+    - apt_repository: repo='deb http://eu.ceph.com/debian-emperor/ precise main' state=present
 
     - apt: name=ceph-fs-common state=present update_cache=yes
 
