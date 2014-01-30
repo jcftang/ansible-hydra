@@ -7,7 +7,7 @@ mysql
 mysql_replicated
 redis
 monitoring
-shibboleth-idp
+shibboleth_idp
 buildbot
 fedora
 solr
@@ -81,8 +81,8 @@ redis_pass={{redis_pass}}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
-[shibboleth-idp]
-{% for host in groups['shibboleth-idp'] %}
+[shibboleth_idp]
+{% for host in groups['shibboleth_idp'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 

@@ -125,7 +125,7 @@
     - rvm-passenger
     - fits
 
-- hosts: shibboleth-idp
+- hosts: shibboleth_idp
   user: root
 
   roles:
