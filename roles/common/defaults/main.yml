@@ -4,3 +4,6 @@ mail_hostname: mail
 
 # hostname of the ntp server in your domain, the domain will be appeneded by the template
 ntp_hostname: ntp
+
+# host name of site wide syslogger
+syslog_ng_server: syslog

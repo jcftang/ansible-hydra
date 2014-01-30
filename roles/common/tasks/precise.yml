@@ -1,7 +1,7 @@
 ---
 ## boiler plate
 - name: Install dependancies
-  apt: name=$item state=present update-cache=yes
+  apt: name={{ item }} state=present update-cache=yes
   with_items:
     - git
     - bzr
