@@ -69,7 +69,6 @@
       mysql_db: db={{ fedora_db_name }} state=present
 
     - name: create user '{{ fedora_db_user }}' with password '{{ fedora_db_pass }}' for '{{ fedora_db_name }}' and grant all priveleges
-      mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ groups['fedora'][0] }}
       mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
 
 - hosts: redis
@@ -133,11 +132,11 @@
     - ldap-replicated
 
 
-- hosts: shibboleth-idp
+- hosts: shibboleth_idp
   user: root
 
   roles:
-    - shibboleth-idp
+#    - shibboleth-idp
 
 - hosts: buildbot
   user: root

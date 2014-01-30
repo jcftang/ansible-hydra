@@ -1,6 +1,6 @@
 ---
 - name: Install Tomcat
-  apt: pkg=$item state=present
+  apt: pkg={{item}} state=present
   with_items:
     - tomcat6
     - tomcat6-admin

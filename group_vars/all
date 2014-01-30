@@ -24,8 +24,8 @@ db_pass: dripass
 ## Where ever RVM is install is where the rails app will be deployed
 ruby_version: 2.0.0-p195
 rvm_user: vagrant
-rvm_home: /home/${rvm_user}/.rvm
-rvm_bindir: ${rvm_home}/bin
+rvm_home: /home/{{rvm_user}}/.rvm
+rvm_bindir: '{{rvm_home}}/bin'
 
 ## Redis
 redis_pass: foobar
@@ -52,16 +52,14 @@ syslog_ng_server: 134.226.115.149
 
 
 #shibboleth-idp
-idp_hostname: "{{ansible_fqdn}}"
-idp_URI: https://{{ansible_fqdn}}:8443
-idp_keystore_password: test
-tomcat_keystore_pass: test123
-tomcat_key_pass: test123
-shibboleth_user_ldap_server: localhost
+idp_URI: https://repository.dri.ie
+tomcat_keystore_pass: CHANGEME
+tomcat_key_pass: CHANGEME
+shibboleth_user_ldap_server: repository.dri.ie
 shibboleth_user_ldap_port: 389
 shibboleth_user_base_DN: ou=people,dc=dri,dc=ie
 shibboleth_user_ldap_principal: cn=admin,dc=dri,dc=ie
-shibboleth_user_ldap_principal_password: password
+shibboleth_user_ldap_principal_password: {{ ldap_pass }}
 
 # configure slapd
 ldap_server: localhost

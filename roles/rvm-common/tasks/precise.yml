@@ -1,6 +1,6 @@
 ---
   - name: Set up ruby and rails dependancies
-    apt: pkg=$item state=present
+    apt: pkg={{item}} state=present
     with_items:
       - build-essential
       - openssl
@@ -31,17 +31,17 @@
   - name: install rvm
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'curl -4 -L https://get.rvm.io | bash -s 1.23.7' creates=${rvm_bindir}/rvm
+    command: bash -lc 'curl -4 -L https://get.rvm.io | bash -s 1.23.7' creates={{rvm_bindir}}/rvm
 
-  - name: install ruby ${ruby_version}
+  - name: install ruby {{ruby_version}}
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'rvm install ${ruby_version}'
+    command: bash -lc 'rvm install "{{ruby_version}}"'
 
-  - name: use ruby ${ruby_version} by default
+  - name: use ruby {{ruby_version}} by default
     sudo: True
     sudo_user: $rvm_user
-    command: bash -lc 'rvm alias create default ${ruby_version}'
+    command: bash -lc 'rvm alias create default "{{ruby_version}}"'
 
   # register variables for later use
   - name: register gem dir variable

@@ -1,14 +1,13 @@
-<<<<<<< HEAD
 #Check if replication is already configured
 - name: Check if replication already configured
-  shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={1}hdb,cn=config'
+  shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={2}bdb,cn=config'
   register: result1
   ignore_errors: True
   delegate_to: "{{ groups.ldap_replicated[0] }}"
   
 #Check if replication is already configured
 - name: Check if replication already configured
-  shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={1}hdb,cn=config'
+  shell: 'ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn | grep olcOverlay={0}syncprov,olcDatabase={2}bdb,cn=config'
   register: result2
   ignore_errors: True
   delegate_to: "{{ groups.ldap_replicated[1] }}"
@@ -44,8 +43,3 @@
   service: name=slapd state=restarted
 #  when: result|failed
   when: result1.rc != 0 and result2.rc != 0
-=======
----
-- include: precise.yml
-  when: ansible_distribution_release == 'precise'
->>>>>>> eea76fb7aa7af63cf1966759afa548460bff6dc1

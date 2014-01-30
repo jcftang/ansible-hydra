@@ -3,7 +3,7 @@
   # mod_passenger
   #
   - name: install mod_passenger dependencies
-    apt: pkg=$item state=present
+    apt: pkg={{item}} state=present
     with_items:
       - apache2
       - apache2-mpm-worker
@@ -41,7 +41,7 @@
 
   # 3.0.19 was the last known good version, now at 4.0.2, between 4.0.5 and 4.0.6 phusion changed the path of the apache module!
   - name: install mod_passenger
-    command: bash -lc 'gem install passenger --version "4.0.5"' creates=${rvm_home}/gems/${ruby_version.stdout}/bin/passenger-install-apache2-module
+    command: bash -lc 'gem install passenger --version "4.0.5"' creates={{rvm_home}}/gems/{{ruby_version.stdout}}/bin/passenger-install-apache2-module
     sudo: True
     sudo_user: $rvm_user
     ignore_errors: True
@@ -53,7 +53,7 @@
     sudo_user: $rvm_user
 
   - name: build mod_passenger for apache
-    command: bash -lc 'passenger-install-apache2-module -a' creates=${rvm_home}/gems/${ruby_version.stdout}/gems/passenger-${passenger_version.stdout}/libout/apache2/mod_passenger.so
+    command: bash -lc 'passenger-install-apache2-module -a' creates={{rvm_home}}/gems/{{ruby_version.stdout}}/gems/passenger-{{passenger_version.stdout}}/libout/apache2/mod_passenger.so
     sudo: True
     sudo_user: $rvm_user
 
