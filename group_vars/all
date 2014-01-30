@@ -59,7 +59,7 @@ shibboleth_user_ldap_server: repository.dri.ie
 shibboleth_user_ldap_port: 389
 shibboleth_user_base_DN: ou=people,dc=dri,dc=ie
 shibboleth_user_ldap_principal: cn=admin,dc=dri,dc=ie
-shibboleth_user_ldap_principal_password: {{ ldap_pass }}
+shibboleth_user_ldap_principal_password: password
 
 # configure slapd
 ldap_server: localhost
