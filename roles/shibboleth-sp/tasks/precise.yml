@@ -3,12 +3,6 @@
 - name: Check for apache
   shell: dpkg -l | grep ' apache2 '
 
-#Check for apache SSL 
-- name: Check for modssl
-  command: ls -l /etc/apache2/mods-enabled/ssl.load
-  register: command_result
-  failed_when: command_result.rc != 0
-  
 #install Packages
 - name: Install Packages
   apt: name=$item state=present
