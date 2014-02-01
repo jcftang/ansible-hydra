@@ -31,6 +31,8 @@
 - copy: src=precise/SimpleConfig.py dest=/home/{{rvm_user}}/masters/SimpleConfig.py owner={{rvm_user}} group={{rvm_user}}
 #  notify: restart buildmaster
 
+- template: src=myconfig.json dest=/home/{{rvm_user}}/myconfig.json
+
 - file: path=/home/{{rvm_user}} owner={{rvm_user}} group={{rvm_user}} recurse=yes
 
 - apt: name=supervisor state=present

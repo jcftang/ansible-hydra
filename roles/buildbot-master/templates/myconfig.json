@@ -1,0 +1,5 @@
+{
+  "webuser" : "{{webuser}}",
+  "webpass" : "{{webpass}}",
+  "slavepass" : "{{slavepass}}"
+}

@@ -143,11 +143,17 @@
   roles:
 #    - shibboleth-idp
 
-- hosts: buildbot
+- hosts: buildbot-master
   user: root
 
   roles:
     - buildbot-master
+
+- hosts: buildbot-slave
+  user: root
+
+  roles:
+    - buildbot-slave
 
   tasks:
     - name: Install dependancies
