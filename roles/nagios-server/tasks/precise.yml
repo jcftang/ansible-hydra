@@ -38,6 +38,7 @@
      - solr.cfg
      - shibboleth.cfg
      - mysql_replicated.cfg
+     - ldap_replicated.cfg
      - radosgw.cfg
      - buildbot.cfg
      - redis.cfg
