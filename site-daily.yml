@@ -70,7 +70,7 @@
     - authorized_key: user=root key="{{ lookup('file', '/srv/infrastructure/private/keys/dri-deploy.pub') }}"
     - authorized_key: user=tchpc key="{{ lookup('file', '/srv/infrastructure/private/keys/dri-deploy.pub') }}"
 
-- hosts: buildbot-master;build-slave
+- hosts: buildbot-master;buildbot-slave
   sudo: True
   user: tchpc
   #accelerate: True
