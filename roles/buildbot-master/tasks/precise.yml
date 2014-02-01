@@ -37,4 +37,4 @@
 
 - apt: name=supervisor state=present
 - template: src=buildbot.conf dest=/etc/supervisor/conf.d/buildbot.conf
-- service: name=supervisor state=restarted enabled=yes
+- service: name=supervisor state=started enabled=yes
