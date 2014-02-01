@@ -9,7 +9,7 @@ install_deps)
     ;;
 configure)
     if [[ -s "$HOME/hosts.buildbot" ]] ; then
-      cp $HOME/hosts.buildbot hosts.buildbot
+      cp ~/hosts.buildbot hosts.buildbot
     else
       printf "Can't upload and deploy, can't find hosts.buildbot file"
       exit 1
