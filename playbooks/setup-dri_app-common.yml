@@ -42,7 +42,7 @@
 
     ## must configure vhosts to look for a rails app deployment to serve out
     - name: configure rails app - private and public head config
-      action: template src=$item dest=/etc/apache2/sites-enabled/rails-app-{{ host_group }}.conf
+      action: template src={{item}} dest=/etc/apache2/sites-enabled/rails-app-{{ host_group }}.conf
       first_available_file:
         - ../templates/rails-app-{{host_group}}.j2
         - ../templates/rails-app.j2
