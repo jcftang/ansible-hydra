@@ -45,7 +45,7 @@
     # latest stable
     - apt_repository: repo='deb http://eu.ceph.com/debian-emperor/ precise main' state=present
 
-    - apt: name=ceph-fs-common state=present update_cache=yes
+    - apt: name=ceph-fs-common state=present update_cache=yes cache_valid_time=3600
 
     - apt_repository: repo='ppa:fish-shell/release-2' state=present
     - apt: name=fish state=present
@@ -127,7 +127,6 @@
   user: root
 
   roles:
-    - rvm-common
     - rvm-passenger
     - fits
 

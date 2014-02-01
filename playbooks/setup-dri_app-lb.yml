@@ -9,7 +9,7 @@
 
   pre_tasks:
     - name: Install dependancies
-      apt: name=$item state=present update-cache=yes
+      apt: name={{item}} state=present update-cache=yes cache_valid_time=3600
       with_items:
         - python-software-properties
         - python-virtualenv
@@ -25,7 +25,7 @@
   tasks:
     - apt_key: id=1C61B9CD url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x505D97A41C61B9CD
     - apt_repository: repo=ppa:vbernat/haproxy-1.5 state=present
-    - apt: update_cache=yes name=$item state=present
+    - apt: update_cache=yes name={{item}} state=present cache_valid_time=3600
       with_items:
         - haproxy
         - socat
