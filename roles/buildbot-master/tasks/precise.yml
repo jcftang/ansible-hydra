@@ -32,3 +32,7 @@
 #  notify: restart buildmaster
 
 - file: path=/home/{{rvm_user}} owner={{rvm_user}} group={{rvm_user}} recurse=yes
+
+- apt: name=supervisor state=present
+- template: src=buildbot.conf dest=/etc/supervisor/conf.d/buildbot.conf
+- service: name=supervisor state=restarted enabled=yes
