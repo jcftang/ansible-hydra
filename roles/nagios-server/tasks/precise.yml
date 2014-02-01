@@ -42,7 +42,9 @@
      - buildbot.cfg
      - redis.cfg
      - sites.cfg
-  notify: restart nagios
+  notify:
+    - restart nagios
+    - restart apache2
 
 - service: name=nagios3 state=started enabled=yes
 - service: name=apache2 state=started enabled=yes
