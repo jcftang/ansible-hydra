@@ -90,7 +90,6 @@
   user: root
 
   roles:
-    - tomcat
     - fedora
 
 # SOLR - search engine
@@ -98,7 +97,6 @@
   user: root
 
   roles:
-    - tomcat
     - solr
 
 # mod_passenger for the systems that will run the rails app or the resque queues
