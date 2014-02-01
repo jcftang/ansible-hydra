@@ -1,5 +1,5 @@
 - name: restart nagios
   action: service name=nagios3 state=restarted
 
-- name: restart apache
+- name: restart apache2
   action: service name=apache2 state=restarted
