@@ -1,11 +1,11 @@
 ---
 - name: Enable EPEL
-  action: yum pkg=$item state=present
+  action: yum pkg={{item}} state=present
   with_items:
     - epel-release
 
 - name: Install modified repo files which enables mirrors
-  copy: src=Carbon/$item dest=/etc/yum.repos.d/$item owner=root group=root mode=0644
+  copy: src=Carbon/{{item}} dest=/etc/yum.repos.d/{{item}} owner=root group=root mode=0644
   with_items:
     - epel.repo
     - epel-testing.repo
@@ -15,7 +15,7 @@
     - fish.release-2.repo
 
 - name: Common packages
-  action: yum pkg=$item state=latest
+  action: yum pkg={{item}} state=latest
   with_items:
     - tsocks
     - ansible
