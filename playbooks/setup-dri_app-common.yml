@@ -44,6 +44,7 @@
     - name: configure rails app - private and public head config
       action: template src={{item}} dest=/etc/apache2/sites-enabled/rails-app-{{ host_group }}.conf
       with_first_found:
+       - files:
           - ../templates/rails-app-{{host_group}}.j2
           - ../templates/rails-app.j2
       notify:
