@@ -38,7 +38,7 @@
   template: src={{item}} dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat6 group=tomcat6
   with_first_found:
     - files:
-       - solr-schema-{{host_group}}.xml
+       - solr_schema_{{host_group}}.xml
        - solr-schema.xml
 
 - name: Correct ownership
