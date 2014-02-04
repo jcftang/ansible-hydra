@@ -64,7 +64,7 @@
 
 #  - name: configure rails app
 #    action: template src=$item dest=/etc/httpd/conf.d/rails-app.conf
-#    first_available_file:
+#    with_first_found:
 #      - ../templates/rails-app-${host_group}.j2
 #      - ../templates/rails-app.j2
 #    notify:

@@ -36,7 +36,7 @@
 
 - name: Install solr schema (custom hydra/dri one)
   template: src={{item}} dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat6 group=tomcat6
-  first_available_file:
+  with_first_found:
     - solr-schema-{{host_group}}.xml
     - solr-schema.xml
 
