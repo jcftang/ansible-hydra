@@ -35,11 +35,10 @@
   template: src=solrconfig-production.j2 dest=/opt/solr/production/collection1/conf/solrconfig.xml owner=tomcat6 group=tomcat6
 
 - name: Install solr schema (custom hydra/dri one)
-  template: src={{item}} dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat6 group=tomcat6
+  action: template src={{item}} dest=/opt/solr/production/collection1/conf/schema.xml owner=tomcat6 group=tomcat6
   with_first_found:
-    - files: 
-       - "solr-schema-{{host_group}}.xml"
-       - solr-schema.xml
+   - solr-schema-{{host_group}}.xml
+   - solr-schema.xml
 
 - name: Correct ownership
   file: owner=tomcat6 group=tomcat6 path=/opt/solr recurse=yes state=directory
