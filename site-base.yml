@@ -141,7 +141,7 @@
   user: root
 
   roles:
-     - shibboleth_sp
+     - shibboleth-sp
 
 
 - hosts: shibboleth_idp
