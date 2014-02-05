@@ -104,8 +104,10 @@
   user: root
 
   tasks:
+    - group: name=vagrant gid=10000 state=present
     - name: Create $rvm_user
-      user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes
+      user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes uid=10000
+    
 
     - name: Make sure .ssh directory exists
       file: path=/home/{{rvm_user}}/.ssh state=directory owner={{ rvm_user }} group={{rvm_user}}
