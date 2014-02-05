@@ -148,7 +148,7 @@
   user: root
 
   roles:
-#    - shibboleth-idp
+    - shibboleth-idp
 
 - hosts: buildbot-master
   user: root
