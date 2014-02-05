@@ -34,6 +34,7 @@
      - monitoring.cfg
      - haproxy.cfg
      - webservers.cfg
+     - resque_workers.cfg
      - fedora.cfg
      - solr.cfg
      - shibboleth.cfg
