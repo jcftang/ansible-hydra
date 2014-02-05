@@ -5,7 +5,7 @@
   ## dummy group just to pull in needed information for selfcontained runs
 
 ## deploy the rails applications - private head
-- hosts: dri_app
+- hosts: dri_app;dri_app_worker
   user: $rvm_user
 
   tasks:
@@ -24,8 +24,8 @@
 
     # configure up app 1
     # optional can be commented out, ruby versions are taken from a previous task
-    - name: Configure database
-      template: src=../templates/nuig-rnag/$item dest=/home/{{rvm_user}}/{{ host_group }}/config/$item
+    - name: Configure database, fedora, solr and redis
+      template: src=../templates/nuig-rnag/{{item}} dest=/home/{{rvm_user}}/{{ host_group }}/config/{{item}}
       with_items:
         - database.yml
         - fedora.yml
@@ -37,14 +37,14 @@
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
       when: proxy_is_set is defined
-      environment:
-        http_proxy: http://{{proxy_server}}:{{proxy_port}}
-        https_proxy: http://{{proxy_server}}:{{proxy_port}}
-
+#      environment:
+#        http_proxy: http://{{proxy_server}}:{{proxy_port}}
+#        https_proxy: http://{{proxy_server}}:{{proxy_port}}
+#
     - name: Run bundle for {{ host_group }}
       command: bash -lc 'bundle install' chdir=/home/{{rvm_user}}/{{ host_group }}
-      when: proxy_is_set is not defined
-
+#      when: proxy_is_set is not defined
+#
     - name: generate assets
       command: bash -lc 'bundle exec rake RAILS_ENV=production assets:precompile RAILS_RELATIVE_URL_ROOT="/v1"' chdir=/home/{{rvm_user}}/{{ host_group }}
 
@@ -58,16 +58,10 @@
     - name: db seed
       command: bash -lc 'bundle exec rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
 
-- hosts: dri_app
+- hosts: dri_app;dri_app_worker
   user: root
 
   tasks:
-#- template: src=../templates/resque.init dest=/etc/init.d/{{ host_group }} mode=0755
-#- command: chkconfig --add {{ host_group }}
-    - template: src=../templates/resque-worker.conf dest=/etc/init/resque-worker.conf mode=644
-    - template: src=../templates/resque-workers.conf dest=/etc/init/resque-workers.conf mode=644
-#- service: name=resque-workers enabled=yes state=started
-
     - name: Symlink hydra head
       file: src=/home/{{rvm_user}}/{{ host_group }}/public dest=/var/www/v1 state=link
 
@@ -77,3 +71,12 @@
     # house cleaning
     - file: path=/var/www/admin state=absent
     - file: path=/var/www/repository state=absent
+
+- hosts: dri_app_worker
+  user: root
+
+  # as root on the worker machines do 'supervisorctl restart all' to kick the worker processes
+  tasks:
+    - apt: name=supervisor state=present
+    - template: src=../templates/supervisord-nuig-rnag.j2 dest=/etc/supervisor/conf.d/resque_worker.conf
+    - service: name=supervisor enabled=yes state=started

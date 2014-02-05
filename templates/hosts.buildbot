@@ -1,5 +1,6 @@
 [nuig_rnag:children]
 dri_app
+dri_app_worker
 passenger
 solr
 passenger
@@ -37,6 +38,11 @@ redis_pass={{redis_pass}}
 ## Rails apps, the dri_app and passenger blocks should have the same machines
 [dri_app]
 {% for host in groups['dri_app'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}
+
+[dri_app_worker]
+{% for host in groups['dri_app_worker'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 

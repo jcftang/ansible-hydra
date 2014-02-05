@@ -23,7 +23,7 @@
       #delegate_to: groups.mysql_replicated[0]
     - mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
 
-- hosts: dri_app
+- hosts: dri_app;dri_app_worker
   user: root
 
   tasks:
