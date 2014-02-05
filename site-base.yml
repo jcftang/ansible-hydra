@@ -136,6 +136,13 @@
   roles:
     - ldap-replicated
 
+#install SP before IDP
+- hosts: dri_app
+  user: root
+
+  roles:
+     - shibboleth_sp
+
 
 - hosts: shibboleth_idp
   user: root
