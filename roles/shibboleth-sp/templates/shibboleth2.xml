@@ -32,7 +32,7 @@
         in that case. Note that while we default checkAddress to "false", this has a negative
         impact on the security of the SP. Stealing cookies/sessions is much easier with this disabled.
         -->
-        <Sessions lifetime="28800" timeout="3600" checkAddress="false" relayState="ss:mem" handlerSSL="true">
+        <Sessions lifetime="28800" timeout="3600" checkAddress="false" relayState="ss:mem" handlerSSL="false">
 
             <!--
             Configures SSO for a default IdP. To allow for >1 IdP, remove
