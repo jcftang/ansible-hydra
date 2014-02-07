@@ -61,7 +61,7 @@
   notify: restart tomcat6
 
 - name: Copy IDP keys
-  copy: src=../../private/shibboleth/{{ item }} dest=/opt/shibboleth-idp/credentials/{{ item }} owner=tomcat6 group=tomcat6
+  copy: src=../private/shibboleth/{{ item }} dest=/opt/shibboleth-idp/credentials/{{ item }} owner=tomcat6 group=tomcat6
   with_items:
     - idp.crt
     - idp.key
