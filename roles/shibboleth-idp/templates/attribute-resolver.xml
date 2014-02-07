@@ -308,7 +308,7 @@
      -->
 
     <!-- Example LDAP Connector -->
-    
+<!--    
     <resolver:DataConnector id="myLDAP" xsi:type="dc:LDAPDirectory"
         ldapURL="ldap://{{ shibboleth_user_ldap_server }}" 
         baseDN="{{ shibboleth_user_base_DN }}" 
@@ -322,7 +322,7 @@
 
 	
     </resolver:DataConnector>
-    
+    -->
     <!-- Computed targeted ID connector -->
     <!--
     <resolver:DataConnector xsi:type="dc:ComputedId"
