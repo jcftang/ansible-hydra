@@ -1,7 +1,7 @@
 ---
 
 - name: install packages
-  action: apt pkg=$item state=latest
+  action: apt pkg={{ item }} state=latest
   with_items:
    - tomcat6
    - openjdk-6-jre 
