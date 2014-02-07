@@ -33,12 +33,12 @@
 
 #Push SAML cert 
 - name: Push SAML certs
-  template: src=../private/shibboleth/saml.crt dest=/etc/shibboleth/cert/saml.crt mode=0644 
+  template: src=/srv/infrastructure/private/shibboleth/saml.crt dest=/etc/shibboleth/cert/saml.crt mode=0644 
   notify: reload shibd_apache2
 
 #Push SAML private key
 - name: Push SAML private key
-  template: src=../private/shibboleth/saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
+  template: src=/srv/infrastructure/private/shibboleth/saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
   notify: reload shibd_apache2
 
 #Configure shibboleth2.xml
@@ -54,6 +54,6 @@
 
 #Deliver idp metadata file
 - name: Deliver IDP metadata xml file
-  template: src=../private/shibboleth/idp-metadata.xml dest=/etc/shibboleth/idp-metadata.xml mode=0644
+  template: src=/srv/infrastructure/private/shibboleth/idp-metadata.xml dest=/etc/shibboleth/idp-metadata.xml mode=0644
   notify: reload shibd_apache2
 

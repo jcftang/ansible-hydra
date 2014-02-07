@@ -61,7 +61,7 @@
   notify: restart tomcat6
 
 - name: Copy IDP keys
-  copy: src=../private/shibboleth/{{ item }} dest=/opt/shibboleth-idp/credentials/{{ item }} owner=tomcat6 group=tomcat6
+  copy: src=/srv/infrastructure/private/shibboleth/{{ item }} dest=/opt/shibboleth-idp/credentials/{{ item }} owner=tomcat6 group=tomcat6
   with_items:
     - idp.crt
     - idp.key
@@ -80,7 +80,7 @@
   notify: restart tomcat6
 
 - name: configure idp metadata.xml
-  template: src=../private/shibboleth/idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
+  template: src=/srv/infrastructure/private/shibboleth/idp-metadata.xml dest=/opt/shibboleth-idp/metadata/idp-metadata.xml owner=tomcat6 group=tomcat6
   notify: restart tomcat6
 
 - name: configure idp relying-party.xml
