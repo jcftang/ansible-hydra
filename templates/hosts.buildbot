@@ -33,6 +33,9 @@ db_name={{db_name}}
 db_user={{db_user}}
 db_pass={{db_pass}}
 
+
+ldap_pass={{ldap_pass}}
+
 redis_pass={{redis_pass}}
 
 ## Rails apps, the dri_app and passenger blocks should have the same machines
