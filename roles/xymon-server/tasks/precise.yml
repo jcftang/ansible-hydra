@@ -1,0 +1,21 @@
+---
+- apt_repository: repo="ppa:thwint/tom" state=present
+
+- apt: name={{item}} state=present
+  with_items:
+    - apache2
+    - xymon
+
+- command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
+  notify:
+    - restart apache2
+
+- service: name=apache2 state=started
+
+- template: src=precise/{{item}} dest=/etc/xymon/{{item}}
+  with_items:
+    - hosts.cfg
+    - hosts-general.cfg
+    - hosts-dri.cfg
+  notify:
+    - restart xymon
