@@ -64,7 +64,7 @@
     # create ceph mount point for DRI files
     - file: path=/ceph state=directory
     - file: path=/etc/ceph state=directory
-    - copy: src=../../private/ceph/keyring.dri-hydrahead dest=/etc/ceph/secret owner=root group=root mode=0600
+    - copy: src=/srv/infrastructure/private/ceph/keyring.dri-hydrahead dest=/etc/ceph/secret owner=root group=root mode=0600
     - mount: name=/ceph src="134.226.115.110,134.226.115.111,134.226.115.112:6789:/projects/dri" fstype=ceph opts="name=dri-hydrahead,secretfile=/etc/ceph/secret,noatime"  state=mounted 
  
   handlers:

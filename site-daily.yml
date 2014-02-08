@@ -46,7 +46,7 @@
         - jtang-mba
         - ptiernan
     - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
-    - apt: update_cache=yes cache_valid_time=3600
+    #- apt: update_cache=yes cache_valid_time=3600
 
 - hosts: passenger
   sudo: True
@@ -86,3 +86,8 @@
         - idp-metadata.xml
         - saml.crt
         - saml.pem
+ 
+    - file: path=/srv/infrastructure/private/ceph state=directory owner={{rvm_user}} group={{rvm_user}}
+    - copy: src=/srv/infrastructure/private/ceph/{{item}} dest=/srv/infrastructure/private/ceph/{{item}} owner={{rvm_user}} group={{rvm_user}}
+      with_items:
+        - keyring.dri-hydrahead
