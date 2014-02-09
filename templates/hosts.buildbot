@@ -35,8 +35,11 @@ db_name={{db_name}}
 db_user={{db_user}}
 db_pass={{db_pass}}
 
-
+#ldap and shibboleth idp passwords
 ldap_pass={{ldap_pass}}
+tomcat_keystore_pass={{tomcat_keystore_pass}}
+tomcat_key_pass={{tomcat_key_pass}}
+shibboleth_user_ldap_principal_password={{ ldap_pass }}
 
 redis_pass={{redis_pass}}
 
