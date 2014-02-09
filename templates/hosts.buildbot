@@ -15,6 +15,7 @@ buildbot-slave
 fedora
 solr
 dri_app-lb
+radosgw
 
 [nuig_rnag:vars]
 rvm_user={{rvm_user}}
