@@ -1,6 +1,6 @@
 # order matters!
 ---
-- hosts: passenger;fedora;solr;mysql;mysql_replicated
+- hosts: all
   user: root
   ## dummy group just to pull in needed information for selfcontained runs
 
