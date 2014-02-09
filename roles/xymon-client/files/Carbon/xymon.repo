@@ -1,0 +1,5 @@
+[xymon]
+name=Xymon pakages
+baseurl=http://terabithia.org/rpms/xymon/el6/
+enabled=1
+gpgcheck=0

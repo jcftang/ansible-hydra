@@ -1,0 +1,10 @@
+---
+- copy: src=Carbon/xymon.repo dest=/etc/yum.repos.d/xymon.repo owner=root group=root
+
+- yum: name=xymon-client state=present
+
+- template: src=Carbon/xymon-client dest=/etc/sysconfig/xymon-client
+  notify:
+    - restart xymon-client
+
+- service: name=xymon-client state=restarted enabled=yes
