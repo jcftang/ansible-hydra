@@ -6,6 +6,7 @@ solr
 passenger
 mysql
 mysql_replicated
+ldap_replicated
 redis
 monitoring
 shibboleth_idp
@@ -86,6 +87,11 @@ redis_pass={{redis_pass}}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
 
+[radosgw]
+{% for host in groups['radosgw'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}
+
 [monitoring]
 {% for host in groups['monitoring'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
@@ -103,5 +109,10 @@ redis_pass={{redis_pass}}
 
 [buildbot-slave]
 {% for host in groups['buildbot-slave'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}
+
+[ldap_replicated]
+{% for host in groups['ldap_replicated'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
