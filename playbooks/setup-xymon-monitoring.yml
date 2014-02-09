@@ -1,0 +1,14 @@
+# order matters!
+---
+- hosts: all:!monitoring
+  user: root
+#  accelerate: True
+  roles:
+    - { role: ../../roles/xymon-client }
+
+- hosts: monitoring
+  user: root
+#  accelerate: True
+
+  roles:
+    - { role: ../../roles/xymon-server }
