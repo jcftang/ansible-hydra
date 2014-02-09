@@ -5,6 +5,7 @@
   with_items:
     - apache2
     - xymon
+    - xymon-plugins
 
 - command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
   notify:

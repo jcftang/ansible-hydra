@@ -4,6 +4,7 @@
 - apt: name={{item}} state=present
   with_items:
     - xymon-client
+    - xymon-plugins
 
 - service: name=xymon-client state=started
 
