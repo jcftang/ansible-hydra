@@ -54,13 +54,13 @@
   user: root
 
   roles:
-    - collectd-server
+    - xymon-server
 
 - hosts: all:!monitoring
   user: root
 
   roles:
-    - collectd-client
+    - xymon-client
 
 # Mysql - this is needed before fedora-commons and the rails app is setup
 - hosts: mysql_replicated
