@@ -57,7 +57,7 @@
     - copy: src=/srv/infrastructure/private/keys/dri-deploy dest=/home/{{rvm_user}}/.ssh/id_rsa owner={{rvm_user}} group={{rvm_user}} mode=0600
     - copy: src=/srv/infrastructure/private/keys/dri-deploy.pub dest=/home/{{rvm_user}}/.ssh/id_rsa.pub owner={{rvm_user}} group={{rvm_user}} mode=0600
 
-- hosts: nuig_rnag;radosgw
+- hosts: nuig_rnag;radosgw;inspire_ireland
   sudo: True
   user: tchpc
   #accelerate: True
