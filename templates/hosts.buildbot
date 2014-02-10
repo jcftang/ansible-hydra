@@ -120,3 +120,8 @@ redis_pass={{redis_pass}}
 {% for host in groups['ldap_replicated'] %}
 {{ hostvars[host].ansible_default_ipv4.address }}
 {% endfor %}
+
+[inspire_ireland]
+{% for host in groups['inspire_ireland'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}
