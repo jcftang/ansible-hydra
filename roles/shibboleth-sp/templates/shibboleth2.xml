@@ -20,7 +20,7 @@
     -->
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
-    <ApplicationDefaults entityID="{{ sp_URL }}/shibboleth"
+    <ApplicationDefaults entityID="{{ sp_URI }}/shibboleth"
                          REMOTE_USER="eppn persistent-id targeted-id">
 
         <!--
