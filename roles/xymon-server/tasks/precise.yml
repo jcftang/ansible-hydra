@@ -28,6 +28,12 @@
   notify:
     - restart xymon
 
+- copy: src=precise/{{item}} dest=/etc/xymon/{{item}} mode=0644
+  with_items:
+    - alerts.cfg
+  notify:
+    - restart xymon
+
 - template: src=precise/{{item}} dest=/etc/xymon/hosts.d/{{item}} mode=0644
   with_items:
     - 000-general.cfg
