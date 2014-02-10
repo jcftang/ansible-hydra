@@ -15,6 +15,9 @@
 
 - file: path=/etc/xymon/hosts.d state=directory owner=root group=root
 
+- copy: src=dnsreg.cfg dest=/etc/xymon/tasks.d/dnsreg.cfg owner=root group=root mode=0644
+- copy: src=dnsreg.sh dest=/usr/lib/xymon/client/ext/dnsreg.sh owner=root group=root mode=0755
+
 - template: src=precise/{{item}} dest=/etc/xymon/{{item}} mode=0644
   with_items:
     - hosts.cfg
