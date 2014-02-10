@@ -13,10 +13,17 @@
 
 - service: name=apache2 state=started
 
-- template: src=precise/{{item}} dest=/etc/xymon/{{item}}
+- file: path=/etc/xymon/hosts.d state=directory owner=root group=root
+
+- template: src=precise/{{item}} dest=/etc/xymon/{{item}} mode=0644
   with_items:
     - hosts.cfg
-    - hosts-general.cfg
-    - hosts-dri.cfg
+  notify:
+    - restart xymon
+
+- template: src=precise/{{item}} dest=/etc/xymon/hosts.d/{{item}} mode=0644
+  with_items:
+    - 000-general.cfg
+    - 100-dri.cfg
   notify:
     - restart xymon
