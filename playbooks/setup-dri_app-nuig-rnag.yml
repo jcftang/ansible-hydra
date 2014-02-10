@@ -59,6 +59,12 @@
     - name: db seed
       command: bash -lc 'bundle exec rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
 
+    - uri: url=http://{{ansible_fqdn}}/v1/ return_content=yes timeout=60
+      register: webpage
+
+    - action: fail
+      when: 'Content-Type' not in "{{webpage.content}}"
+
 - hosts: dri_app;dri_app_worker
   user: root
 
