@@ -11,3 +11,5 @@
 - template: src=precise/xymonclient.cfg dest=/etc/xymon/xymonclient.cfg owner=root group=root
   notify:
     - restart xymon-client
+
+- cron: special_time=reboot name="start xymon-client on reboot" job="service xymon-client start"
