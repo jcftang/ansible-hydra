@@ -91,12 +91,12 @@
                           backingFile="/opt/shibboleth-idp/metadata/{{ hostvars[host].ansible_hostname }}.xml">
      </metadata:MetadataProvider>
 -->
-#{% set count = count + 1 %}
-#{% endfor %}
+ {% set count = count + 1 %}
+{% endfor %}
 
       <metadata:MetadataProvider id="URLMD" xsi:type="metadata:FileBackedHTTPMetadataProvider"
                           metadataURL="{{ sp_URI }}/Shibboleth.sso/Metadata"
-                          backingFile="/opt/shibboleth-idp/metadata/{{ sp_URI }}.xml">
+                          backingFile="/opt/shibboleth-idp/metadata/sp.xml">
      </metadata:MetadataProvider>
 
       
