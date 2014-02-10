@@ -83,14 +83,14 @@
    
  <!-- DRI SP Servers -->
  
-#{% set count = 1 %} 
-# {% for host in groups['dri_app'] %}
-
-#     <metadata:MetadataProvider id="URLMD{{ count }}" xsi:type="metadata:FileBackedHTTPMetadataProvider"
-#                          metadataURL="{{ sp_URI }}/Shibboleth.sso/Metadata"
-#                          backingFile="/opt/shibboleth-idp/metadata/{{ hostvars[host].ansible_hostname }}.xml">
-#     </metadata:MetadataProvider>
-
+{% set count = 1 %} 
+ {% for host in groups['dri_app'] %}
+<!--
+     <metadata:MetadataProvider id="URLMD{{ count }}" xsi:type="metadata:FileBackedHTTPMetadataProvider"
+                          metadataURL="{{ sp_URI }}/Shibboleth.sso/Metadata"
+                          backingFile="/opt/shibboleth-idp/metadata/{{ hostvars[host].ansible_hostname }}.xml">
+     </metadata:MetadataProvider>
+-->
 #{% set count = count + 1 %}
 #{% endfor %}
 
