@@ -50,6 +50,8 @@
     - apt_repository: repo='ppa:fish-shell/release-2' state=present
     - apt: name=fish state=present
 
+    - apt: name=linux-generic-lts-saucy state=present
+
 - hosts: monitoring
   user: root
 
