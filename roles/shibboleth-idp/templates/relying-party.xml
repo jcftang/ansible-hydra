@@ -87,7 +87,7 @@
  {% for host in groups['dri_app'] %}
 
      <metadata:MetadataProvider id="URLMD{{ count }}" xsi:type="metadata:FileBackedHTTPMetadataProvider"
-                          metadataURL="http://{{ hostvars[host].ansible_fqdn }}/Shibboleth.sso/Metadata"
+                          metadataURL="{{ sp_URI }}/Shibboleth.sso/Metadata"
                           backingFile="/opt/shibboleth-idp/metadata/{{ hostvars[host].ansible_hostname }}.xml">
      </metadata:MetadataProvider>
 
