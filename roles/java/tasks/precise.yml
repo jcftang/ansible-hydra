@@ -1,0 +1,8 @@
+---
+- apt_repository: repo="ppa:webupd8team/java" state=present
+- shell: echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+- apt: name={{item}} state=present
+  with_items:
+    - oracle-java7-set-default
+    - oracle-java7-installer
+- command: update-java-alternatives -s java-7-oracle
