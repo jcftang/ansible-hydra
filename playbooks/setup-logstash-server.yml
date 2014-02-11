@@ -1,0 +1,7 @@
+---
+- hosts: monitoring
+  user: root
+
+  roles:
+    - { role: ../../roles/common }
+    - { role: ../../roles/logstash-server }
