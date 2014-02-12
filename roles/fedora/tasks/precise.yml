@@ -1,0 +1,42 @@
+# See also http://mvnrepository.com/artifact/org.fcrepo/fcrepo-webapp-fedora/${fedora_version}
+---
+- name: Check variable fedora_version is set
+  fail: msg="Please set 'fedora_version' variable in the playbook"
+  when: fedora_version is not defined
+
+# setup db in top level site.yml
+#- include: mysql.yml
+
+- name: Download Fedora Commons
+  #action: get_url url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.1.0/solr-4.1.0.tgz dest=/tmp/solr-4.1.0.tgz
+#shell: curl http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/${fedora_version}/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-${fedora_version}.jar
+  shell: curl http://public.objects.tchpc.tcd.ie/fcrepo-installer-${fedora_version}.jar > /tmp/fcrepo-installer-${fedora_version}.jar creates=/tmp/fcrepo-installer-{{fedora_version}}.jar
+
+- name: Upload install.properties file for automated install
+  template: src=fedora-install-properties-mysql.j2 dest=/tmp/fedora-install.properties owner=tomcat6 group=tomcat6
+
+- name: Setup directory
+  file: path=/opt/fedora state=directory owner=tomcat6 group=tomcat6
+
+- name: Run automated install of fedora-commons
+  command: java -jar /tmp/fcrepo-installer-${fedora_version}.jar /tmp/fedora-install.properties creates=/opt/fedora/server/config/fedora.fcfg
+  sudo: True
+  sudo_user: tomcat6
+
+## could be smarter below here as a loop can be written
+- name: Install tomcat context for fop
+  template: src=fop-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fop.xml owner=tomcat6 group=tomcat6
+
+- name: Install tomcat context for imagemanip
+  template: src=imagemanip-xml.j2 dest=/etc/tomcat6/Catalina/localhost/imagemanip.xml owner=tomcat6 group=tomcat6
+
+- name: Install tomcat context for saxon
+  template: src=saxon-xml.j2 dest=/etc/tomcat6/Catalina/localhost/saxon.xml owner=tomcat6 group=tomcat6
+
+## disable default xacml policy of denying everything except localhost
+- file: path=/opt/fedora/server/fedora-internal-use/fedora-internal-use-repository-policies-approximating-2.0/deny-apim-if-not-localhost.xml state=absent
+- file: path=/opt/fedora/data/fedora-xacml-policies/repository-policies/default/deny-apim-if-not-localhost.xml state=absent
+
+## deploy the fedora context last
+- name: Install tomcat context for fedora
+  template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat6 group=tomcat6
