@@ -19,7 +19,7 @@
   file: path=/opt/fedora state=directory owner=tomcat6 group=tomcat6
 
 - name: Run automated install of fedora-commons
-  command: java -jar /tmp/fcrepo-installer-${fedora_version}.jar /tmp/fedora-install.properties creates=/opt/fedora/server/config/fedora.fcfg
+  command: java -jar /tmp/fcrepo-installer-{{fedora_version}}.jar /tmp/fedora-install.properties creates=/opt/fedora/server/config/fedora.fcfg
   sudo: True
   sudo_user: tomcat6
 
