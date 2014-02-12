@@ -2,7 +2,7 @@
 ---
 
 ## dummy group just to pull in needed information for selfcontained runs
-- hosts: passenger;fedora;solr
+- hosts: passenger;fedora;solr;mysql_replicated[0];dri_app;dri_app_worker
   user: root
 
 ## create the databases and users as required on the HA configuration of MYSQL
@@ -25,12 +25,9 @@
       #delegate_to: groups.mysql_replicated[0]
     - mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
 
-## deploy the app
+## deploy the app -- assumes that the system has everything in place
 - hosts: dri_app;dri_app_worker
   user: root
-
-  roles:
-    - { role: ../../roles/sufia-deps }
 
   tasks:
     ## must configure vhosts to look for a rails app deployment to serve out
