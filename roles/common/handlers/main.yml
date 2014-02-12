@@ -1,4 +1,6 @@
 ---
+- include: precise.yml
+  when: ansible_distribution_release == 'precise'
 
-- name: restart rsyslog
-  service: name=rsyslog state=restarted
+- include: Carbon.yml
+  when: ansible_distribution_release == 'Carbon'

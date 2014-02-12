@@ -21,12 +21,17 @@
 # enable sendmail
 - apt: name=sendmail state=present
 - template: src=precise/sendmail.mc dest=/etc/mail/sendmail.mc
-- service: name=sendmail state=restarted enabled=yes
+  notify:
+    - restart sendmail
+
+- service: name=sendmail state=started enabled=yes
 
 # enable ntp
 - apt: name=ntp state=present
 - template: src=precise/ntp.conf dest=/etc/ntp.conf
-- service: name=ntp state=restarted enabled=yes
+  notify:
+    - restart ntp
+- service: name=ntp state=started enabled=yes
 
 # enable tmpreaper
 - apt: name=tmpreaper state=present
@@ -34,4 +39,5 @@
 
 # configure remote syslog
 - template: src=precise/remote-log.conf dest=/etc/rsyslog.d/remote-log.conf mode=0644
-  notify: restart rsyslog
+  notify:
+    - restart rsyslog
