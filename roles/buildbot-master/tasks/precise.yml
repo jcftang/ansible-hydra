@@ -10,12 +10,14 @@
     - python-jinja2
     - python-migrate
     - python-twisted
-- pip: name=sqlalchemy version=0.7.10 state=present
-  ignore_errors: true
-- pip: name=buildbot state=present
-  ignore_errors: true
-- pip: name=buildbot-slave state=present
-  ignore_errors: true
+
+- copy: src=pip-1.5.2.tar.gz dest=/tmp/pip-1.5.2.tar.gz
+- command: pip install /tmp/pip-1.5.2.tar.gz creates=/usr/local/bin/pip
+
+- pip: executable="tsocks pip" name=sqlalchemy version=0.7.10 state=present
+- pip: executable="tsocks pip" name=buildbot state=present
+- pip: executable="tsocks pip" name=buildbot-slave state=present
+
 # or do this
 #- command: chdir=/home/{{rvm_user}} pip install  -i http://c.pypi.python.org/simple -r requirements.txt
 

@@ -11,12 +11,6 @@
 - name: Configure wgetrc for the system
   action: template src=precise/wgetrc.j2 dest=/etc/wgetrc mode=0644
 
-- name: /root/.pip
-  file: path=/root/.pip/ owner=root  mode=0755 state=directory
-
-- name: write /root/.pip/pip.conf
-  template: src=precise/pip.j2 dest=/root/.pip/pip.conf owner=root
-
 - name: environment
   template: src=precise/environment dest=/etc/environment owner=root group=root mode=0644
 
@@ -29,3 +23,7 @@
   template: src=precise/maven3/settings.xml dest=~/.m2/settings.xml owner=root group=root
 
 - template: src=precise/tsocks.conf dest=/etc/tsocks.conf owner=root group=root mode=0644
+
+#note needed anymore due to pip being completely broken, just use tsocks with pip
+- file: path=/root/.pip/ state=absent
+- file: path=/root/.pip/pip.conf state=absent
