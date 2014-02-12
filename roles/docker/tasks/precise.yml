@@ -1,0 +1,7 @@
+---
+- apt_key: url=https://get.docker.io/gpg
+- apt_repository: repo="deb http://get.docker.io/ubuntu docker main" 
+- apt: name={{item}} state=latest
+  with_items:
+    - linux-generic-lts-saucy
+    - lxc-docker
