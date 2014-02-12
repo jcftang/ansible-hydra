@@ -5,8 +5,8 @@
 
   tasks:
     - group_by: key="{{ansible_distribution_release}}"
-    - sshknownhosts: host={{item}} state=present
-      with_items: groups.all
+    #- sshknownhosts: host={{item}} state=present
+    #  with_items: groups.all
 
 - hosts: Carbon
   user: root

@@ -1,4 +1,7 @@
 ---
 - apt_key: url=https://get.docker.io/gpg state=present
 - apt_repository: repo='deb http://get.docker.io/ubuntu docker main' state=present
-- apt: pkg=lxc-docker state=latest update_cache=yes cache_valid_time=3600
+- apt: name={{item}} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - linux-generic-lts-saucy
+    - lxc-docker
