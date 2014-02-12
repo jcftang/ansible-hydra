@@ -1,9 +1,11 @@
 # order matters!
 ---
+
+## dummy group just to pull in needed information for selfcontained runs
 - hosts: passenger;fedora;solr
   user: root
-  ## dummy group just to pull in needed information for selfcontained runs
 
+## create the databases and users as required on the HA configuration of MYSQL
 - hosts: mysql_replicated[0]
   user: root
 
@@ -23,23 +25,14 @@
       #delegate_to: groups.mysql_replicated[0]
     - mysql_user: state=present name={{ db_user }} password={{ db_pass }} priv={{ db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
 
+## deploy the app
 - hosts: dri_app;dri_app_worker
   user: root
 
-  tasks:
-    - name: Install dependancies
-      apt: name={{item}} state=present
-      with_items:
-        - imagemagick
-        - libgraphicsmagick1-dev
-        - npm
-        - clamav
-        - libclamav-dev
-        - ffmpeg
-        - libavcodec-extra-53
-        - libmysqlclient-dev
-        - mysql-client
+  roles:
+    - { role: ../../roles/sufia-deps }
 
+  tasks:
     ## must configure vhosts to look for a rails app deployment to serve out
     - name: configure rails app - private and public head config
       action: template src={{item}} dest=/etc/apache2/sites-enabled/rails-app-{{ host_group }}.conf

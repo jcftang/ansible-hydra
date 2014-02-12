@@ -132,7 +132,7 @@
 
   roles:
     - rvm-passenger
-    - fits
+    - sufia-deps
 
 - hosts: ldap_replicated
   user: root
