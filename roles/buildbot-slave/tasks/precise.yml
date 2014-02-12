@@ -11,9 +11,6 @@
     - python-migrate
     - python-twisted
 
-- copy: src=pip-1.5.2.tar.gz dest=/tmp/pip-1.5.2.tar.gz
-- command: pip install /tmp/pip-1.5.2.tar.gz creates=/usr/local/bin/pip
-
 - pip: executable="tsocks pip" name=sqlalchemy version=0.7.10 state=present
 - pip: executable="tsocks pip" name=buildbot state=present
 - pip: executable="tsocks pip" name=buildbot-slave state=present
