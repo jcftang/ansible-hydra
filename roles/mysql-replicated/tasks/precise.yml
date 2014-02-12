@@ -1,5 +1,34 @@
 ---
 
+##
+## start of mysql config
+##
+
+#- template: src=my.cnf.j2 dest=/etc/mysql/my.cnf
+
+- name: Install mysql client and server
+  apt: pkg={{item}} state=present
+  with_items:
+    - mysql-client
+    - mysql-server
+    - libmysqlclient-dev
+    - python-mysqldb
+  notify:
+    - restart mysql
+
+- name: enable mysqld service
+  action: service name=mysql state=started enabled=yes
+
+- name: create my.cnf file
+  template: src=my.cnf.j2 dest=/etc/mysql/my.cnf backup=yes
+  notify:
+    - restart mysql
+
+- include: secure.yml
+
+##
+## start of replicated setup
+##
 #check if replication already setup on sql backend server1
 - name: Check if replication already setup
   shell: 'mysql -u root --password={{mysql_root_password}} -e "show slave status;" | wc -l'
