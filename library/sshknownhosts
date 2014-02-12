@@ -1,0 +1,204 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
+import re
+import os
+
+DOCUMENTATION = """
+---
+module: sshknownhosts
+short_description: Maintain the ssh_known_hosts file by adding/
+                   removing/ updating public keys.
+description:
+  - This module will scan a host for its ssh key and add it to the ssh
+    known hosts file.  Typically this file is located in
+    /etc/ssh/ssh_known_hosts or ~user/.ssh/known_hosts.
+  - If the public key is already present in the known hosts file and
+    it is does not match the current value, it is updated.  Otherwise
+    the hosts file is untouched.
+  - This is an alternative to copying a file to each host using the
+    copy command.
+
+options:
+  host:
+    required: true
+    description:
+      - the hostname to scan.  Use a fully-qualified domain name if
+        possible. If used with state=absent, this specified the
+        hostname of the key to remove from the dest file
+  dest:
+    required: false
+    description:
+      - Full path of the file to modify.  This will be created if it
+        does not exist.
+    default: /etc/ssh/ssh_known_hosts
+  state:
+    required: false
+    choices: [present, absent]
+    default: "present"
+    aliases: [name]
+    description:
+      - Whether the host should be there or not.
+  enctype:
+    required: false
+    choices: [rsa, dsa]
+    default: "rsa"
+    description:
+      - The type of public key to scan for.
+  keyscan:
+    required: false
+    default: "ssh-keyscan"
+    description:
+      - The full path to the program to run to do the scan.  If not
+        specified, the module will run the ssh-keyscan program from
+        the path.
+"""
+
+EXAMPLES = r"""
+Examples:
+
+  - name: Add localhost to ssh_known_hosts file
+    action: sshknownhosts host=localhost state=present
+
+  - name: Add several hosts to ssh_known_hosts file
+    action: sshknownhosts host=${item} state=present
+    with_items:
+      - host1.example.com
+      - host2.example.com
+      - host3.example.com
+
+  - name: a long example
+    action: sshknownhosts host=abc.example.com dest=/usr/local/etc/ssh_known_hosts keyscan=/usr/local/bin/ssh-keyscan enctype=dsa
+
+  - name: for one user id
+    action: sshknownhosts host=mypc dest=~myself/.ssh/knownhosts
+"""
+
+# read a text file.
+# return the lines as an array.  if the file is not found, return an
+# empty array
+def read_known_hosts(dest):
+    if os.path.exists(dest):
+        f = open(dest, 'rb')
+        lines = f.readlines()
+        f.close()
+    else:
+        lines = []
+    return lines
+
+
+# locate a host in the known hosts array
+# return the position if found, or -1 if not found
+def find_host(lines, host):
+    # look for the hostname at the beginning of a line, followed by a
+    # space character
+    mre = re.compile(r"^" + host + ' ')
+
+    found = -1
+    for lineno, cur_line in enumerate(lines):
+        if mre.search(cur_line):
+            found = lineno
+
+    return found
+
+
+# write the new/changed file. this is the only place where system
+# changes are performed
+def write_known_hosts(module, dest, lines):
+    if not module.check_mode:
+        of = open(dest, 'wb')
+        of.writelines(lines)
+        of.close
+
+
+# scan the remote host
+# return an array: [rc, str]
+# rc = return code: 0 = success, -1 = error
+# str = public key or error message
+def get_key(module, host, keyscan, enctype):
+    cmd = keyscan + ' -t ' + enctype + ' ' + host
+    (rc, out, err) = module.run_command(cmd)
+
+    # look for a non-blank string
+    mre = re.compile(r"^\s*$")
+    if not mre.search(out):
+        return [0, out]
+    else:
+        return [-1, err.strip()]
+
+
+def present(module, dest, host, keyscan, enctype):
+    changed = False
+    msg = ""
+    lines = read_known_hosts(dest)
+    found = find_host(lines, host)
+    rc, key = get_key(module, host, keyscan, enctype)
+
+    if rc == 0:
+        if found != -1:
+            if key != lines[found]:
+                # replace
+                del lines[found]
+                lines.append(key)
+                write_known_hosts(module, dest, lines)
+                changed = True
+        else:
+            # add
+            lines.append(key)
+            write_known_hosts(module, dest, lines)
+            changed = True
+    else:
+        # error: return the error message to the user
+        msg = key
+
+    module.exit_json(changed=changed, msg=msg)
+
+
+def absent(module, dest, host):
+    changed = False
+    msg = ""
+    lines = read_known_hosts(dest)
+    found = find_host(lines, host)
+
+    if found != -1:
+        del lines[found]
+        write_known_hosts(module, dest, lines)
+        changed = True
+
+    module.exit_json(changed=changed, msg=msg)
+
+
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            host=dict(required=True, aliases=['name']),
+            dest=dict(default='/etc/ssh/ssh_known_hosts'),
+            keyscan=dict(default='ssh-keyscan'),
+            state=dict(default='present', choices=['absent', 'present']),
+            enctype=dict(default='rsa', choices=['rsa', 'dsa']),
+        ),
+        supports_check_mode=True
+    )
+    params = module.params
+
+    host = module.params['host']
+    keyscan = module.params['keyscan']
+    enctype = module.params['enctype']
+    dest = os.path.expanduser(params['dest'])
+# not implemented:
+#    aliases = module.params['aliases']
+#    key = module.params['key']
+
+    if 'host' not in params:
+        module.fail_json(msg='host= is required')
+
+    if params['state'] == 'present':
+        present(module, dest, host, keyscan, enctype)
+    else:
+        absent(module, dest, host)
+
+# this is magic, see lib/ansible/module_common.py
+#<<INCLUDE_ANSIBLE_MODULE_COMMON>>
+
+main()
