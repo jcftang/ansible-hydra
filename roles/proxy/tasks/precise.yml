@@ -22,6 +22,7 @@
 - name: maven proxy settings
   template: src=precise/maven3/settings.xml dest=~/.m2/settings.xml owner=root group=root
 
+- apt: name=tsocks state=present
 - template: src=precise/tsocks.conf dest=/etc/tsocks.conf owner=root group=root mode=0644
 
 #note needed anymore due to pip being completely broken, just use tsocks with pip
