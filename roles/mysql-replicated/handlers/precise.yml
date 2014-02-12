@@ -2,3 +2,6 @@
 - name: reload mysql
   service: name=mysql state=restarted
 #  delegate_to: "{{ groups.sql_backend }}"
+
+- name: restart mysql
+  service: name=mysql state=restarted
