@@ -27,31 +27,17 @@
     ## install ceph from upstream repos
     - name: Get ceph release key
       apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
-      environment:
-        https_proxy: http://{{proxy_server}}:{{proxy_port}}
-      when: proxy_is_set is defined
 
-    - name: Get ceph release key
-      apt_key: id=17ED316D url=https://raw.github.com/ceph/ceph/master/keys/release.asc state=present
-      when: proxy_is_set is not defined
-
-    # remove previous stables
-    - apt_repository: repo='deb http://eu.ceph.com/debian-cuttlefish/ $(lsb_release -sc) main' state=absent
-    - apt_repository: repo='deb http://eu.ceph.com/debian-cuttlefish/ precise main' state=absent
-    - apt_repository: repo='deb-src http://eu.ceph.com/debian-cuttlefish/ precise main' state=absent
-    - apt_repository: repo='deb http://eu.ceph.com/debian-dumpling/ $(lsb_release -sc) main' state=absent
-    - apt_repository: repo='deb http://eu.ceph.com/debian-dumpling/ precise main' state=absent
-    - apt_repository: repo='deb http://eu.ceph.com/debian-emperor/ $(lsb_release -sc) main' state=absent
-    # latest stable
+    # latest stable version of ceph
     - apt_repository: repo='deb http://eu.ceph.com/debian-emperor/ precise main' state=present
-
-    - apt: name=ceph-fs-common state=latest update_cache=yes cache_valid_time=3600
+    - apt: name=ceph-fs-common state=latest cache_valid_time=3600
 
     - apt_repository: repo='ppa:fish-shell/release-2' state=present
     - apt: name=fish state=present
 
     - apt: name=linux-generic-lts-saucy state=latest
 
+# setup monitoring with xymon
 - hosts: monitoring
   user: root
 
@@ -65,22 +51,14 @@
     - xymon-client
 
 # Mysql - this is needed before fedora-commons and the rails app is setup
+# there can only be two hosts in this block
 - hosts: mysql_replicated
   user: root
 
   roles:
     - mysql-replicated
 
-- hosts: mysql_replicated[0]
-  user: root
-
-  tasks:
-    - name: create db '{{ fedora_db_name }}'
-      mysql_db: db={{ fedora_db_name }} state=present
-
-    - name: create user '{{ fedora_db_user }}' with password '{{ fedora_db_pass }}' for '{{ fedora_db_name }}' and grant all priveleges
-      mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
-
+# Redis K/V store for resque queues
 - hosts: redis
   user: root
 
@@ -90,6 +68,13 @@
 # Fedora-Commons - Preservation and archival repository
 - hosts: fedora
   user: root
+
+  # setup DB's on one of the data, its easier to delegate to the mysql master for now than to do it in its own block. will need change this if and when we move to fedora 4
+  pre_tasks:
+    - mysql_db: db={{ fedora_db_name }} state=present
+      delegate_to: "{{ groups.mysql_replicated[0] }}"
+    - mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ groups['dri_app-lb'][0] }}
+      delegate_to: "{{ groups.mysql_replicated[0] }}"
 
   roles:
     - fedora
@@ -105,8 +90,8 @@
 - hosts: passenger
   user: root
 
-  tasks:
-    - group: name=vagrant gid=10000 state=present
+  pre_tasks:
+    - group: name={{rvm_user}} gid=10000 state=present
     - name: Create $rvm_user
       user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes uid=10000
     
@@ -116,24 +101,11 @@
 
     - authorized_key: user={{rvm_user}} key="{{ lookup('file','~/.ssh/id_rsa.pub') }}"
 
-    - name: install insecure ssh config for $rvm_user if proxy_is_set is defined
-      template: src=files/insecure_config_proxy dest=/home/{{rvm_user}}/.ssh/config mode=0600 owner={{ rvm_user }} group={{rvm_user}}
-      when: proxy_is_set is defined
-      tags: passenger
-
-    - template: src=roles/proxy/templates/precise/curlrc.j2 dest=/home/{{rvm_user}}/.curlrc owner={{rvm_user}} group={{rvm_user}}
-      when: proxy_is_set is defined
-
-    - template: src=roles/proxy/templates/precise/gemrc.j2 dest=/home/{{rvm_user}}/.gemrc owner={{rvm_user}} group={{rvm_user}}
-      when: proxy_is_set is defined
-
-- hosts: passenger
-  user: root
-
   roles:
     - rvm-passenger
     - sufia-deps
 
+# install before Shibboleth IDP
 - hosts: ldap_replicated
   user: root
 
@@ -147,13 +119,13 @@
   roles:
      - shibboleth-sp
 
-
 - hosts: shibboleth_idp
   user: root
 
   roles:
     - shibboleth-idp
 
+# Build/Test infrastructure
 - hosts: buildbot-master
   user: root
 
@@ -165,23 +137,9 @@
 
   roles:
     - buildbot-slave
+    - sufia-deps
 
   tasks:
-    - name: Install dependancies
-      apt: name=$item state=present
-      with_items:
-        - imagemagick
-        - libgraphicsmagick1-dev
-        - npm
-        - clamav
-        - libclamav-dev
-        - ffmpeg
-        - libavcodec-extra-53
-        - libmysqlclient-dev
-
-    - apt_repository: repo="ppa:pcarrier/ppa" state=present
-    - apt: name=phantomjs state=present
-
     - apt_repository: repo="ppa:rquillo/ansible" state=present
     - apt: name=ansible state=latest
 
