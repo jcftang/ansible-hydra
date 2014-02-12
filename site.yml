@@ -8,11 +8,7 @@
 
   tasks:
     - name: /root/.pip
-      file: path=/root/.pip/ owner=root  mode=0755 state=directory
-
-    - name: write /root/.pip/pip.conf
-      action: template src=templates/pip.j2 dest=/root/.pip/pip.conf owner=root
-      tags: configuration
+      file: path=/root/.pip/ owner=root  mode=0755 state=absent
 
     - name: install insecure ssh config for root
       template: src=files/insecure_config_proxy dest=~/.ssh/config mode=0600
@@ -20,4 +16,4 @@
 - include: site-base.yml proxy_is_set=True
 # deploy your rails app here (you should deploy it on the machines where you deployed passenger)
 #- include: site-daily.yml
-- include: playbooks/setup-dri_app.yml proxy_is_set=True
+#- include: playbooks/setup-dri_app.yml proxy_is_set=True
