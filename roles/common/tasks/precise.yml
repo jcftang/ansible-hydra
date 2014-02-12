@@ -17,7 +17,7 @@
     - unattended-upgrades
     - tmux
     - htop
-    - systat
+    - sysstat
     - dstat
     - vnstat
     - supervisor
