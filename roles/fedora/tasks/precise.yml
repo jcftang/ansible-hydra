@@ -45,3 +45,5 @@
 ## deploy the fedora context last
 - name: Install tomcat context for fedora
   template: src=fedora-xml.j2 dest=/etc/tomcat6/Catalina/localhost/fedora.xml owner=tomcat6 group=tomcat6
+
+- service: name=tomcat6 state=started enabled=yes
