@@ -9,7 +9,7 @@ apia.auth.required=false
 database.jdbcDriverClass=com.mysql.jdbc.Driver
 upstream.auth.enabled=false
 ssl.available=true
-database.jdbcURL=jdbc\:mysql\://${groups['dri_app-lb'][0]}/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+database.jdbcURL=jdbc\:mysql\://{{ fedora_db_server }}/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
 database.password={{ fedora_db_pass }}
 database.mysql.driver=included
 database.username={{ fedora_db_user }}
@@ -22,7 +22,7 @@ database.driver=included
 fedora.serverContext=fedora
 llstore.type=akubra-fs
 fedora.home=/opt/fedora
-database.mysql.jdbcURL=jdbc\:mysql\://${groups['dri_app-lb'][0]}/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+database.mysql.jdbcURL=jdbc\:mysql\://{{ fedora_db_server }}/{{ fedora_db_name }}?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
 install.type=custom
 servlet.engine=other
 apim.ssl.required=false

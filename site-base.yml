@@ -71,6 +71,9 @@
 - hosts: fedora
   user: root
 
+  vars:
+    fedora_db_server: groups['dri_app-lb'][0]
+
   # setup DB's on one of the data, its easier to delegate to the mysql master for now than to do it in its own block. will need change this if and when we move to fedora 4
   pre_tasks:
     - mysql_db: db={{ fedora_db_name }} state=present
