@@ -1,0 +1,20 @@
+# for ubuntu 12.04 hosts, run this playbook as... "ansible-playbook -i hosts PLAYBOOK.yml -k"
+---
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  tasks:
+    ## install public/private keys
+    - name: authorized_keys for root
+      authorized_key: user=root key="{{ lookup('file','hacking/keys/insecure_public_key') }}" state=present
+
+    - name: install insecure private key for root
+      action: copy src=hacking/keys/insecure_private_key dest=/root/.ssh/id_rsa owner=root group=root mode=0600 force=no
+
+    - name: install insecure config for root
+      action: copy src=hacking/keys/insecure_config dest=/root/.ssh/config owner=root group=root mode=0600 force=no
+
+    - name: authorized_keys for vagrant
+      authorized_key: user=vagrant key="{{ lookup('file','hacking/keys/insecure_public_key') }}" state=present
+    - apt: name=avahi-dnsconfd state=present
