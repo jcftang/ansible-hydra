@@ -1,11 +1,14 @@
 # see also http://mvnrepository.com/artifact/org.apache.solr/solr/${solr_version}
 ---
+- file: path=/opt/src state=directory
+- file: path=/opt/build state=directory
+
 - name: Check variable solr_version is set
   fail: msg="Please set 'solr_version' variable in the playbook"
   when: solr_version is not defined
 
 - name: Download SOLR
-  get_url: url=http://public.objects.dri.ie/apache-solr-{{solr_version}}.tgz dest=/tmp/apache-solr-{{solr_version}}.tgz sha256sum=4b7ac4fdc1f1610f2d13e8dddf310e9d61620c00c463ba24e0f385a4c5c6f3ec
+  get_url: url=http://public.objects.dri.ie/apache-solr-{{solr_version}}.tgz dest=/opt/src/apache-solr-{{solr_version}}.tgz sha256sum=4b7ac4fdc1f1610f2d13e8dddf310e9d61620c00c463ba24e0f385a4c5c6f3ec
 
 - name: Setup directory
   file: path=/opt/solr/production state=directory owner=tomcat6 group=tomcat6
@@ -14,10 +17,10 @@
   file: path=/opt/solr/production/collection1/data/index state=directory owner=tomcat6 group=tomcat6
 
 - name: Unpack SOLR
-  command: tar -C /tmp -xvzf /tmp/apache-solr-{{solr_version}}.tgz creates=/tmp/apache-solr-{{solr_version}}/dist/solr-{{solr_version}}.war
+  command: tar -C /opt/build -xvzf /opt/src/apache-solr-{{solr_version}}.tgz creates=/opt/build/apache-solr-{{solr_version}}/dist/solr-{{solr_version}}.war
 
 - name: Copy solr.war into place
-  command: cp /tmp/apache-solr-{{solr_version}}/dist/apache-solr-{{solr_version}}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+  command: cp /opt/build/apache-solr-{{solr_version}}/dist/apache-solr-{{solr_version}}.war /opt/solr/solr.war creates=/opt/solr/solr.war
 
 - name: Copy solr contribs into place (need to fix this in a production environment)
   get_url: url=http://public.objects.dri.ie/solr-contrib.tar dest=/opt/solr-contrib.tar sha256sum=43130d1354f353e09e73607ecb553ab1bcb080f655676688170dd82591b1bd91
@@ -26,7 +29,7 @@
   command: tar xf solr-contrib.tar chdir=/opt
 
 - name: Setup SOLR core -- need to refine this step
-  command: rsync -av /tmp/apache-solr-{{solr_version}}/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
+  command: rsync -av /opt/build/apache-solr-{{solr_version}}/example/solr/ /opt/solr/production/ creates=/opt/solr/production/solr.xml
 
 - name: Setup stopwords_en
   command: cp /opt/solr/production/collection1/conf/lang/stopwords_en.txt /opt/solr/production/collection1/conf/stopwords_en.txt creates=/opt/solr/production/collection1/conf/stopwords_en.txt

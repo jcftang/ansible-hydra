@@ -4,5 +4,6 @@
     - python-virtualenv
     - python-pip
 
-- copy: src=pip-1.5.2.tar.gz dest=/tmp/pip-1.5.2.tar.gz
-- command: pip install /tmp/pip-1.5.2.tar.gz creates=/usr/local/bin/pip
+- file: path=/opt/src state=directory
+- copy: src=pip-1.5.2.tar.gz dest=/opt/src/pip-1.5.2.tar.gz
+- command: pip install /opt/src/pip-1.5.2.tar.gz creates=/usr/local/bin/pip

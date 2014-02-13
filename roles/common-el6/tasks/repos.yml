@@ -1,9 +1,0 @@
----
-- name: Install modified repo files which enables mirrors
-  copy: src=$item dest=/etc/yum.repos.d/$item owner=root group=root mode=0644
-  with_items:
-    - epel.repo
-    - epel-testing.repo
-    - sl6x.repo
-    - sl-other.repo
-    - sl.repo

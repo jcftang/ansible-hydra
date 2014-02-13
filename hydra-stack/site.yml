@@ -1,0 +1,9 @@
+---
+- hosts: all
+  sudo: True
+
+  roles:
+    - proxy
+    - common
+    - sufia-deps
+    - solr
