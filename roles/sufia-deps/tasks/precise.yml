@@ -11,3 +11,4 @@
     - libavcodec-extra-53
     - libmysqlclient-dev
     - mysql-client
+    - ghostscript
