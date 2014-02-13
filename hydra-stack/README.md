@@ -1,3 +1,5 @@
+# Sample Hydra Stack for development and pre-production usage
+
 ## Requirements
 
 Working installation of 
@@ -5,6 +7,11 @@ Working installation of
 * ansible 1.4.x or newer
 * vagrant 1.4.x or newer
 * virtualbox 4.3.x or newer
+
+### Ideally use Homebrew
+
+    $ brew install ansible brew-cask
+    $ brew cask install virtualbox vagrant
 
 ## Quickstart
 
