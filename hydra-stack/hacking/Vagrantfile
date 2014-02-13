@@ -11,7 +11,7 @@ Vagrant::configure("2") do |global_config|
   # assumes vagrant-cachier plugin is installed
   global_config.cache.auto_detect = true
 
-  global_config.vm.define(:hydra) do |config|
+  global_config.vm.define(:hydra_stack) do |config|
     config.vm.network :private_network, ip: "10.0.1.200"
     config.vm.hostname = "hydra-stack.localhost"
 

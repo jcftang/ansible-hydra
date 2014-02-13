@@ -1,26 +1,28 @@
 ---
+- include: devel-vagrant.yml
+
 - hosts: all
-  sudo: True
+  user: root
 
   # order matters!
   roles:
-    - proxy
+    #- proxy
     - common
 
 - hosts: redis
-  sudo: True
+  user: root
 
   roles:
     - redis
 
 - hosts: solr
-  sudo: True
+  user: root
 
   roles:
     - solr
 
 - hosts: mysql
-  sudo: True
+  user: root
 
   roles:
     - mysql
@@ -38,13 +40,13 @@
 
 
 - hosts: fedora
-  sudo: True
+  user: root
 
   roles:
     - fedora
 
 - hosts: app;solr;fedora;mysql;redis
-  sudo: True
+  user: root
 
   roles:
     - rvm-passenger
@@ -55,8 +57,10 @@
 
     # setup default passenger config
     - template: src=templates/rvm-passenger-app.conf dest=/etc/apache2/sites-available/app owner=root group=root
+    - command: a2dissite default
     - command: a2ensite app creates=/etc/apache2/sites-enabled/app
       notify: restart apache2
+
 
     # clone an app into 'deploy' directory
     - git: repo=https://github.com/railstutorial/sample_app_2nd_ed dest=/home/{{rvm_user}}/app
@@ -69,7 +73,8 @@
         - redis.yml
         - fedora.yml
         - solr.yml
-#        - database.yml
+        #- database.yml
+    - command: chdir=/home/{{rvm_user}}/app cp config/database.yml.example config/database.yml
 
     # bundle install dependancies
     - command: chdir=/home/{{rvm_user}}/app bash -lc 'bundle install'
