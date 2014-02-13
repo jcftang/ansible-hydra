@@ -2,8 +2,92 @@
 - hosts: all
   sudo: True
 
+  # order matters!
   roles:
     - proxy
     - common
-    - sufia-deps
+
+- hosts: redis
+  sudo: True
+
+  roles:
+    - redis
+
+- hosts: solr
+  sudo: True
+
+  roles:
     - solr
+
+- hosts: mysql
+  sudo: True
+
+  roles:
+    - mysql
+
+  tasks:
+    ## create database for fedora-commons
+    - mysql_db: db={{ fedora_db_name }} state=present
+    - mysql_user: state=present name={{ fedora_db_user }} password={{ fedora_db_pass }} priv={{ fedora_db_name }}.*:ALL host={{ item }}
+      with_items: groups.app
+
+    ## create database for aap
+    - mysql_db: db={{ app_db_name }} state=present
+    - mysql_user: state=present name={{ app_db_user }} password={{ app_db_pass }} priv={{ app_db_name }}.*:ALL host={{ item }}
+      with_items: groups.app
+
+
+- hosts: fedora
+  sudo: True
+
+  roles:
+    - fedora
+
+- hosts: app;solr;fedora;mysql;redis
+  sudo: True
+
+  roles:
+    - rvm-passenger
+    - sufia-deps
+
+  post_tasks:
+    - file: path=/home/{{rvm_user}}/ state=directory owner={{rvm_user}} group={{rvm_user}}
+
+    # setup default passenger config
+    - template: src=templates/rvm-passenger-app.conf dest=/etc/apache2/sites-available/app owner=root group=root
+    - command: a2ensite app creates=/etc/apache2/sites-enabled/app
+      notify: restart apache2
+
+    # clone an app into 'deploy' directory
+    - git: repo=https://github.com/railstutorial/sample_app_2nd_ed dest=/home/{{rvm_user}}/app
+      sudo: True
+      sudo_user: '{{rvm_user}}'
+  
+    # configure app
+    - template: src=templates/app/{{item}} dest=/home/{{rvm_user}}/app/config/{{item}} owner={{rvm_user}} group={{rvm_group}}
+      with_items:
+        - redis.yml
+        - fedora.yml
+        - solr.yml
+#        - database.yml
+
+    # bundle install dependancies
+    - command: chdir=/home/{{rvm_user}}/app bash -lc 'bundle install'
+      sudo: True
+      sudo_user: '{{rvm_user}}'
+
+    - command: chdir=/home/{{rvm_user}}/app bash -lc 'bundle exec rake RAILS_ENV=production db:migrate'
+      sudo: True
+      sudo_user: '{{rvm_user}}'
+
+    - command: chdir=/home/{{rvm_user}}/app bash -lc 'bundle exec rake RAILS_ENV=production assets:precompile'
+      sudo: True
+      sudo_user: '{{rvm_user}}'
+
+    - command: chdir=/home/{{rvm_user}}/app bash -lc 'touch tmp/restart.txt'
+      sudo: True
+      sudo_user: '{{rvm_user}}'
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted

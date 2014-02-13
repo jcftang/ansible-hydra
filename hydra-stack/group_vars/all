@@ -1,0 +1,30 @@
+---
+## application database name, username and password
+app_db_user: deploy
+app_db_name: deploy
+app_db_pass: deploy
+
+## root password for mysql
+mysql_root_password: password
+
+# upgrading will require fixing/changing the fedora role
+# fedora version, database name, username, password and application password
+fedora_version: 3.6.2
+fedora_db_user: fcrepo
+fedora_db_pass: fcrepo
+fedora_db_name: fcrepo
+fedora_db_server: "{{ groups['mysql'][0] }}"
+fedora_admin_pass: fedoraAdmin
+
+# upgrading will require fixing/changing the solr role
+solr_version: 4.0.0
+
+redis_pass: password
+
+## default ruby and passenger versions and deployment user account name
+ruby_version: 2.0.0-p195
+
+rvm_user: vagrant
+rvm_group: vagrant
+rvm_home: /home/{{rvm_user}}/.rvm
+rvm_bindir: '{{rvm_home}}/bin'

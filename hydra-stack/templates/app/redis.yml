@@ -1,0 +1,12 @@
+development:
+  host: localhost
+  port: 6379
+  password:
+test:
+  host: localhost
+  port: 6379
+  password:
+production:
+  host: {{ groups['redis'][0] }}
+  port: 6379
+  password: {{ redis_pass }}
