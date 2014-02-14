@@ -22,7 +22,7 @@ ready to go for use with deploying a Hydra Head.
 * HAProxy
 * LDAP
 * Corosync/Pacemaker *coming soon*
-* Nagios and Collectd
+* Xymon
 
 What's missing here is the deployment of the actual Hydra-Head. This part
 is not automated yet as it's not clear what we want to do this is area.

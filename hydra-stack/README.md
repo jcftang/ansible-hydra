@@ -8,6 +8,8 @@ Working installation of
 * vagrant 1.4.x or newer
 * virtualbox 4.3.x or newer
 
+The playbooks and roles primarily target Ubuntu 12.04.
+
 ### Ideally use Homebrew
 
     $ brew install ansible brew-cask
