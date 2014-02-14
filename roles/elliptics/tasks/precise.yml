@@ -1,0 +1,7 @@
+---
+- apt_key: url=http://repo.reverbrain.com/REVERBRAIN.GPG  state=present
+- apt_repository: repo={{item}} state=present
+  with_items:
+    - "'deb http://repo.reverbrain.com/precise/ current/amd64/'"
+    - "'deb http://repo.reverbrain.com/precise/ current/all/'"
+- apt: name=elliptics state=latest
