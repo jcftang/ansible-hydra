@@ -1,7 +1,10 @@
 ---
 - file: path={{fcrepo_home}} state=directory owner=tomcat7 group=tomcat7
 - copy: src=fcrepo-webapp-4.0.0-alpha-3.war dest={{fcrepo_home}}/fedora4.war owner=tomcat7 group=tomcat7
-- template: src=precise/tomcat7 dest=/etc/default/tomcat7 owner=tomcat7 group=tomcat7
+
+- lineinfile: dest=/etc/default/tomcat7
+              line='JAVA_OPTS="${JAVA_OPTS} -Dfcrepo.home={{fcrepo_home}} -Xmx1024m"'
+
 - template: src=precise/fedora4.xml dest=/etc/tomcat7/Catalina/localhost/fedora4.xml owner=tomcat7 group=tomcat7
 
 - service: name=tomcat7 state=started enabled=yes

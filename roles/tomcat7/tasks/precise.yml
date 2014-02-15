@@ -3,6 +3,7 @@
   apt: pkg={{item}} state=present
   with_items:
     - tomcat7
-
+- lineinfile: dest=/etc/default/tomcat7
+              line="JAVA_HOME=/usr/lib/jvm/java-7-oracle"
 - name: enable tomcat service
   action: service name=tomcat7 state=started enabled=yes
