@@ -34,6 +34,7 @@
   with_first_found:
     - files:
         - schema-{{host_group}}.xml
+        - schema.xml
       paths:
         - ../files
 
