@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="{{fcrepo_home}}/fedora4.war" >
+    <Parameter name="fcrepo.home" value="{{fcrepo_home}}" />
+</Context>
