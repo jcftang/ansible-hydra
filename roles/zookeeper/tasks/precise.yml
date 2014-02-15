@@ -12,6 +12,7 @@
 - service: name=supervisor enabled=yes state=started
 
 ## notes - http://systemsarchitect.net/painless-guide-to-solr-cloud-configuration/
+#          https://cwiki.apache.org/confluence/display/solr/Command+Line+Utilities
 ## bootstrap the solrcloud instance
 # $ cloud-scripts/zkcli.sh -cmd upconfig -zkhost 127.0.0.1:2181 -d /opt/solr/dri/collection1/conf -n collection1
 # $ cloud-scripts/zkcli.sh -cmd linkconfig -zkhost 127.0.0.1:2181 -collection collection1 -confname collection1 -solrhome solr
