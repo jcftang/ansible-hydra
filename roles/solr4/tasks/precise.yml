@@ -1,0 +1,35 @@
+---
+- file: path=/opt/src state=directory
+- file: path=/opt/build state=directory
+
+- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/4.6.1/solr-4.6.1.tgz dest=/opt/src/solr-4.6.1.tgz sha256sum=5ee861d7ae301c0f3fa1e96e4cb42469531d8f9188d477351404561b47e55d94
+
+- file: path=/opt/solr/dri/lib state=directory owner=tomcat7 group=tomcat7
+
+- command: chdir=/opt/build tar zxf ../src/solr-4.6.1.tgz creates=/opt/build/solr-4.6.1/README.txt
+
+- command: chdir=/opt/build cp solr-4.6.1/dist/solr-4.6.1.war /opt/solr/solr.war creates=/opt/solr/solr.war
+
+- command: chdir=/opt/build rsync -a solr-4.6.1/dist/ /opt/solr/dri/lib/ creates=/opt/solr/dri/lib/solr-core-4.6.1.jar
+
+- command: chdir=/opt/build rsync -a solr-4.6.1/contrib/ /opt/solr/dri/lib/ creates=/opt/solr/dri/lib/velocity/lib/velocity-1.7.jar
+
+- command: chdir=/opt/build rsync -a solr-4.6.1/example/solr/collection1 /opt/solr/dri/ creates=/opt/solr/dri/collection1
+
+- command: chdir=/opt/solr/dri/collection1 cp conf/lang/stopwords_en.txt conf/stopwords_en.txt creates=/opt/solr/dri/collection1/conf/stopwords_en.txt
+- command: chdir=/opt/build cp solr-4.6.1/example/resources/log4j.properties /usr/share/tomcat7/lib
+
+## logging libraries - this changed from solr 4.2 and up
+- apt: name=unzip state=present
+- get_url: url=http://www.slf4j.org/dist/slf4j-1.6.6.zip dest=/opt/src/slf4j-1.6.6.zip sha256sum=b1565b70b9e5cd405068338f239e0a5a54d30e700de9095e998512209c2f254b
+- command: chdir=/opt/build unzip ../src/slf4j-1.6.6.zip creates=/opt/build/slf4j-1.6.6/pom.xml
+- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-api-1.6.6.jar        /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-jdk14-1.6.6.jar      /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/slf4j-jdk14-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp jcl-over-slf4j-1.6.6.jar   /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/jcl-over-slf4j-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp log4j-over-slf4j-1.6.6.jar /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/log4j-over-slf4j-1.6.6.jar
+
+- file: owner=tomcat7 group=tomcat7 path=/opt/solr recurse=yes state=directory
+
+- template: src=precise/solr.xml dest=/etc/tomcat7/Catalina/localhost/solr.xml owner=tomcat7      group=tomcat7
+
+- service: name=tomcat7 state=started enabled=yes
