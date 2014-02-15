@@ -1,0 +1,18 @@
+---
+- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/zookeeper/zookeeper-3.4.5/zookeeper-3.4.5.tar.gz 
+           dest=/opt/src/zookeeper-3.4.5.tar.gz
+           sha256sum=e92b634e99db0414c6642f6014506cc22eefbea42cc912b57d7d0527fb7db132
+
+- command: chdir=/opt tar xzf /opt/src/zookeeper-3.4.5.tar.gz creates=/opt/zookeeper-3.4.5/bin/zkCli.sh
+
+- template: src=zoo.cfg dest=/opt/zookeeper-3.4.5/conf/zoo.cfg 
+- file: path=/var/lib/zookeeper state=directory
+- copy: src=zookeeper.conf dest=/etc/supervisor/conf.d/zookeeper.conf
+- apt: name=supervisor state=present
+- service: name=supervisor enabled=yes state=started
+
+## notes - http://systemsarchitect.net/painless-guide-to-solr-cloud-configuration/
+## bootstrap the solrcloud instance
+# $ cloud-scripts/zkcli.sh -cmd upconfig -zkhost 127.0.0.1:2181 -d /opt/solr/dri/collection1/conf -n collection1
+# $ cloud-scripts/zkcli.sh -cmd linkconfig -zkhost 127.0.0.1:2181 -collection collection1 -confname collection1 -solrhome solr
+# $ cloud-scripts/zkcli.sh -cmd bootstrap -zkhost 127.0.0.1:2181 -solrhome solr
