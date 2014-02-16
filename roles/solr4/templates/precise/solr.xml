@@ -35,7 +35,7 @@
     <int name="zkClientTimeout">${zkClientTimeout:15000}</int>
     <bool name="genericCoreNodeNames">${genericCoreNodeNames:true}</bool>
     <!-- {% for host in groups.solr -%}{{host}}:2181{% if not loop.last %},{% endif %}{%- endfor %}"> -->
-    {% for host in groups.solr %}
+    {% for host in groups.zookeeper %}
     <str name="zkHost">{{host}}:2181</str>
     {%- endfor %}
   </solrcloud>

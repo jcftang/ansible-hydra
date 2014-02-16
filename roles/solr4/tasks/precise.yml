@@ -45,6 +45,6 @@
 
 - file: owner=tomcat7 group=tomcat7 path=/opt/solr recurse=yes state=directory
 
-- template: src=precise/solr-deploy.xml dest=/etc/tomcat7/Catalina/localhost/solr.xml owner=tomcat7      group=tomcat7
+- template: src=precise/solr-deploy.xml dest=/etc/tomcat7/Catalina/localhost/solr.xml owner=tomcat7 group=tomcat7
 
 - service: name=tomcat7 state=started enabled=yes
