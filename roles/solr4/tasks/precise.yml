@@ -25,10 +25,10 @@
 - apt: name=unzip state=present
 - get_url: url=http://www.slf4j.org/dist/slf4j-1.6.6.zip dest=/opt/src/slf4j-1.6.6.zip sha256sum=b1565b70b9e5cd405068338f239e0a5a54d30e700de9095e998512209c2f254b
 - command: chdir=/opt/build unzip ../src/slf4j-1.6.6.zip creates=/opt/build/slf4j-1.6.6/pom.xml
-- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-api-1.6.6.jar        /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
-- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-jdk14-1.6.6.jar      /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/slf4j-jdk14-1.6.6.jar
-- command: chdir=/opt/build/slf4j-1.6.6 cp jcl-over-slf4j-1.6.6.jar   /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/jcl-over-slf4j-1.6.6.jar
-- command: chdir=/opt/build/slf4j-1.6.6 cp log4j-over-slf4j-1.6.6.jar /usr/share/tomcat7/lib creates=/usr/share/tomcat7/lib/log4j-over-slf4j-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-api-1.6.6.jar        /opt/solr/dri/lib creates=/opt/solr/dri/lib/slf4j-api-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp slf4j-jdk14-1.6.6.jar      /opt/solr/dri/lib creates=/opt/solr/dri/lib/slf4j-jdk14-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp jcl-over-slf4j-1.6.6.jar   /opt/solr/dri/lib creates=/opt/solr/dri/lib/jcl-over-slf4j-1.6.6.jar
+- command: chdir=/opt/build/slf4j-1.6.6 cp log4j-over-slf4j-1.6.6.jar /opt/solr/dri/lib creates=/opt/solr/dri/lib/log4j-over-slf4j-1.6.6.jar
 
 ## solr.xml with zookeeper config
 - template: src=precise/solr.xml dest=/opt/solr/dri/solr.xml owner=tomcat7 group=tomcat7
