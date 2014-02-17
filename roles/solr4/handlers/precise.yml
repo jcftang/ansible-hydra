@@ -4,3 +4,6 @@
 
 - name: restore ownership of /opt/solr
   file: owner=tomcat7 group=tomcat7 path=/opt/solr recurse=yes state=directory
+
+- name: touch solr context and restart
+  command: touch /etc/tomcat7/Catalina/localhost/solr.xml

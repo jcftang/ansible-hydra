@@ -13,10 +13,12 @@
 - command: chdir=/opt/build cp solr-{{solr.version}}/dist/solr-{{solr.version}}.war /opt/solr/solr.war creates=/opt/solr/solr.war
   notify:
     - restore ownership of /opt/solr
+    - touch solr context and restart
 
 - command: chdir=/opt/build rsync -a solr-{{solr.version}}/dist/ /opt/solr/dri/lib/ creates=/opt/solr/dri/lib/solr-core-{{solr.version}}.jar
   notify:
     - restore ownership of /opt/solr
+    - touch solr context and restart
 
 # get contribs into place (lucene related)
 - get_url: url=http://objects.dri.ie/public/solr-contrib-{{solr.version}}.tar
@@ -25,15 +27,18 @@
 - command: chdir=/opt/solr/dri/lib tar xf /opt/src/solr-contrib-{{solr.version}}.tar creates=icu4j-49.1.jar
   notify:
     - restore ownership of /opt/solr
+    - touch solr context and restart
 
 - command: chdir=/opt/build rsync -a solr-{{solr.version}}/example/solr/collection1 /opt/solr/dri/ creates=/opt/solr/dri/collection1
   notify:
     - restore ownership of /opt/solr
+    - touch solr context and restart
 
 
 - command: chdir=/opt/solr/dri/collection1 cp conf/lang/stopwords_en.txt conf/stopwords_en.txt creates=/opt/solr/dri/collection1/conf/stopwords_en.txt
   notify:
     - restore ownership of /opt/solr
+    - touch solr context and restart
 
 - command: chdir=/opt/build cp solr-{{solr.version}}/example/resources/log4j.properties /usr/share/tomcat7/lib
 
@@ -48,6 +53,8 @@
 
 ## solr.xml with zookeeper config
 - template: src=precise/solr.xml dest=/opt/solr/dri/solr.xml owner=tomcat7 group=tomcat7
+  notify:
+    - touch solr context and restart
 #
 ## set custom schema
 - name: Install solr schema (custom hydra/dri one)
@@ -62,3 +69,6 @@
 - template: src=precise/solr-deploy.xml dest=/etc/tomcat7/Catalina/localhost/solr.xml owner=tomcat7 group=tomcat7
 
 - service: name=tomcat7 state=started enabled=yes
+
+- template: src=bootstrap.sh dest=/opt/build/solr-{{solr.version}}/example/bootstrap.sh mode=0711
+- debug: msg="Look at and run /opt/build/solr-{{solr.version}}/example/bootstrap.sh to do the initial zookeeper/solr bootstrapping"
