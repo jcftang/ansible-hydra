@@ -11,7 +11,15 @@
            sha256sum={{zookeeper.sha256sum}}
 
 - command: chdir=/opt tar xzf /opt/src/zookeeper-{{zookeeper.version}}.tar.gz creates=/opt/zookeeper-{{zookeeper.version}}/bin/zkCli.sh
+
+- template: src=myid dest=/var/lib/zookeeper/myid owner=zookeeper group=zookeeper
+  notify:
+    - restart zookeeper
+
 - template: src=zoo.cfg dest=/opt/zookeeper-{{zookeeper.version}}/conf/zoo.cfg 
+  notify:
+    - restart zookeeper
+
 - file: path=/opt/zookeeper-{{zookeeper.version}} state=directory owner=zookeeper group=zookeeper recurse=yes
 - file: path=/var/lib/zookeeper state=directory owner=zookeeper group=zookeeper recurse=yes
 
