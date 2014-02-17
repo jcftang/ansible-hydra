@@ -3,15 +3,19 @@
 - file: path=/opt/build state=directory
 - file: path=/etc/supervisor/conf.d state=directory
 
-- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/zookeeper/zookeeper-3.4.5/zookeeper-3.4.5.tar.gz 
-           dest=/opt/src/zookeeper-3.4.5.tar.gz
-           sha256sum=e92b634e99db0414c6642f6014506cc22eefbea42cc912b57d7d0527fb7db132
+- group: name=zookeeper system=yes
+- user: name=zookeeper group=zookeeper system=yes
 
-- command: chdir=/opt tar xzf /opt/src/zookeeper-3.4.5.tar.gz creates=/opt/zookeeper-3.4.5/bin/zkCli.sh
+- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/zookeeper/zookeeper-{{zookeeper.version}}/zookeeper-{{zookeeper.version}}.tar.gz 
+           dest=/opt/src/zookeeper-{{zookeeper.version}}.tar.gz
+           sha256sum={{zookeeper.sha256sum}}
 
-- template: src=zoo.cfg dest=/opt/zookeeper-3.4.5/conf/zoo.cfg 
-- file: path=/var/lib/zookeeper state=directory
-- copy: src=zookeeper.conf dest=/etc/supervisor/conf.d/zookeeper.conf
+- command: chdir=/opt tar xzf /opt/src/zookeeper-{{zookeeper.version}}.tar.gz creates=/opt/zookeeper-{{zookeeper.version}}/bin/zkCli.sh
+- template: src=zoo.cfg dest=/opt/zookeeper-{{zookeeper.version}}/conf/zoo.cfg 
+- file: path=/opt/zookeeper-{{zookeeper.version}} state=directory owner=zookeeper group=zookeeper recurse=yes
+- file: path=/var/lib/zookeeper state=directory owner=zookeeper group=zookeeper recurse=yes
+
+- template: src=supervisor-zookeeper.conf dest=/etc/supervisor/conf.d/zookeeper.conf
 - apt: name=supervisor state=present
 - service: name=supervisor enabled=yes state=started
 
