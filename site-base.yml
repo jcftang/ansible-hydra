@@ -84,12 +84,27 @@
   roles:
     - fedora
 
+# zookeeper for solrloud - search engine
+- hosts: zookeeper
+  user: root
+
+  roles:
+    - zookeeper
+
+# SOLR - search engine
+- hosts: solrcloud
+  user: root
+
+  roles:
+    - solrcloud
+
 # SOLR - search engine
 - hosts: solr
   user: root
 
   roles:
     - solr
+
 
 # mod_passenger for the systems that will run the rails app or the resque queues
 - hosts: passenger
