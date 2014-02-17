@@ -1,0 +1,6 @@
+---
+- name: restart tomcat7
+  service: name=tomcat7 state=restarted
+
+- name: restore ownership of /opt/solr
+  file: owner=tomcat7 group=tomcat7 path=/opt/solr recurse=yes state=directory
