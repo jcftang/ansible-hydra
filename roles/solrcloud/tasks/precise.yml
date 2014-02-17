@@ -2,6 +2,9 @@
 - file: path=/opt/src state=directory
 - file: path=/opt/build state=directory
 
+- lineinfile: dest=/etc/hosts state=absent
+              line="127.0.1.1       {{ansible_fqdn}}  {{ansible_hostname}}"
+
 - get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/{{solrcloud.version}}/solr-{{solrcloud.version}}.tgz
            dest=/opt/src/solr-{{solrcloud.version}}.tgz
            sha256sum={{solrcloud.sha256sum}}
@@ -21,10 +24,10 @@
     - touch solr context and restart
 
 # get contribs into place (lucene related)
-- get_url: url=http://objects.dri.ie/public/solrcloud.contrib-{{solrcloud.version}}.tar
-           dest=/opt/src/solrcloud.contrib-{{solrcloud.version}}.tar
+- get_url: url=http://objects.dri.ie/public/solr-contrib-{{solrcloud.version}}.tar
+           dest=/opt/src/solr-contrib-{{solrcloud.version}}.tar
            sha256sum={{solrcloud.contrib_sha256sum}}
-- command: chdir=/opt/solr/dri/lib tar xf /opt/src/solrcloud.contrib-{{solrcloud.version}}.tar creates=icu4j-49.1.jar
+- command: chdir=/opt/solr/dri/ tar xf /opt/src/solrcloud.contrib-{{solrcloud.version}}.tar creates=lib/icu4j-49.1.jar
   notify:
     - restore ownership of /opt/solr
     - touch solr context and restart
@@ -43,10 +46,10 @@
 - command: chdir=/opt/build cp solr-{{solrcloud.version}}/example/resources/log4j.properties /usr/share/tomcat7/lib
 
 ## logging libraries - this changed from solr 4.2 and up
-- get_url: url=http://objects.dri.ie/public/solrcloud.contrib-logging-{{solrcloud.version}}.tar
-           dest=/opt/src/solrcloud.contrib-logging-{{solrcloud.version}}.tar
+- get_url: url=http://objects.dri.ie/public/solr-contrib-logging-{{solrcloud.version}}.tar
+           dest=/opt/src/solr-contrib-logging-{{solrcloud.version}}.tar
            sha256sum={{solrcloud.contrib_logging_sha256sum}}
-- command: chdir=/usr/share/tomcat7 tar xf /opt/src/solrcloud.contrib-logging-{{solrcloud.version}}.tar creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
+- command: chdir=/usr/share/tomcat7 tar xf /opt/src/solr-contrib-logging-{{solrcloud.version}}.tar creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
   notify:
     - restore ownership of /opt/solr
     - restart tomcat7
