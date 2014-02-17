@@ -8,4 +8,4 @@ cucumber:
   <<: *TEST
 production:
   #url: http://your.production.server:8080/bl_solr/core0
-  url: http://{{ hostvars[groups['solr'][0]]['ansible_fqdn'] }}:8080/solr/collection1
+  url: http://{{ groups['dri_app-lb'][0] }}:8080/solr/collection1
