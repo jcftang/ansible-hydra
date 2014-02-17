@@ -1,5 +1,5 @@
 ---
-solr:
+solrcloud:
   version: 4.6.1
   sha256sum: 5ee861d7ae301c0f3fa1e96e4cb42469531d8f9188d477351404561b47e55d94
   contrib_sha256sum: 1c98dad909ca2c76b22137a5e3e500fd69d769dc2fb4160e1ffc4ed36de1c7ae

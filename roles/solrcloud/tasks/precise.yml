@@ -2,34 +2,34 @@
 - file: path=/opt/src state=directory
 - file: path=/opt/build state=directory
 
-- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/{{solr.version}}/solr-{{solr.version}}.tgz
-           dest=/opt/src/solr-{{solr.version}}.tgz
-           sha256sum={{solr.sha256sum}}
+- get_url: url=http://ftp.heanet.ie/mirrors/www.apache.org/dist/lucene/solr/{{solrcloud.version}}/solr-{{solrcloud.version}}.tgz
+           dest=/opt/src/solr-{{solrcloud.version}}.tgz
+           sha256sum={{solrcloud.sha256sum}}
 
 - file: path=/opt/solr/dri/lib state=directory owner=tomcat7 group=tomcat7
 
-- command: chdir=/opt/build tar zxf ../src/solr-{{solr.version}}.tgz creates=/opt/build/solr-{{solr.version}}/README.txt
+- command: chdir=/opt/build tar zxf ../src/solr-{{solrcloud.version}}.tgz creates=/opt/build/solr-{{solrcloud.version}}/README.txt
 
-- command: chdir=/opt/build cp solr-{{solr.version}}/dist/solr-{{solr.version}}.war /opt/solr/solr.war creates=/opt/solr/solr.war
+- command: chdir=/opt/build cp solr-{{solrcloud.version}}/dist/solr-{{solrcloud.version}}.war /opt/solr/solr.war creates=/opt/solr/solr.war
   notify:
     - restore ownership of /opt/solr
     - touch solr context and restart
 
-- command: chdir=/opt/build rsync -a solr-{{solr.version}}/dist/ /opt/solr/dri/lib/ creates=/opt/solr/dri/lib/solr-core-{{solr.version}}.jar
+- command: chdir=/opt/build rsync -a solr-{{solrcloud.version}}/dist/ /opt/solr/dri/lib/ creates=/opt/solr/dri/lib/solr-core-{{solrcloud.version}}.jar
   notify:
     - restore ownership of /opt/solr
     - touch solr context and restart
 
 # get contribs into place (lucene related)
-- get_url: url=http://objects.dri.ie/public/solr-contrib-{{solr.version}}.tar
-           dest=/opt/src/solr-contrib-{{solr.version}}.tar
-           sha256sum={{solr.contrib_sha256sum}}
-- command: chdir=/opt/solr/dri/lib tar xf /opt/src/solr-contrib-{{solr.version}}.tar creates=icu4j-49.1.jar
+- get_url: url=http://objects.dri.ie/public/solrcloud.contrib-{{solrcloud.version}}.tar
+           dest=/opt/src/solrcloud.contrib-{{solrcloud.version}}.tar
+           sha256sum={{solrcloud.contrib_sha256sum}}
+- command: chdir=/opt/solr/dri/lib tar xf /opt/src/solrcloud.contrib-{{solrcloud.version}}.tar creates=icu4j-49.1.jar
   notify:
     - restore ownership of /opt/solr
     - touch solr context and restart
 
-- command: chdir=/opt/build rsync -a solr-{{solr.version}}/example/solr/collection1 /opt/solr/dri/ creates=/opt/solr/dri/collection1
+- command: chdir=/opt/build rsync -a solr-{{solrcloud.version}}/example/solr/collection1 /opt/solr/dri/ creates=/opt/solr/dri/collection1
   notify:
     - restore ownership of /opt/solr
     - touch solr context and restart
@@ -40,13 +40,13 @@
     - restore ownership of /opt/solr
     - touch solr context and restart
 
-- command: chdir=/opt/build cp solr-{{solr.version}}/example/resources/log4j.properties /usr/share/tomcat7/lib
+- command: chdir=/opt/build cp solr-{{solrcloud.version}}/example/resources/log4j.properties /usr/share/tomcat7/lib
 
 ## logging libraries - this changed from solr 4.2 and up
-- get_url: url=http://objects.dri.ie/public/solr-contrib-logging-{{solr.version}}.tar
-           dest=/opt/src/solr-contrib-logging-{{solr.version}}.tar
-           sha256sum={{solr.contrib_logging_sha256sum}}
-- command: chdir=/usr/share/tomcat7 tar xf /opt/src/solr-contrib-logging-{{solr.version}}.tar creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
+- get_url: url=http://objects.dri.ie/public/solrcloud.contrib-logging-{{solrcloud.version}}.tar
+           dest=/opt/src/solrcloud.contrib-logging-{{solrcloud.version}}.tar
+           sha256sum={{solrcloud.contrib_logging_sha256sum}}
+- command: chdir=/usr/share/tomcat7 tar xf /opt/src/solrcloud.contrib-logging-{{solrcloud.version}}.tar creates=/usr/share/tomcat7/lib/slf4j-api-1.6.6.jar
   notify:
     - restore ownership of /opt/solr
     - restart tomcat7
@@ -70,5 +70,5 @@
 
 - service: name=tomcat7 state=started enabled=yes
 
-- template: src=bootstrap.sh dest=/opt/build/solr-{{solr.version}}/example/bootstrap.sh mode=0711
-- debug: msg="Look at and run /opt/build/solr-{{solr.version}}/example/bootstrap.sh to do the initial zookeeper/solr bootstrapping"
+- template: src=bootstrap.sh dest=/opt/build/solr-{{solrcloud.version}}/example/bootstrap.sh mode=0711
+- debug: msg="Look at and run /opt/build/solr-{{solrcloud.version}}/example/bootstrap.sh to do the initial zookeeper/solr bootstrapping"
