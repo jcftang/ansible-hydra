@@ -1,26 +1,11 @@
 ---
-- hosts: dri_app;shibboleth_idp;mysql_replicated;ldap_replicated;inspire_ireland;solrcloud
+- hosts: dri_app;shibboleth_idp;mysql_replicated;ldap_replicated;inspire_ireland;solrcloud;fedora
   user: tchpc
 # dummy play to get some information from the gateways themselves
 
 ## ubuntu machine
 - hosts: dri_app-lb
   user: root
-
-  pre_tasks:
-    - name: Install dependancies
-      apt: name={{item}} state=present update-cache=yes cache_valid_time=3600
-      with_items:
-        - python-software-properties
-        - python-virtualenv
-        - python-apt
-      environment:
-        http_proxy: http://{{proxy_server}}:{{proxy_port}}
-        https_proxy: http://{{proxy_server}}:{{proxy_port}}
-
-  roles:
-    - role: ../../roles/proxy
-    - role: ../../roles/common
 
   tasks:
     - apt_key: id=1C61B9CD url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x505D97A41C61B9CD

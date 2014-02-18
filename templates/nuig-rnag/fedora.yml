@@ -9,6 +9,6 @@ test: &TEST
 production:
   user: fedoraAdmin
   password: {{ fedora_admin_pass }}
-  url: http://{{ hostvars[groups['fedora'][0]]['ansible_fqdn'] }}:8080/fedora
+  url: http://{{ groups['dri_app-lb'][0] }}:8080/fedora
 cucumber:
   <<: *TEST
