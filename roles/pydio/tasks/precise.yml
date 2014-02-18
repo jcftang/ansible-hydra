@@ -1,0 +1,6 @@
+---
+- apt_key: url=http://dl.ajaxplorer.info/repos/charles@ajaxplorer.info.gpg.key state=present
+- apt_repository: repo="deb http://dl.ajaxplorer.info/repos/apt stable main" state=present
+- apt: name={{name}} state=present
+  with_items:
+    - pydio
