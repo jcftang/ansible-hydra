@@ -2,12 +2,12 @@
 - apt: name={{item}} state=present
   with_items:
     - unzip
-    - openjdk-6-jre-headless
 
 - file: path=/opt/src state=directory
-- get_url: url=https://fits.googlecode.com/files/fits-0.6.2.zip dest=/opt/src/fits-0.6.2.zip
+- get_url: url=http://projects.iq.harvard.edu/files/fits/files/fits-{{fits.version}}.zip
+           dest=/opt/src/fits-{{fits.version}}.zip
 - file: path=/opt/local/ state=directory
-#- unarchive: src=fits-0.6.2.zip dest=/opt/local
-- command: chdir=/opt/local creates=/opt/local/fits-0.6.2/fits.sh unzip /opt/src/fits-0.6.2.zip 
-- file: src=/opt/local/fits-0.6.2 dest=/opt/local/fits state=link
+#- unarchive: src=fits-{{fits.version}}.zip dest=/opt/local
+- command: chdir=/opt/local creates=/opt/local/fits-{{fits.version}}/fits.sh unzip /opt/src/fits-{{fits.version}}.zip 
+- file: src=/opt/local/fits-{{fits.version}} dest=/opt/local/fits state=link
 - file: path=/opt/local/fits/fits.sh state=file mode=0755
