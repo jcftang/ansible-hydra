@@ -48,10 +48,6 @@
     - name: db seed
       command: bash -lc 'bundle exec rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
 
-    - name: restart resque workers forcefally -- need to setup handler for this
-      command: supervisorctl restart all
-      ignore_errors: True
-
     - uri: url=http://{{ansible_fqdn}}/v1/ return_content=yes timeout=60 return_content=yes timeout=60  HEADER_Content-Type="text/html"
 
 - hosts: dri_app;dri_app_worker
@@ -74,5 +70,20 @@
   # as root on the worker machines do 'supervisorctl restart all' to kick the worker processes
   tasks:
     - apt: name=supervisor state=present
+    - template: src=../templates/supervisord-nuig-rnag-worker.j2 dest=/etc/supervisor/conf.d/resque_worker.conf
+    - service: name=supervisor enabled=yes state=started
+    - name: restart resque workers forcefally -- need to setup handler for this
+      command: supervisorctl restart all
+      ignore_errors: True
+
+- hosts: dri_app
+  user: root
+
+  # as root on the worker machines do 'supervisorctl restart all' to kick the worker processes
+  tasks:
+    - apt: name=supervisor state=present
     - template: src=../templates/supervisord-nuig-rnag.j2 dest=/etc/supervisor/conf.d/resque_worker.conf
     - service: name=supervisor enabled=yes state=started
+    - name: restart resque workers forcefally -- need to setup handler for this
+      command: supervisorctl restart all
+      ignore_errors: True
