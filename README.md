@@ -4,8 +4,9 @@
 
 Playbooks for deploying DRI test and development infrastructure
 
-In the DRI test and development infrastructure for our Hydra Head we
-use primarily Ubuntu 12.04.
+In the DRI test and development infrastructure for our Hydra Head we use
+primarily Ubuntu 12.04, mainly due to almost everything *just working*
+and better ceph support.
 
 The goal of this set of plays is to be able to quickly setup a base
 system with Ubuntu and have at least the following applications installed
@@ -21,7 +22,7 @@ ready to go for use with deploying a Hydra Head.
 * Shibboleth
 * HAProxy
 * LDAP
-* Corosync/Pacemaker *coming soon*
+* Keepalived/Corosync/Pacemaker *coming soon*
 * Xymon
 
 What's missing here is the deployment of the actual Hydra-Head. This part
@@ -33,10 +34,9 @@ these scripts are not yet ready for production usage.
 ## Requirements
 
 * A target machine (or VM) that you can login to with ssh keys
-* The target machine should be running a flavour of Ubuntu 12.04- should
-  be a fresh/stock install (a vagrant Ubuntu based basebox is great for
-  testing against)
-* Ansible 1.4 or newer on your own host machine
+* The target machine should be running a flavour of Ubuntu 12.04
+  - should be a fresh/stock install (a vagrant Ubuntu based basebox is great for testing against)
+* Ansible 1.5 or newer on your own host machine
 
 ## Usage
 
@@ -56,4 +56,11 @@ the playbooks from the playbooks directory.
 	[ lots of output ]
 
 There are a number of playbooks in the playbooks directory, so have a
-poke around.
+poke around. A large amount of the work is actually done in the roles,
+so they may be a better place to look at to understand how things work.
+
+## Todo
+
+* A scrubbed version of a our production hosts file would be of interest
+to other users. This should be cleaned up and shared once we are back
+in a steady state of changes.
