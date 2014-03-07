@@ -52,7 +52,7 @@
       command: supervisorctl restart all
       ignore_errors: True
 
-    - uri: url=http://{{ansible_fqdn}}/00D9DB5F-0CC1-4AE1-B014-968AFA0371AC/ return_content=yes timeout=60 return_content=yes timeout=60  HEADER_Content-Type="text/html"
+    #- uri: url=http://{{ansible_fqdn}}/00D9DB5F-0CC1-4AE1-B014-968AFA0371AC/ return_content=yes timeout=60 return_content=yes timeout=60  HEADER_Content-Type="text/html"
 
 - hosts: dri_app;dri_app_worker
   user: root
