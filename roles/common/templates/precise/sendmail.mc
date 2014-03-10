@@ -87,6 +87,17 @@ dnl #
 dnl # Stop connections that overflow our concurrent and time connection rates
 FEATURE(`conncontrol', `nodelay', `terminate')dnl
 FEATURE(`ratecontrol', `nodelay', `terminate')dnl
+
+dnl # Masquerade
+FEATURE(always_add_domain)dnl
+FEATURE(`masquerade_entire_domain')dnl
+FEATURE(`masquerade_envelope')dnl
+FEATURE(`allmasquerade')dnl
+MASQUERADE_AS(`{{ansible_domain}}')dnl
+MASQUERADE_DOMAIN(`{{ansible_domain}}.')dnl
+MASQUERADE_DOMAIN(localhost)dnl
+MASQUERADE_DOMAIN(localhost.localdomain)dnl
+
 dnl #
 dnl # If you're on a dialup link, you should enable this - so sendmail
 dnl # will not bring up the link (it will queue mail for later)
