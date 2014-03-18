@@ -24,10 +24,10 @@ if set -q argv
    end
 end
 
-function ansible -d "ansible Wrapper"
+function ansible -d "ansible wrapper"
     /usr/bin/env ansible --user=vagrant --private-key="~/.vagrant.d/insecure_private_key" $argv
 end
 
-function ansible-playbook -d "ansible Wrapper"
+function ansible-playbook -d "ansible-playbook wrapper"
     /usr/bin/env ansible-playbook --user=vagrant --private-key="~/.vagrant.d/insecure_private_key" $argv
 end
