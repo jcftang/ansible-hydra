@@ -1,5 +1,5 @@
 ---
-deploy_branch: develop
+deploy_branch: master
 host_group: nuig-rnag
 solr_version: 4.0.0
 fedora_version: 3.6.2
