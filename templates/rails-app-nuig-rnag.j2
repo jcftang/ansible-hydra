@@ -42,4 +42,10 @@
       PassengerAppRoot /home/{{rvm_user}}/{{ host_group }}
    </Directory>
 
+   <Location /00D9DB5F-0CC1-4AE1-B014-968AFA0371AC/users/auth/shibboleth/callback>
+        AuthType shibboleth
+        ShibRequestSetting requireSession 1
+        require valid-user
+   </Location>
+
 </VirtualHost>
