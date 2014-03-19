@@ -41,6 +41,11 @@
   template: src=/srv/infrastructure/private/shibboleth/saml.pem dest=/etc/shibboleth/cert/saml.pem mode=0644 
   notify: reload shibd_apache2
 
+#Configure attribute map
+- name: Push LDAP map
+  template: src=attribute-map.xml dest=/etc/shibboleth/attribute-map.xml mode=0644
+  notify: reload shibd_apache2
+
 #Configure shibboleth2.xml
 - name: Configure Shibboleth SP xml file
   template: src=shibboleth2.xml dest=/etc/shibboleth/shibboleth2.xml mode=0644
