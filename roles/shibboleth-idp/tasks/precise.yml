@@ -74,7 +74,11 @@
   
 - name: configure idp login.config
   template: src=login.config dest=/opt/shibboleth-idp/conf/login.config owner=tomcat6 group=tomcat6      
-  
+
+- name: configure idp attribute-filter.xml
+  template: src=attribute-filter.xml dest=/opt/shibboleth-idp/conf/attribute-filter.xml owner=tomcat6 group=tomcat6
+  notify: restart tomcat6  
+
 - name: configure idp attribute-resolver.xml
   template: src=attribute-resolver.xml dest=/opt/shibboleth-idp/conf/attribute-resolver.xml owner=tomcat6 group=tomcat6
   notify: restart tomcat6
