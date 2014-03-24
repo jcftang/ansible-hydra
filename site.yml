@@ -16,4 +16,4 @@
 - include: site-base.yml proxy_is_set=True
 # deploy your rails app here (you should deploy it on the machines where you deployed passenger)
 #- include: site-daily.yml
-#- include: playbooks/setup-dri_app.yml proxy_is_set=True
+- include: playbooks/setup-dri_app.yml proxy_is_set=True
