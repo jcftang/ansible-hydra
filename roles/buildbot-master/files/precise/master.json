@@ -49,6 +49,7 @@
       "repourl": "ssh://git@tracker.dri.ie/navr/nuig-rnag",
       "category": "active",
       "builders": [
+          { "os": "precise64", "branch": "master" },
           { "os": "precise64", "branch": "develop" }
         ]
     },
