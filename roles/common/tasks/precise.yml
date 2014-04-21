@@ -1,7 +1,7 @@
 ---
 ## boiler plate
 - name: Install dependancies
-  apt: name={{ item }} state=present update-cache=yes
+  apt: name={{ item }} state=present update-cache=yes cache_valid_time=3600
   with_items:
     - git
     - bzr
@@ -49,3 +49,6 @@
 - template: src=precise/remote-log.conf dest=/etc/rsyslog.d/remote-log.conf mode=0644
   notify:
     - restart rsyslog
+
+- apt_repository: repo="ppa:rquillo/ansible" state=present
+- apt: name=ansible state=present cache_valid_time=3600
