@@ -1,0 +1,65 @@
+---
+- hosts: all
+  user: root
+
+  tasks:
+    - group_by: key="{{ansible_distribution_release}}"
+
+- hosts: Carbon
+  user: root
+
+  tasks:
+    - yum: name={{item}} state=absent
+      with_items:
+        - collectd-rrdtool
+        - collectd
+        - collectd-web
+
+- hosts: precise
+  user: root
+
+  tasks:
+    - apt: name={{item}} state=absent
+      with_items:
+        - nagios3
+        - nagios-plugins
+        - nagios-nrpe-server
+        - collectd
+        - rrdcached
+        - collectd-core
+        - linux-image-3.5.0-23-generic
+        - linux-image-3.5.0-41-generic
+        - linux-image-3.5.0-42-generic
+        - linux-image-3.5.0-43-generic
+        - linux-image-3.5.0-44-generic
+        - linux-image-3.5.0-45-generic
+        - linux-headers-3.5.0-41
+        - linux-headers-3.5.0-41-generic
+        - linux-headers-3.5.0-42
+        - linux-headers-3.5.0-42-generic
+        - linux-headers-3.5.0-43
+        - linux-headers-3.5.0-43-generic
+        - linux-headers-3.5.0-44
+        - linux-headers-3.5.0-44-generic
+        - linux-image-3.2.0-54-generic
+        - linux-image-3.2.0-55-generic
+        - linux-image-3.2.0-56-generic
+        - linux-image-3.2.0-57-generic
+        - linux-image-3.2.0-58-generic
+        - linux-image-3.2.0-59-generic
+	- linux-headers-3.11.0-15
+	- linux-headers-3.11.0-16
+	- linux-headers-3.11.0-17
+        - linux-image-3.11.0-15-generic
+        - linux-image-3.11.0-16-generic
+        - linux-image-3.11.0-17-generic
+
+    # remove previous stables
+    - apt_repository: repo={{item}} state=absent
+      with_items:
+        - "'deb http://eu.ceph.com/debian-cuttlefish/ $(lsb_release -sc) main'"
+        - "'deb http://eu.ceph.com/debian-cuttlefish/ precise main'"
+        - "'deb-src http://eu.ceph.com/debian-cuttlefish/ precise main'"
+        - "'deb http://eu.ceph.com/debian-dumpling/ $(lsb_release -sc) main'"
+        - "'deb http://eu.ceph.com/debian-dumpling/ precise main'"
+        - "'deb http://eu.ceph.com/debian-emperor/ $(lsb_release -sc) main'"
