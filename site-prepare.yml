@@ -13,7 +13,7 @@
   #accelerate: True
 
   pre_tasks:
-    - user: name=root state=present password={{ rootpw }}
+    #- user: name=root state=present password={{ rootpw }}
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
       with_items: users
