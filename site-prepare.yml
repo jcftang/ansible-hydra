@@ -12,19 +12,23 @@
   user: tchpc
   #accelerate: True
 
-  tasks:
+  pre_tasks:
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
       with_items: users
 
     - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
 
+  roles:
+    - proxy
+    - common
+
 - hosts: precise
   sudo: True
   user: tchpc
   #accelerate: True
 
-  tasks:
+  pre_tasks:
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
       with_items: users
@@ -34,6 +38,11 @@
 
     - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
     #- apt: update_cache=yes cache_valid_time=3600
+
+  roles:
+    - proxy
+    - common
+
 
 - hosts: passenger
   sudo: True
