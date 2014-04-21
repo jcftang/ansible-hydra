@@ -4,6 +4,7 @@
   apt: name={{ item }} state=present update-cache=yes cache_valid_time=3600
   with_items:
     - git
+    - stgit
     - bzr
     - etckeeper
     - curl
