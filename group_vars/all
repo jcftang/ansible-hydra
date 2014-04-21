@@ -68,3 +68,18 @@ ldap_domain: dri.ie
 ldap_dc: dc=dri,dc=ie
 ldap_org: dri
 ldap_pass: password
+
+users:
+  - jtang-dsa
+  - jtang-rsa
+  - jtang-mba
+  - skenny
+  - kcassidy
+  - ptiernan
+
+sudo_users:
+  - jtang-dsa
+  - jtang-rsa
+  - jtang-mba
+  - skenny
+  - ptiernan

@@ -15,13 +15,8 @@
   tasks:
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
-      with_items:
-        - jtang-dsa
-        - jtang-rsa
-        - jtang-mba
-        - skenny
-        - kcassidy
-        - ptiernan
+      with_items: users
+
     - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
 
 - hosts: precise
@@ -32,20 +27,11 @@
   tasks:
     #- authorized_key: user=tchpc key='$FILE(../private/keys/{{ item }}.pub )' state=present
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
-      with_items:
-        - jtang-dsa
-        - jtang-rsa
-        - jtang-mba
-        - skenny
-        - kcassidy
-        - ptiernan
+      with_items: users
+
     - authorized_key: user=root key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
-      with_items:
-        - jtang-dsa
-        - jtang-rsa
-        - jtang-mba
-        - ptiernan
-        - skenny
+      with_items: sudo_users
+
     - copy: src=files/sudoers.d-root-tchpc dest=/etc/sudoers.d/user-tchpc owner=root group=root mode=0440
     #- apt: update_cache=yes cache_valid_time=3600
 
