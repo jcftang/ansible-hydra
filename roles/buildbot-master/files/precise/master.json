@@ -60,6 +60,14 @@
       "builders": [
           { "os": "precise64", "branch": "master" }
         ]
+    },
+    {
+      "name": "workflows-tests",
+      "repourl": "ssh://git@tracker.dri.ie/navr/workflows-tests",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
     }
   ]
 }

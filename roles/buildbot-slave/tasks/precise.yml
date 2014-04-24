@@ -10,6 +10,7 @@
     - python-jinja2
     - python-migrate
     - python-twisted
+    - libqtwebkit-dev
 
 - copy: src=tsocks-pip dest=/usr/local/bin/tsocks-pip mode=0755
 
