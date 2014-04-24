@@ -29,5 +29,5 @@
 - template: src=precise/ldapscripts.passwd dest=/etc/ldapscripts/ldapscripts.passwd owner=root group=root mode=0600
 - template: src=precise/structure.ldif dest=/root/structure.ldif
 - template: src=precise/eduperson.ldif dest=/root/eduperson.ldif
-- shell: ldapadd -w $ldap_pass -x -D cn=admin,$ldap_dc -f /root/structure.ldif && touch /etc/ldap/.done_structure creates=/etc/ldap/.done_structure
+- shell: ldapadd -w {{ ldap_pass }} -x -D cn=admin,{{ ldap_dc }} -f /root/structure.ldif && touch /etc/ldap/.done_structure creates=/etc/ldap/.done_structure
 - shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /root/eduperson.ldif && touch /etc/ldap/.done_eduperson creates=/etc/ldap/.done_eduperson
