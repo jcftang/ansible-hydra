@@ -134,7 +134,7 @@
     - ldap-replicated
 
 #install SP before IDP
-- hosts: dri_app
+- hosts: dri_app;dri_app_worker
   user: root
 
   roles:
