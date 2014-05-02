@@ -50,6 +50,8 @@ ntp_hostname: ntp
 #syslog-ng server location
 syslog_ng_server: '{{ groups.monitoring[0] }}'
 
+#mail-server
+mail_domain_name: dri.ie
 
 #shibboleth-idp
 idp_URI: https://repository.dri.ie
