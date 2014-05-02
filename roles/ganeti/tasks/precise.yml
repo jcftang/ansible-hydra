@@ -1,0 +1,2 @@
+---
+- apt_repository: repo=ppa:pkg-ganeti-devel/lts state=present
