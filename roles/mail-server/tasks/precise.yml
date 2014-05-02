@@ -1,0 +1,22 @@
+---
+- name: Install dependancies
+  apt: name={{ item }} state=present update-cache=yes cache_valid_time=3600
+  with_items:
+    - mailutils
+    - sendmail
+
+
+- name: configure mail server
+  template: src=sendmail.mc dest=/etc/mail/sendmail.mc
+  notify:
+    - restart sendmail
+
+- name: configure virtual domains/mailboxes
+  template: src=local-host-names dest=/etc/mail/local-host-names
+  notify:
+    - restart sendmail
+
+
+- name: enable sendmail
+  service: name=sendmail state=started enabled=yes
+

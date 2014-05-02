@@ -1,6 +1,6 @@
 divert(-1)dnl
 #-----------------------------------------------------------------------------
-# $Sendmail: debproto.mc,v 8.14.4 2012-12-05 12:51:18 cowboy Exp $
+# $Sendmail: debproto.mc,v 8.14.4 2011-08-14 09:21:51 cowboy Exp $
 #
 # Copyright (c) 1998-2010 Richard Nelson.  All Rights Reserved.
 #
@@ -16,7 +16,7 @@ divert(-1)dnl
 # If you modify this file, you will have to regenerate /etc/mail/sendmail.cf
 # by running this file through the m4 preprocessor via one of the following:
 #	* make   (or make -C /etc/mail)
-#	* sendmailconfig 
+#	* sendmailconfig
 #	* m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
 # The first two options are preferred as they will also update other files
 # that depend upon the contents of this file.
@@ -33,7 +33,7 @@ divert(0)dnl
 #
 define(`_USE_ETC_MAIL_')dnl
 include(`/usr/share/sendmail/cf/m4/cf.m4')dnl
-VERSIONID(`$Id: sendmail.mc, v 8.14.4-2.1ubuntu2 2012-12-05 12:51:18 cowboy Exp $')
+VERSIONID(`$Id: sendmail.mc, v 8.14.4-2ubuntu2 2011-08-14 09:21:51 cowboy Exp $')
 OSTYPE(`debian')dnl
 DOMAIN(`debian-mta')dnl
 dnl # Items controlled by /etc/mail/sendmail.conf - DO NOT TOUCH HERE
@@ -87,6 +87,17 @@ dnl #
 dnl # Stop connections that overflow our concurrent and time connection rates
 FEATURE(`conncontrol', `nodelay', `terminate')dnl
 FEATURE(`ratecontrol', `nodelay', `terminate')dnl
+
+dnl # Masquerade
+FEATURE(always_add_domain)dnl
+FEATURE(`masquerade_entire_domain')dnl
+FEATURE(`masquerade_envelope')dnl
+FEATURE(`allmasquerade')dnl
+MASQUERADE_AS(`{{ mail_domain_name }}')dnl
+MASQUERADE_DOMAIN(`{{ mail_domain_name }}.')dnl
+MASQUERADE_DOMAIN(localhost)dnl
+MASQUERADE_DOMAIN(localhost.localdomain)dnl
+
 dnl #
 dnl # If you're on a dialup link, you should enable this - so sendmail
 dnl # will not bring up the link (it will queue mail for later)
@@ -101,24 +112,4 @@ dnl # Default Mailer setup
 MAILER_DEFINITIONS
 MAILER(`local')dnl
 MAILER(`smtp')dnl
-
-LOCAL_CONFIG
-FEATURE(`masquerade_envelope')dnl
-LOCAL_CONFIG
-Cwdri-guest016.tchpc.tcd.ie
-FEATURE(`use_cw_file')dnl
-FEATURE(`use_ct_file')dnl
-FEATURE(`smrsh')dnl
-dnl #
-dnl # Dialup/LAN connection overrides
-dnl #
-include(`/etc/mail/m4/dialup.m4')dnl
-include(`/etc/mail/m4/provider.m4')dnl
-dnl #
-MAILER_DEFINITIONS
-MAILER(local)dnl
-MAILER(smtp)dnl
-
-LOCAL_CONFIG
-## Custom configurations below (will be preserved)
-
+define(`SMART_HOST', `{{mail_hostname}}.{{ansible_domain}}')dnl
