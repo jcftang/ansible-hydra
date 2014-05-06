@@ -18,7 +18,7 @@
   when: active_master is defined
 
 - name: create passive master percona sql user
-  mysql_user: name=percona_user password={{ percona_user_pass }} host={{ groups.mysql_replicated[0] }}  priv=*.*:ALL state=present
+  mysql_user: name=percona_user password={{ percona_user_pass }} host={{ groups.mysql_replicated[1] }}  priv=*.*:ALL state=present
   when: active_master is not defined
 
 
