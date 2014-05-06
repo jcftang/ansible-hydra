@@ -1,6 +1,3 @@
 ---
 - include: precise.yml
   when: ansible_distribution_release == 'precise'
-
-- include: Carbon.yml
-  when: ansible_distribution_release == 'Carbon'

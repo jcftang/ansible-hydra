@@ -39,6 +39,12 @@
 
     - apt: name=linux-generic-lts-saucy state=latest
 
+- hosts: precise:!mail:!dri_app-lb
+  user: root
+
+  roles:
+    - common-sendmail
+
 # setup monitoring with xymon
 - hosts: monitoring
   user: root
@@ -145,6 +151,13 @@
 
   roles:
     - shibboleth-idp
+
+- hosts: mail
+  user: root
+
+  roles:
+    - mail-server
+
 
 # Build/Test infrastructure
 - hosts: buildbot-master
