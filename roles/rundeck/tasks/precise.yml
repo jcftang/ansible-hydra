@@ -1,0 +1,12 @@
+---
+- file: path=/opt/src state=directory owner=root group=root
+
+- stat: path=/opt/src/rundeck-2.1.1-1-GA.deb
+  register: rundeck_deb_st
+
+- get_url: >
+    url=http://download.rundeck.org/deb/rundeck-2.1.1-1-GA.deb
+    dest=/opt/src/rundeck-2.1.1-1-GA.deb
+  when: rundeck_deb_st.stat.exist is not defined
+
+- command: dpkg -i /opt/src/rundeck-2.1.1-1-GA.deb
