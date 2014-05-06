@@ -1,5 +1,5 @@
 ---
-- hosts: dri_app;shibboleth_idp;mysql_replicated;ldap_replicated;inspire_ireland;inspire_ireland_uat;solrcloud;solr;fedora
+- hosts: dri_app;shibboleth_idp;mysql_replicated;ldap_replicated;inspire_ireland;inspire_ireland_uat;solrcloud;solr;fedora;mail
   user: tchpc
 # dummy play to get some information from the gateways themselves
 
