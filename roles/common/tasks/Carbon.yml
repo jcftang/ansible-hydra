@@ -30,14 +30,6 @@
     - libselinux-python
     - dstat
 
-# enable sendmail
-- yum: name=sendmail state=present
-- template: src=Carbon/sendmail.mc dest=/etc/mail/sendmail.mc
-  notify:
-    - restart sendmail
-
-- service: name=sendmail state=started enabled=yes
-
 # enable ntp
 - yum: name=ntp state=present
 - template: src=Carbon/ntp.conf dest=/etc/ntp.conf

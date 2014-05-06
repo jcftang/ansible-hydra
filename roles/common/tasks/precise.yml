@@ -27,13 +27,6 @@
 
 - copy: src=precise/10periodic  dest=/etc/apt/apt.conf.d/10periodic owner=root group=root
 
-# enable sendmail
-- apt: name=sendmail state=present
-- template: src=precise/sendmail.mc dest=/etc/mail/sendmail.mc
-  notify:
-    - restart sendmail
-
-- service: name=sendmail state=started enabled=yes
 
 # enable ntp
 - apt: name=ntp state=present
