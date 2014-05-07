@@ -1,0 +1,123 @@
+#!/bin/bash
+# ------------------------------------------------------------------
+#
+#
+# ------------------------------------------------------------------
+
+VERSION=0.1.0
+SUBJECT=54657675hhub67mjhg8
+USAGE="Usage: command [-vh] <email address>"
+DB_USER=percona_user
+DB_PASS={{ percona_user_pass }}
+DBs={{ percona_check_dbs }}
+
+if [ -v $DBs ] || [[ $DBs =~ ^\ +$ ]] ; then
+	PERCONA_COMMAND="pt-table-checksum --user=$DB_USER --password=$DB_PASS"
+else
+	PERCONA_COMMAND="pt-table-checksum --databases=$DBs --user=$DB_USER --password=$DB_PASS"
+fi 
+
+
+
+# --- Options processing -------------------------------------------
+if [ $# == 0 ] ; then
+    echo $USAGE
+    exit 1;
+fi
+
+while getopts ":e:vh" optname
+  do
+    case "$optname" in
+      "v")
+        echo "Version $VERSION"
+        exit 0;
+        ;;
+#      "e")
+#        echo "-e argument: $OPTARG"
+#        ;;
+      "h")
+        echo $USAGE
+        exit 0;
+        ;;
+      "?")
+        echo "Unknown option $OPTARG"
+        exit 0;
+        ;;
+      ":")
+        echo "No argument value for option $OPTARG"
+        exit 0;
+        ;;
+      *)
+        echo "Unknown error while processing options"
+        exit 0;
+        ;;
+    esac
+  done
+
+shift $(($OPTIND - 1))
+
+EMAIL_ADDRESS=$1
+#param2=$2
+
+# --- Locks -------------------------------------------------------
+LOCK_FILE=/tmp/$SUBJECT.lock
+if [ -f "$LOCK_FILE" ]; then
+   echo "Script is already running"
+   exit
+fi
+
+trap "rm -f $LOCK_FILE" EXIT
+touch $LOCK_FILE
+
+# --- Command Checks ---------------------------------------------
+
+command -v pt-table-checksum >/dev/null 2>&1 || { echo "percona-tools not installed. Aborting." >&2; exit 1; }
+command -v sendmail >/dev/null 2>&1 || { echo "sendmail not installed. Aborting." >&2; exit 1; }
+
+
+# --- Functions --------------------------------------------------
+alert_email () {
+
+        OUTPUT2=$(printf "Subject: [ERR: $3] $2 \n\n$4\n\n" | /usr/lib/sendmail -v $1)
+	RCODE2=$?
+
+	if [ $RCODE2 == 0 ] ; then
+    		echo "Email sent to $1"
+	else
+                echo "Problem sending Email to $1"
+       		exit 1;
+	fi
+
+	
+}
+
+
+
+
+# --- Body --------------------------------------------------------
+
+
+OUTPUT=$( { $PERCONA_COMMAND; } 2>&1 )
+RCODE=$?
+
+if [ $RCODE == 0 ] ; then
+    echo "No MySQL Replication issues discovered"
+    exit 0;
+elif [ $RCODE == 1 ] ; then
+    echo "Fatal Error occured with Percona Command [ERR: $RCODE]...Sending Email..."
+    alert_email $EMAIL_ADDRESS "MySQL Repl Check: FATAL ERROR OCCURED" $RCODE "$OUTPUT"
+    exit 1;
+elif [ $RCODE -a 16 ] ; then
+    echo "Percona found differences between MySQL replicas [ERR: $RCODE]...Sending Email..."
+    alert_email $EMAIL_ADDRESS "MySQL Repl Check: Differences found" $RCODE "$OUTPUT"
+    exit 0;
+else
+    echo "Percona found some other issue [ERR: $RCODE]..Sending Email..."
+    alert_email $EMAIL_ADDRESS "MySQL Repl Check: Other Issue" $RCODE "$OUTPUT"
+    exit 0;
+fi
+
+
+
+# -----------------------------------------------------------------
+
