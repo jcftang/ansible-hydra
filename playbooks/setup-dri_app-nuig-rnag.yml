@@ -6,7 +6,7 @@
 
 ## deploy the rails applications - private head
 - hosts: dri_app;dri_app_worker
-  user: $rvm_user
+  user: '{{ rvm_user }}'
   serial: 1
 
   tasks:

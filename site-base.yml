@@ -119,7 +119,7 @@
 
   pre_tasks:
     - group: name={{rvm_user}} gid=10000 state=present
-    - name: Create $rvm_user
+    - name: Create {{ rvm_user }}
       user: name={{rvm_user}} state=present shell=/bin/bash generate_ssh_key=yes uid=10000
     
 
