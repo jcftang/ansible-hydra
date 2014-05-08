@@ -1,6 +1,7 @@
 ---
 - name: check for percona tools install
-  shell: dpkg -l | grep percona-toolkit | grep {{ percona_toolkit_version }}
+#  shell: dpkg -l | grep percona-toolkit | grep {{ percona_toolkit_version }}
+  command: which pt-table-checksum 
   register: result
   ignore_errors: True
   when: active_master is defined
