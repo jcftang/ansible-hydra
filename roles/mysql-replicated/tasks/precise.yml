@@ -91,3 +91,7 @@
 # Start Slave replication  
 - name: Start Slaves
   mysql_replication: mode=startslave login_user=root login_password={{ mysql_root_password }}
+
+
+# include percona replication toolkit
+- include: percona.yml
