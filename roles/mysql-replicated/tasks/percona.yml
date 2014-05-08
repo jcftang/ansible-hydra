@@ -8,7 +8,7 @@
 
 - name: Deliver percona-tools deb
   command: wget http://www.percona.com/redir/downloads/percona-toolkit/{{ percona_toolkit_version }}/deb/percona-toolkit_{{ percona_toolkit_version }}_all.deb chdir=/tmp creates=/tmp/percona-toolkit_{{ percona_toolkit_version }}_all.deb
-  when: active_master is defined and result.rc=1
+  when: result.rc=1 active_master is defined
 
 - name: Install percona-tools
   command: dpkg -i /tmp/percona-toolkit_{{ percona_toolkit_version }}_all.deb
