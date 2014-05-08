@@ -6,10 +6,7 @@
   when: active_master is defined
 
 - name: Deliver percona-tools deb
-  command: >
-	chdir=/tmp
-	creates=/tmp/percona-toolkit_{{ percona_toolkit_version }}_all.deb
-	wget http://www.percona.com/redir/downloads/percona-toolkit/{{ percona_toolkit_version }}/deb/percona-toolkit_{{ percona_toolkit_version }}_all.deb
+  command: wget http://www.percona.com/redir/downloads/percona-toolkit/{{ percona_toolkit_version }}/deb/percona-toolkit_{{ percona_toolkit_version }}_all.deb chdir=/tmp creates=/tmp/percona-toolkit_{{ percona_toolkit_version }}_all.deb
   when: active_master is defined and result.rc=1
 
 - name: Install percona-tools
