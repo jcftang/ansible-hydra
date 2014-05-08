@@ -1,6 +1,6 @@
 ---
 - name: check for percona tools install
-  command: dpkg -l | grep percona-toolkit | grep {{ percona_toolkit_version }}
+  shell: dpkg -l | grep percona-toolkit | grep {{ percona_toolkit_version }}
   register: result
   ignore_errors: True
   when: active_master is defined
@@ -22,7 +22,7 @@
   when: active_master is not defined
 
 - name: deliver percona check script
-  template: src=percona_check.sh.yml dest=/usr/sbin/percona_check.sh mode=0754
+  template: src=percona_check.sh.yml dest=/usr/sbin/percona-check.sh mode=0754
   when: active_master is defined
 
 
