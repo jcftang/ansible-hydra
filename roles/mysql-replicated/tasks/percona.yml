@@ -22,7 +22,7 @@
   when: active_master is not defined
 
 - name: deliver percona check script
-  template: src=percona_check.sh.yml dest=/usr/sbin/percona-check.sh mode=0754
+  template: src=percona-check.sh.yml dest=/usr/sbin/percona-check.sh mode=0754
   when: active_master is defined
 
 
