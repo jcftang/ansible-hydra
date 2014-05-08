@@ -26,5 +26,5 @@
   when: active_master is defined
 
 - name: create sql check cronjob
-  cron: name="check sql replication consistency" hour="4,16" minute="0" weekday="1-5" job="/usr/sbin/percona-check.sh {{ admin_email }}"
+  cron: name="check sql replication consistency" hour="4" minute="0" weekday="1-5" job="/usr/sbin/percona-check.sh {{ admin_email }}"
   when: active_master is defined
