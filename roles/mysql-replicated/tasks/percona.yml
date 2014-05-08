@@ -27,4 +27,4 @@
 
 - name: create sql check cronjob
   cron: name="check sql replication consistency" hour="4,16" weekday="1-5" job="percona-check.sh {{ admin_email }}"
-
+  when: active_master is defined
