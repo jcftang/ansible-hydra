@@ -72,7 +72,7 @@ touch $LOCK_FILE
 # --- Command Checks ---------------------------------------------
 
 command -v pt-table-checksum >/dev/null 2>&1 || { echo "percona-tools not installed. Aborting." >&2; exit 1; }
-command -v sendmail >/dev/null 2>&1 || { echo "sendmail not installed. Aborting." >&2; exit 1; }
+command -v /usr/sbin/sendmail >/dev/null 2>&1 || { echo "sendmail not installed. Aborting." >&2; exit 1; }
 
 
 # --- Functions --------------------------------------------------
