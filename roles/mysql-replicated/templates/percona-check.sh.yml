@@ -11,7 +11,7 @@ DB_USER=percona_user
 DB_PASS={{ percona_user_pass }}
 DBs={{ percona_check_dbs }}
 
-if [ -v $DBs ] || [[ $DBs =~ ^\ +$ ]] ; then
+if [ -v $DBs ] || [ $DBs == "None" ] || [[ $DBs =~ ^\ +$ ]] ; then
 	PERCONA_COMMAND="pt-table-checksum --user=$DB_USER --password=$DB_PASS"
 else
 	PERCONA_COMMAND="pt-table-checksum --databases=$DBs --user=$DB_USER --password=$DB_PASS"
