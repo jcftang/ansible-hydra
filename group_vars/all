@@ -75,7 +75,9 @@ ldap_pass: password
 percona_user_pass: CHANGEME
 percona_toolkit_version: 2.2.7 
 #comma seperated list of dbs to check, or leave empty to check all
-percona_check_dbs: dridb
+#percona_check_dbs: dridb
+admin_email: dri@tchpc.tcd.ie
+
 
 users:
   - jtang-dsa
