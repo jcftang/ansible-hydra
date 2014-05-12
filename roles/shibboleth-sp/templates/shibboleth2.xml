@@ -69,13 +69,11 @@
             styleSheet="/shibboleth-sp/main.css"/>
         
         <!-- Example of remotely supplied batch of signed metadata. -->
-        <!--
-        <MetadataProvider type="XML" uri="http://federation.org/federation-metadata.xml"
+        <MetadataProvider type="XML" uri="https://edugate.heanet.ie/rr3/signedmetadata/provider/aHR0cDovL3JlcG9zaXRvcnkuZHJpLmllL3NoaWJib2xldGg~/metadata.xml"
               backingFilePath="federation-metadata.xml" reloadInterval="7200">
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="2419200"/>
-            <MetadataFilter type="Signature" certificate="fedsigner.pem"/>
+            <MetadataFilter type="Signature" certificate="metadata-signer-2012.crt"/>
         </MetadataProvider>
-        -->
 
         <MetadataProvider type="XML" uri="{{ idp_URI }}/idp/profile/Metadata/SAML" 
 		backingFilePath="/etc/shibboleth/idp-metadata.xml" reloadInterval="180000"/>
