@@ -68,6 +68,14 @@
       "builders": [
           { "os": "precise64", "branch": "master" }
         ]
+    },
+    {
+      "name": "docs-scribe",
+      "repourl": "ssh://git@tracker.dri.ie/navr/docs-scribe",
+      "category": "active",
+      "builders": [
+          { "os": "precise64", "branch": "master" }
+        ]
     }
   ]
 }
