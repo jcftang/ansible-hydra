@@ -48,7 +48,15 @@
     - name: db seed
       command: bash -lc 'bundle exec rake RAILS_ENV=production db:seed' chdir=/home/{{rvm_user}}/{{ host_group }}
 
-    - name: restart resque workers forcefally -- need to setup handler for this
+    - name: restart supervisord -- need to setup handler for this
+      service: name=supervisor state=stopped
+      ignore_errors: True
+
+    - name: restart supervisord -- need to setup handler for this
+      service: name=supervisor state=started
+      ignore_errors: True
+
+    - name: restart resque workers forcefully -- need to setup handler for this
       command: supervisorctl restart all
       ignore_errors: True
 
