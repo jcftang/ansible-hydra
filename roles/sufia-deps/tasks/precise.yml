@@ -12,3 +12,6 @@
     - libmysqlclient-dev
     - mysql-client
     - ghostscript
+    - asciidoc
+    - source-highlight
+    - fop
