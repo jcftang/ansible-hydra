@@ -69,7 +69,7 @@
             styleSheet="/shibboleth-sp/main.css"/>
         
         <!-- Example of remotely supplied batch of signed metadata. -->
-        <MetadataProvider type="XML" uri="https://edugate.heanet.ie/rr3/signedmetadata/provider/aHR0cDovL3JlcG9zaXRvcnkuZHJpLmllL3NoaWJib2xldGg~/metadata.xml"
+        <MetadataProvider type="XML" uri="https://edugate.heanet.ie/edugate-federation-metadata-signed.xml"
               backingFilePath="federation-metadata.xml" reloadInterval="7200">
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="2419200"/>
             <MetadataFilter type="Signature" certificate="metadata-signer-2012.crt"/>
