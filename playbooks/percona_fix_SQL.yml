@@ -4,6 +4,6 @@
 
   tasks:
   - name: Run percona and fix sync errors
-    shell: pt-table-sync --print --user=percona_user --password={{ percona_user_pass }} --sync-to-master {{ groups.mysql_replicated[0] }}
+    shell: pt-table-sync --execute --user=percona_user --password={{ percona_user_pass }} --sync-to-master {{ groups.mysql_replicated[0] }}
     when: active_master is defined
 
