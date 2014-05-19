@@ -5,5 +5,5 @@
   tasks:
 
   - name: Run percona and email problem records to admin email
-    shell: pt-table-sync --print --user=percona_user --password={{ percona_user_pass }} --sync-to-master {{ groups.mysql_replication[0] }} 2>&1 | 2>&1 | sed 's/^/Subject: Percona: SQL sync queries Subject\n\n/' | sendmail -v {{ admin_email }} 1>/dev/null
+    shell: pt-table-sync --print --user=percona_user --password={{ percona_user_pass }} --sync-to-master {{ groups.mysql_replication[0] }}
     when: active_master is defined
