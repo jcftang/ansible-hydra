@@ -40,7 +40,10 @@
             (Set discoveryProtocol to "WAYF" for legacy Shibboleth WAYF support.)
             You can also override entityID on /Login query string, or in RequestMap/htaccess.
             -->
-            <SSO entityID="{{ idp_URI }}/idp/shibboleth" forceAuthn="true">
+            <!-- <SSO entityID="{{ idp_URI }}/idp/shibboleth" forceAuthn="true">
+              SAML2 SAML1
+            </SSO> -->
+            <SSO discoveryProtocol="SAMLDS" discoveryURL="https://wayf.heanet.ie/WAYF/WAYF">
               SAML2 SAML1
             </SSO>
 
