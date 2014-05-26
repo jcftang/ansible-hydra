@@ -3,7 +3,7 @@
 # or potentially be pulled in as a rails engine
 #NameVirtualHost 10.0.1.200:80
 <VirtualHost *:80>
-   ServerName {{ ansible_fqdn }}
+   ServerName {{ sp_external_endpoint }}
 #   # !!! Be sure to point DocumentRoot to 'public'!
    DocumentRoot /var/www
 

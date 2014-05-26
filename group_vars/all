@@ -56,6 +56,7 @@ mail_domain_name: dri.ie
 #shibboleth-idp
 idp_URI: https://repository.dri.ie
 sp_URI: http://repository.dri.ie
+sp_external_endpoint: https://repository.dri.ie
 tomcat_keystore_pass: CHANGEME
 tomcat_key_pass: CHANGEME
 shibboleth_user_ldap_server: repository.dri.ie
