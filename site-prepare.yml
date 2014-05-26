@@ -36,6 +36,10 @@
     - authorized_key: user=tchpc key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
       with_items: users
 
+    - authorized_key: user=vagrant key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
+      with_items: users
+      ignore_errors: True
+
     - authorized_key: user=root key="{{ lookup('file', '../private/keys/' +  item + '.pub' ) }}" state=present
       with_items: sudo_users
 
